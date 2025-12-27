@@ -3,14 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>History Modal - CattleLog</title>
+  <title>Fleet View - CattleLog</title>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Inter', sans-serif; background: #f3f4f6; min-height: 100vh; }
-    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    body { font-family: 'Inter', sans-serif; }
     @keyframes fadeIn {
       from { opacity: 0; transform: scale(0.95); }
       to { opacity: 1; transform: scale(1); }
@@ -18,115 +15,133 @@
     .animate-fade-in { animation: fadeIn 0.2s ease-out; }
   </style>
 </head>
-<body class="p-8">
-  <!-- History Modal -->
-  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-    <div class="bg-white rounded-xl shadow-xl w-full max-w-lg mx-4 max-h-[85vh] flex flex-col border border-gray-100 animate-fade-in">
-      <!-- Header -->
-      <div class="p-6 border-b border-gray-100 bg-gray-50 flex justify-between items-center rounded-t-xl">
-        <div>
-          <h3 class="font-bold text-gray-900 tracking-tight">Activity History</h3>
-          <p class="text-xs text-gray-500 uppercase font-black tracking-widest mt-1" id="driver-name">John Smith</p>
+<body class="min-h-screen bg-gray-50 text-gray-900">
+  <!-- Fleet View Content -->
+  <div id="fleet-view">
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div class="bg-white p-6 rounded-xl border border-gray-100 flex items-center gap-5 shadow-sm">
+        <div class="w-14 h-14 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>
         </div>
-        <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        <div>
+          <p class="text-xs text-gray-500 font-bold uppercase">Total Vehicles</p>
+          <p class="text-3xl font-black text-gray-900" id="total-vehicles">4</p>
+        </div>
+      </div>
+      <div class="bg-white p-6 rounded-xl border border-gray-100 flex items-center gap-5 shadow-sm">
+        <div class="w-14 h-14 rounded-full bg-green-50 text-green-600 flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+        </div>
+        <div>
+          <p class="text-xs text-gray-500 font-bold uppercase">Available</p>
+          <p class="text-3xl font-black text-gray-900" id="available-vehicles">2</p>
+        </div>
+      </div>
+      <div class="bg-white p-6 rounded-xl border border-orange-100 flex items-center gap-5 shadow-sm">
+        <div class="w-14 h-14 rounded-full bg-orange-50 text-orange-600 flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+        </div>
+        <div>
+          <p class="text-xs text-gray-500 font-bold uppercase text-orange-600">In Maintenance</p>
+          <p class="text-3xl font-black text-orange-600" id="maintenance-vehicles">1</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fleet Table -->
+    <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
+      <div class="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+        <h3 class="font-bold text-gray-900">Vehicle Fleet</h3>
+        <button class="flex items-center gap-2 bg-[#34554a] text-white px-4 py-2 rounded-lg font-medium hover:bg-opacity-90 text-sm shadow-sm transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+          Add Vehicle
         </button>
       </div>
-
-      <!-- Timeline Content -->
-      <div class="p-8 overflow-y-auto custom-scrollbar bg-white flex-1">
-        <div class="space-y-8 relative border-l-2 border-gray-100 ml-3">
-          
-          <!-- Activity Item 1 -->
-          <div class="relative pl-7">
-            <div class="absolute -left-[10px] top-1 w-4 h-4 rounded-full border-4 border-white shadow-sm bg-[#34554a]"></div>
-            <p class="text-[10px] text-gray-400 font-mono mb-1 font-black">2024-01-15 09:30:00</p>
-            <p class="font-bold text-sm text-gray-800">Completed Delivery DEL-0998</p>
-            <p class="text-xs text-gray-500 mt-1 leading-relaxed font-medium">Delivered 18 head to Market B</p>
-          </div>
-
-          <!-- Activity Item 2 -->
-          <div class="relative pl-7">
-            <div class="absolute -left-[10px] top-1 w-4 h-4 rounded-full border-4 border-white shadow-sm bg-gray-200"></div>
-            <p class="text-[10px] text-gray-400 font-mono mb-1 font-black">2024-01-14 14:15:00</p>
-            <p class="font-bold text-sm text-gray-800">Status Updated</p>
-            <p class="text-xs text-gray-500 mt-1 leading-relaxed font-medium">Driver status changed to Active</p>
-          </div>
-
-          <!-- Activity Item 3 -->
-          <div class="relative pl-7">
-            <div class="absolute -left-[10px] top-1 w-4 h-4 rounded-full border-4 border-white shadow-sm bg-gray-200"></div>
-            <p class="text-[10px] text-gray-400 font-mono mb-1 font-black">2024-01-13 14:15:00</p>
-            <p class="font-bold text-sm text-gray-800">Vehicle Assigned</p>
-            <p class="text-xs text-gray-500 mt-1 leading-relaxed font-medium">Assigned to VH-001 (Cattle Truck)</p>
-          </div>
-
-          <!-- Activity Item 4 -->
-          <div class="relative pl-7">
-            <div class="absolute -left-[10px] top-1 w-4 h-4 rounded-full border-4 border-white shadow-sm bg-gray-200"></div>
-            <p class="text-[10px] text-gray-400 font-mono mb-1 font-black">2024-01-12 10:00:00</p>
-            <p class="font-bold text-sm text-gray-800">License Updated</p>
-            <p class="text-xs text-gray-500 mt-1 leading-relaxed font-medium">License renewed until 2025-06-15</p>
-          </div>
-
-          <!-- Activity Item 5 -->
-          <div class="relative pl-7">
-            <div class="absolute -left-[10px] top-1 w-4 h-4 rounded-full border-4 border-white shadow-sm bg-gray-200"></div>
-            <p class="text-[10px] text-gray-400 font-mono mb-1 font-black">2024-01-10 08:00:00</p>
-            <p class="font-bold text-sm text-gray-800">Driver Profile Created</p>
-            <p class="text-xs text-gray-500 mt-1 leading-relaxed font-medium">Added to system by Admin</p>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- Footer -->
-      <div class="p-4 border-t border-gray-100 bg-gray-50 rounded-b-xl">
-        <div class="flex justify-between items-center">
-          <span class="text-xs text-gray-400 font-medium">Showing 5 activities</span>
-          <button class="text-[#34554a] text-sm font-semibold hover:underline">Export History</button>
-        </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left whitespace-nowrap">
+          <thead>
+            <tr class="bg-[#34554a] text-white text-sm">
+              <th class="p-4 font-semibold">Vehicle ID</th>
+              <th class="p-4 font-semibold">Type</th>
+              <th class="p-4 font-semibold">Capacity</th>
+              <th class="p-4 font-semibold">Assigned Driver</th>
+              <th class="p-4 font-semibold">Status</th>
+              <th class="p-4 text-right font-semibold">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 text-sm text-gray-700" id="fleet-table-body">
+            <!-- Vehicle rows will be rendered here -->
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
 
   <script>
-    // Mock History Data
-    const historyData = {
-      driverName: 'John Smith',
-      activities: [
-        { date: '2024-01-15 09:30:00', title: 'Completed Delivery DEL-0998', description: 'Delivered 18 head to Market B', type: 'success' },
-        { date: '2024-01-14 14:15:00', title: 'Status Updated', description: 'Driver status changed to Active', type: 'info' },
-        { date: '2024-01-13 14:15:00', title: 'Vehicle Assigned', description: 'Assigned to VH-001 (Cattle Truck)', type: 'info' },
-        { date: '2024-01-12 10:00:00', title: 'License Updated', description: 'License renewed until 2025-06-15', type: 'info' },
-        { date: '2024-01-10 08:00:00', title: 'Driver Profile Created', description: 'Added to system by Admin', type: 'info' },
-      ]
-    };
+    // Mock Data
+    const vehicles = [
+      { id: 'VH-001', type: 'Cattle Truck', capacity: '20 Head', driver: 'John Smith', status: 'Available' },
+      { id: 'VH-002', type: 'Livestock Trailer', capacity: '15 Head', driver: 'Maria Garcia', status: 'In Use' },
+      { id: 'VH-003', type: 'Cattle Truck', capacity: '25 Head', driver: 'Unassigned', status: 'Maintenance' },
+      { id: 'VH-004', type: 'Transport Van', capacity: '8 Head', driver: 'Sarah Johnson', status: 'Available' },
+    ];
 
-    function getDotColor(type) {
-      return type === 'success' ? 'bg-[#34554a]' : 'bg-gray-200';
+    function getStatusBadge(status) {
+      const styles = {
+        'Available': 'bg-green-100 text-green-800 border-green-200',
+        'In Use': 'bg-purple-100 text-purple-800 border-purple-200',
+        'Maintenance': 'bg-orange-100 text-orange-800 border-orange-200',
+        'Active': 'bg-green-100 text-green-800 border-green-200',
+        'Inactive': 'bg-gray-100 text-gray-800 border-gray-200',
+        'On Route': 'bg-blue-100 text-blue-800 border-blue-200',
+      };
+      return `<span class="px-2.5 py-0.5 rounded-full text-xs font-medium border ${styles[status] || 'bg-gray-100'}">${status}</span>`;
     }
 
-    function renderHistory() {
-      document.getElementById('driver-name').textContent = historyData.driverName;
+    function render() {
+      updateStats();
+      renderTable();
+    }
 
-      const timelineContainer = document.querySelector('.space-y-8');
-      timelineContainer.innerHTML = historyData.activities.map(activity => `
-        <div class="relative pl-7">
-          <div class="absolute -left-[10px] top-1 w-4 h-4 rounded-full border-4 border-white shadow-sm ${getDotColor(activity.type)}"></div>
-          <p class="text-[10px] text-gray-400 font-mono mb-1 font-black">${activity.date}</p>
-          <p class="font-bold text-sm text-gray-800">${activity.title}</p>
-          <p class="text-xs text-gray-500 mt-1 leading-relaxed font-medium">${activity.description}</p>
-        </div>
+    function updateStats() {
+      document.getElementById('total-vehicles').textContent = vehicles.length;
+      document.getElementById('available-vehicles').textContent = vehicles.filter(v => v.status === 'Available').length;
+      document.getElementById('maintenance-vehicles').textContent = vehicles.filter(v => v.status === 'Maintenance').length;
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('fleet-table-body');
+      tbody.innerHTML = vehicles.map(v => `
+        <tr class="hover:bg-gray-50 transition-colors">
+          <td class="p-4 font-mono font-bold text-[#34554a]">${v.id}</td>
+          <td class="p-4 font-medium text-gray-900">${v.type}</td>
+          <td class="p-4 text-gray-600">${v.capacity}</td>
+          <td class="p-4">
+            ${v.driver === 'Unassigned' 
+              ? '<span class="text-gray-400 italic">No driver assigned</span>'
+              : `<div class="flex items-center gap-2">
+                  <div class="w-6 h-6 rounded-full bg-[#34554a] text-white flex items-center justify-center text-[10px] font-bold">${v.driver.charAt(0)}</div>
+                  <span class="text-gray-700">${v.driver}</span>
+                </div>`
+            }
+          </td>
+          <td class="p-4">${getStatusBadge(v.status)}</td>
+          <td class="p-4 text-right">
+            <button onclick="manageVehicle('${v.id}')" class="text-[#34554a] font-semibold text-sm hover:underline">Manage</button>
+          </td>
+        </tr>
       `).join('');
     }
 
-    function closeModal() {
-      alert('Modal closed');
+    function manageVehicle(id) {
+      alert(`Manage Vehicle Modal for ${id} - Would open here`);
     }
 
+    window.manageVehicle = manageVehicle;
+
     // Initialize
-    renderHistory();
+    render();
   </script>
 </body>
 </html>
