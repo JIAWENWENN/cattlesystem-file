@@ -3,11 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fleet View - CattleLog</title>
+  <title>Drivers View - CattleLog</title>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Inter', sans-serif; }
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
     @keyframes fadeIn {
       from { opacity: 0; transform: scale(0.95); }
       to { opacity: 1; transform: scale(1); }
@@ -16,17 +20,17 @@
   </style>
 </head>
 <body class="min-h-screen bg-gray-50 text-gray-900">
-  <!-- Fleet View Content -->
-  <div id="fleet-view">
+  <!-- Drivers View Content -->
+  <div id="drivers-view">
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
       <div class="bg-white p-6 rounded-xl border border-gray-100 flex items-center gap-5 shadow-sm">
         <div class="w-14 h-14 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center">
-          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
         </div>
         <div>
-          <p class="text-xs text-gray-500 font-bold uppercase">Total Vehicles</p>
-          <p class="text-3xl font-black text-gray-900" id="total-vehicles">4</p>
+          <p class="text-xs text-gray-500 font-bold uppercase">Total Drivers</p>
+          <p class="text-3xl font-black text-gray-900" id="total-drivers">4</p>
         </div>
       </div>
       <div class="bg-white p-6 rounded-xl border border-gray-100 flex items-center gap-5 shadow-sm">
@@ -34,113 +38,264 @@
           <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
         </div>
         <div>
-          <p class="text-xs text-gray-500 font-bold uppercase">Available</p>
-          <p class="text-3xl font-black text-gray-900" id="available-vehicles">2</p>
+          <p class="text-xs text-gray-500 font-bold uppercase">Active</p>
+          <p class="text-3xl font-black text-gray-900" id="active-drivers">3</p>
         </div>
       </div>
-      <div class="bg-white p-6 rounded-xl border border-orange-100 flex items-center gap-5 shadow-sm">
-        <div class="w-14 h-14 rounded-full bg-orange-50 text-orange-600 flex items-center justify-center">
+      <div class="bg-white p-6 rounded-xl border border-red-100 flex items-center gap-5 shadow-sm">
+        <div class="w-14 h-14 rounded-full bg-red-50 text-red-600 flex items-center justify-center">
           <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
         </div>
         <div>
-          <p class="text-xs text-gray-500 font-bold uppercase text-orange-600">In Maintenance</p>
-          <p class="text-3xl font-black text-orange-600" id="maintenance-vehicles">1</p>
+          <p class="text-xs text-gray-500 font-bold uppercase text-red-600">Inactive</p>
+          <p class="text-3xl font-black text-red-600" id="inactive-drivers">1</p>
         </div>
       </div>
     </div>
 
-    <!-- Fleet Table -->
-    <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
-      <div class="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-        <h3 class="font-bold text-gray-900">Vehicle Fleet</h3>
-        <button class="flex items-center gap-2 bg-[#34554a] text-white px-4 py-2 rounded-lg font-medium hover:bg-opacity-90 text-sm shadow-sm transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-          Add Vehicle
-        </button>
+    <!-- Filter Bar -->
+    <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+      <div class="flex flex-1 gap-2 w-full md:w-auto">
+        <div class="relative flex-1">
+          <div class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          </div>
+          <input type="text" id="searchInput" placeholder="Search drivers..." class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 outline-none text-sm focus:ring-2 focus:ring-[#34554a]" />
+        </div>
+        <select id="statusFilter" class="px-3 py-2 rounded-lg border border-gray-200 bg-gray-50 text-gray-600 text-sm outline-none focus:ring-2 focus:ring-[#34554a]">
+          <option value="">All Status</option>
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
+          <option value="On Route">On Route</option>
+        </select>
       </div>
+      <button onclick="openAddModal()" class="flex items-center gap-2 bg-[#34554a] text-white px-4 py-2 rounded-lg font-medium hover:bg-opacity-90 text-sm shadow-sm transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        Add Driver
+      </button>
+    </div>
+
+    <!-- Drivers Table -->
+    <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
       <div class="overflow-x-auto">
         <table class="w-full text-left whitespace-nowrap">
           <thead>
             <tr class="bg-[#34554a] text-white text-sm">
-              <th class="p-4 font-semibold">Vehicle ID</th>
-              <th class="p-4 font-semibold">Type</th>
-              <th class="p-4 font-semibold">Capacity</th>
-              <th class="p-4 font-semibold">Assigned Driver</th>
-              <th class="p-4 font-semibold">Status</th>
+              <th onclick="handleSort('id')" class="p-4 font-semibold cursor-pointer hover:bg-[#2a443b]">
+                <div class="flex items-center gap-2">Driver ID <span id="sort-id"></span></div>
+              </th>
+              <th onclick="handleSort('name')" class="p-4 font-semibold cursor-pointer hover:bg-[#2a443b]">
+                <div class="flex items-center gap-2">Name <span id="sort-name"></span></div>
+              </th>
+              <th onclick="handleSort('phone')" class="p-4 font-semibold cursor-pointer hover:bg-[#2a443b]">
+                <div class="flex items-center gap-2">Phone <span id="sort-phone"></span></div>
+              </th>
+              <th onclick="handleSort('license')" class="p-4 font-semibold cursor-pointer hover:bg-[#2a443b]">
+                <div class="flex items-center gap-2">License <span id="sort-license"></span></div>
+              </th>
+              <th onclick="handleSort('vehicle')" class="p-4 font-semibold cursor-pointer hover:bg-[#2a443b]">
+                <div class="flex items-center gap-2">Vehicle <span id="sort-vehicle"></span></div>
+              </th>
+              <th class="p-4 font-semibold">
+                <div class="flex items-center gap-2">Route</div>
+              </th>
+              <th onclick="handleSort('status')" class="p-4 font-semibold cursor-pointer hover:bg-[#2a443b]">
+                <div class="flex items-center gap-2">Status <span id="sort-status"></span></div>
+              </th>
               <th class="p-4 text-right font-semibold">Actions</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-100 text-sm text-gray-700" id="fleet-table-body">
-            <!-- Vehicle rows will be rendered here -->
+          <tbody class="divide-y text-sm text-gray-700" id="drivers-table-body">
+            <!-- Driver rows will be rendered here -->
           </tbody>
         </table>
+      </div>
+      <div class="p-4 border-t bg-gray-50 flex items-center justify-between">
+        <p class="text-sm text-gray-500 font-medium" id="showing-count">Showing 4 of 4 records</p>
+        <div class="flex gap-2">
+          <button class="w-8 h-8 flex items-center justify-center border rounded-lg bg-white disabled:opacity-50 transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          </button>
+          <button class="w-8 h-8 flex items-center justify-center border rounded-lg bg-white disabled:opacity-50 transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
     // Mock Data
-    const vehicles = [
-      { id: 'VH-001', type: 'Cattle Truck', capacity: '20 Head', driver: 'John Smith', status: 'Available' },
-      { id: 'VH-002', type: 'Livestock Trailer', capacity: '15 Head', driver: 'Maria Garcia', status: 'In Use' },
-      { id: 'VH-003', type: 'Cattle Truck', capacity: '25 Head', driver: 'Unassigned', status: 'Maintenance' },
-      { id: 'VH-004', type: 'Transport Van', capacity: '8 Head', driver: 'Sarah Johnson', status: 'Available' },
+    let drivers = [
+      { id: 'D01', name: 'John Smith', phone: '+1-555-0101', status: 'Active', license: 'TX-99210', vehicle: 'VH-001', expiry_date: '2025-06-15', shift_start: '06:00', shift_end: '14:00', source: 'Farm A', destination: 'Market B' },
+      { id: 'D02', name: 'Maria Garcia', phone: '+1-555-0102', status: 'Active', license: 'TX-88321', vehicle: 'VH-002', expiry_date: '2025-03-20', shift_start: '14:00', shift_end: '22:00', source: 'Ranch C', destination: 'Farm D' },
+      { id: 'D03', name: 'James Wilson', phone: '+1-555-0103', status: 'Inactive', license: 'TX-77432', vehicle: 'None', expiry_date: '2024-12-10', shift_start: '', shift_end: '', source: '', destination: '' },
+      { id: 'D04', name: 'Sarah Johnson', phone: '+1-555-0104', status: 'On Route', license: 'TX-66543', vehicle: 'VH-004', expiry_date: '2025-09-05', shift_start: '08:00', shift_end: '16:00', source: 'Auction E', destination: 'Ranch F' },
     ];
+
+    let state = {
+      searchTerm: '',
+      statusFilter: '',
+      sortKey: 'name',
+      sortDir: 'asc'
+    };
 
     function getStatusBadge(status) {
       const styles = {
-        'Available': 'bg-green-100 text-green-800 border-green-200',
-        'In Use': 'bg-purple-100 text-purple-800 border-purple-200',
-        'Maintenance': 'bg-orange-100 text-orange-800 border-orange-200',
         'Active': 'bg-green-100 text-green-800 border-green-200',
         'Inactive': 'bg-gray-100 text-gray-800 border-gray-200',
         'On Route': 'bg-blue-100 text-blue-800 border-blue-200',
+        'Completed': 'bg-green-100 text-green-800 border-green-200',
+        'Issue': 'bg-red-100 text-red-800 border-red-200',
       };
       return `<span class="px-2.5 py-0.5 rounded-full text-xs font-medium border ${styles[status] || 'bg-gray-100'}">${status}</span>`;
     }
 
+    function getSortIcon(key) {
+      if (state.sortKey === key) {
+        return state.sortDir === 'asc' 
+          ? `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>`
+          : `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>`;
+      }
+      return `<span class="opacity-30"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg></span>`;
+    }
+
     function render() {
       updateStats();
+      renderSortIcons();
       renderTable();
+      attachEventListeners();
     }
 
     function updateStats() {
-      document.getElementById('total-vehicles').textContent = vehicles.length;
-      document.getElementById('available-vehicles').textContent = vehicles.filter(v => v.status === 'Available').length;
-      document.getElementById('maintenance-vehicles').textContent = vehicles.filter(v => v.status === 'Maintenance').length;
+      document.getElementById('total-drivers').textContent = drivers.length;
+      document.getElementById('active-drivers').textContent = drivers.filter(d => d.status === 'Active').length;
+      document.getElementById('inactive-drivers').textContent = drivers.filter(d => d.status === 'Inactive').length;
+    }
+
+    function renderSortIcons() {
+      ['id', 'name', 'phone', 'license', 'vehicle', 'status'].forEach(key => {
+        const el = document.getElementById(`sort-${key}`);
+        if (el) el.innerHTML = getSortIcon(key);
+      });
     }
 
     function renderTable() {
-      const tbody = document.getElementById('fleet-table-body');
-      tbody.innerHTML = vehicles.map(v => `
+      const filteredDrivers = drivers.filter(d => {
+        const matchSearch = d.name.toLowerCase().includes(state.searchTerm.toLowerCase()) ||
+                           d.id.toLowerCase().includes(state.searchTerm.toLowerCase()) ||
+                           d.license.toLowerCase().includes(state.searchTerm.toLowerCase());
+        const matchStatus = !state.statusFilter || d.status === state.statusFilter;
+        return matchSearch && matchStatus;
+      });
+
+      filteredDrivers.sort((a, b) => {
+        let aVal = a[state.sortKey] || '';
+        let bVal = b[state.sortKey] || '';
+        if (state.sortDir === 'asc') return aVal.localeCompare(bVal);
+        return bVal.localeCompare(aVal);
+      });
+
+      document.getElementById('showing-count').textContent = `Showing ${filteredDrivers.length} of ${drivers.length} records`;
+
+      const tbody = document.getElementById('drivers-table-body');
+      tbody.innerHTML = filteredDrivers.map(driver => `
         <tr class="hover:bg-gray-50 transition-colors">
-          <td class="p-4 font-mono font-bold text-[#34554a]">${v.id}</td>
-          <td class="p-4 font-medium text-gray-900">${v.type}</td>
-          <td class="p-4 text-gray-600">${v.capacity}</td>
+          <td class="p-4 font-mono text-gray-500">${driver.id}</td>
+          <td class="p-4"><span class="font-bold text-gray-900">${driver.name}</span></td>
           <td class="p-4">
-            ${v.driver === 'Unassigned' 
-              ? '<span class="text-gray-400 italic">No driver assigned</span>'
-              : `<div class="flex items-center gap-2">
-                  <div class="w-6 h-6 rounded-full bg-[#34554a] text-white flex items-center justify-center text-[10px] font-bold">${v.driver.charAt(0)}</div>
-                  <span class="text-gray-700">${v.driver}</span>
-                </div>`
-            }
+            <div class="flex items-center gap-2 text-gray-600">
+              <span class="text-gray-400">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              </span>${driver.phone}
+            </div>
           </td>
-          <td class="p-4">${getStatusBadge(v.status)}</td>
+          <td class="p-4 text-gray-600">${driver.license}</td>
+          <td class="p-4 text-gray-600">${driver.vehicle === 'None' ? '<span class="italic text-gray-400">Unassigned</span>' : driver.vehicle}</td>
+          <td class="p-4 text-gray-600 text-xs">
+            ${driver.source && driver.destination 
+              ? `<span class="font-medium">${driver.source}</span> <span class="text-gray-400">→</span> <span class="font-medium">${driver.destination}</span>` 
+              : '<span class="italic text-gray-400">Not assigned</span>'}
+          </td>
+          <td class="p-4">${getStatusBadge(driver.status)}</td>
           <td class="p-4 text-right">
-            <button onclick="manageVehicle('${v.id}')" class="text-[#34554a] font-semibold text-sm hover:underline">Manage</button>
+            <div class="flex justify-end gap-3 text-gray-400">
+              <button onclick="openViewModal('${driver.id}')" class="cursor-pointer hover:text-blue-600 transition-colors" title="View">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+              <button onclick="openHistoryModal('${driver.id}')" class="cursor-pointer hover:text-amber-600 transition-colors" title="History">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
+              </button>
+              <button onclick="openEditModal('${driver.id}')" class="cursor-pointer hover:text-green-600 transition-colors" title="Edit">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+              </button>
+              <button onclick="openDeleteModal('${driver.id}')" class="cursor-pointer hover:text-red-600 transition-colors" title="Delete">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+              </button>
+            </div>
           </td>
         </tr>
       `).join('');
+
+      if (filteredDrivers.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="p-8 text-center text-gray-500 italic">No driver records found.</td></tr>`;
+      }
     }
 
-    function manageVehicle(id) {
-      alert(`Manage Vehicle Modal for ${id} - Would open here`);
+    function handleSort(key) {
+      state.sortDir = (state.sortKey === key && state.sortDir === 'asc') ? 'desc' : 'asc';
+      state.sortKey = key;
+      render();
     }
 
-    window.manageVehicle = manageVehicle;
+    function attachEventListeners() {
+      const searchInput = document.getElementById('searchInput');
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          state.searchTerm = e.target.value;
+          render();
+        });
+      }
 
-    // Initialize
+      const statusFilter = document.getElementById('statusFilter');
+      if (statusFilter) {
+        statusFilter.addEventListener('change', (e) => {
+          state.statusFilter = e.target.value;
+          render();
+        });
+      }
+    }
+
+    // Event handler functions
+    function openAddModal() {
+      alert('Add Driver Modal - Would open here');
+    }
+
+    function openViewModal(id) {
+      alert(`View Driver Modal for ${id} - Would open here`);
+    }
+
+    function openHistoryModal(id) {
+      alert(`History Modal for ${id} - Would open here`);
+    }
+
+    function openEditModal(id) {
+      alert(`Edit Driver Modal for ${id} - Would open here`);
+    }
+
+    function openDeleteModal(id) {
+      alert(`Delete Confirmation Modal for ${id} - Would open here`);
+    }
+
+    // Expose functions globally
+    window.openAddModal = openAddModal;
+    window.openViewModal = openViewModal;
+    window.openHistoryModal = openHistoryModal;
+    window.openEditModal = openEditModal;
+    window.openDeleteModal = openDeleteModal;
+    window.handleSort = handleSort;
+
+    // Initial render
     render();
   </script>
 </body>
