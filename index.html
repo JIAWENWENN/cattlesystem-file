@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task List - Task CMS</title>
+    <title>Calendar View - Task CMS</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -30,11 +30,11 @@
                     <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
                     <span class="text-sm font-bold">Overview</span>
                 </button>
-                <button onclick="window.location.href='calendar.html'" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-gray-600 hover:bg-gray-50 hover:text-[#34554a]">
+                <button onclick="window.location.href='calendar.html'" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all bg-[#34554a] text-white shadow-md">
                     <i data-lucide="calendar" class="w-4 h-4"></i>
                     <span class="text-sm font-bold">Calendar View</span>
                 </button>
-                <button onclick="window.location.href='task-list.html'" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all bg-[#34554a] text-white shadow-md">
+                <button onclick="window.location.href='task-list.html'" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-gray-600 hover:bg-gray-50 hover:text-[#34554a]">
                     <i data-lucide="list" class="w-4 h-4"></i>
                     <span class="text-sm font-bold">Task List</span>
                 </button>
@@ -56,86 +56,47 @@
         <!-- Main Content -->
         <main class="flex-1 overflow-y-auto p-8">
             <div class="mb-8">
-                <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Task Management</h1>
-                <p class="text-sm text-gray-500 mt-1">View, search, and manage all tasks in one place.</p>
+                <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Calendar View</h1>
+                <p class="text-sm text-gray-500 mt-1">View and manage tasks on a calendar timeline.</p>
             </div>
 
-            <!-- Task List Content -->
-            <div id="task-list-content">
-                <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-                    <div class="flex flex-1 gap-2 w-full md:w-auto">
-                        <div class="relative flex-1">
-                            <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4"></i>
-                            <input type="text" placeholder="Search tasks..." id="search-input" oninput="handleSearch(this.value)" class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 outline-none text-sm focus:ring-2 focus:ring-[#34554a]">
+            <!-- Calendar Content -->
+            <div id="calendar-content">
+                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-bold text-gray-900" id="month-title">January 2025</h2>
+                        <div class="flex gap-2">
+                            <button onclick="changeMonth(-1)" class="p-2 rounded-lg border hover:bg-gray-50 transition-colors">
+                                <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="changeMonth(1)" class="p-2 rounded-lg border hover:bg-gray-50 transition-colors">
+                                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                            </button>
                         </div>
                     </div>
-                    <div class="flex gap-2">
-                        <button onclick="openColumnModal()" class="flex items-center gap-2 bg-white border border-gray-200 px-4 py-2 rounded-lg hover:bg-gray-50 text-sm shadow-sm transition-colors">
-                            <i data-lucide="settings-2" class="w-4 h-4"></i> Columns
-                        </button>
-                        <button onclick="openAddModal()" class="flex items-center gap-2 bg-[#34554a] text-white px-4 py-2 rounded-lg font-medium hover:bg-opacity-90 text-sm shadow-sm">
-                            <i data-lucide="plus" class="w-4 h-4"></i> Add Task
-                        </button>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left whitespace-nowrap">
-                            <thead>
-                                <tr class="bg-[#34554a] text-white text-sm">
-                                    <th class="p-4 font-semibold cursor-pointer hover:bg-[#2a443b]" onclick="handleSort('name')">
-                                        <div class="flex items-center gap-2">Task Name</div>
-                                    </th>
-                                    <th class="p-4 font-semibold cursor-pointer hover:bg-[#2a443b]" onclick="handleSort('type')">
-                                        <div class="flex items-center gap-2">Category</div>
-                                    </th>
-                                    <th class="p-4 font-semibold cursor-pointer hover:bg-[#2a443b]" onclick="handleSort('cattleId')">
-                                        <div class="flex items-center gap-2">Cattle ID</div>
-                                    </th>
-                                    <th class="p-4 font-semibold cursor-pointer hover:bg-[#2a443b]" onclick="handleSort('assignedTo')">
-                                        <div class="flex items-center gap-2">Assigned To</div>
-                                    </th>
-                                    <th class="p-4 font-semibold cursor-pointer hover:bg-[#2a443b]" onclick="handleSort('date')">
-                                        <div class="flex items-center gap-2">Due Date</div>
-                                    </th>
-                                    <th class="p-4 font-semibold cursor-pointer hover:bg-[#2a443b]" onclick="handleSort('priority')">
-                                        <div class="flex items-center gap-2">Priority</div>
-                                    </th>
-                                    <th class="p-4 font-semibold cursor-pointer hover:bg-[#2a443b]">
-                                        <div class="flex items-center gap-2">Status</div>
-                                    </th>
-                                    <th class="p-4 text-right font-semibold">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y text-sm text-gray-700" id="task-table-body">
-                                <!-- Tasks rendered by JS -->
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="p-4 border-t bg-gray-50 flex items-center justify-between">
-                        <p class="text-sm text-gray-500 font-medium" id="task-count">Showing 0 of 0 tasks</p>
+                    <div class="grid grid-cols-7 gap-px bg-gray-200 rounded-xl overflow-hidden border border-gray-200" id="calendar-grid">
+                        <!-- Calendar rendered by JS -->
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Column Manager Modal -->
-    <div id="column-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm">
-        <div class="bg-white rounded-xl shadow-xl w-full max-w-2xl mx-4 overflow-hidden max-h-[90vh]">
-            <div class="flex justify-between items-center p-6 border-b bg-gray-50">
-                <h3 class="text-lg font-bold text-gray-900">Manage Columns</h3>
-                <button onclick="closeColumnModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+    <!-- Detail Modal for Calendar -->
+    <div id="detail-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-md mx-4 overflow-hidden flex flex-col border border-gray-100">
+            <div class="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50">
+                <h3 class="text-lg font-bold text-gray-900">Task Details</h3>
+                <button onclick="closeDetailModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
-            <div class="p-6 overflow-y-auto custom-scrollbar">
-                <h4 class="text-xs font-bold text-gray-500 uppercase mb-3 tracking-wider">Toggle Column Visibility</h4>
-                <div class="space-y-2" id="column-options">
-                    <!-- Columns rendered by JS -->
-                </div>
-                <button onclick="closeColumnModal()" class="mt-6 w-full bg-[#34554a] text-white py-2.5 rounded-lg text-sm font-bold hover:bg-opacity-90 shadow-md">Done</button>
+            <div id="detail-modal-content" class="p-6 space-y-4 bg-white">
+                <!-- Content rendered by JS -->
+            </div>
+            <div class="p-4 bg-gray-50 flex justify-end gap-3 rounded-b-xl border-t">
+                <button onclick="closeDetailModal()" class="px-4 py-2 border rounded-lg text-gray-600 hover:bg-gray-50 font-medium">Close</button>
+                <button onclick="toggleTaskAndClose()" class="px-6 py-2 bg-[#34554a] text-white rounded-lg font-bold shadow-sm">Mark Complete</button>
             </div>
         </div>
     </div>
@@ -151,20 +112,6 @@
             { label: 'Milking', color: 'bg-cyan-100 text-cyan-800 border-cyan-200' },
         ];
 
-        const STAFF = [
-            { id: 'S-01', name: 'John Doe', role: 'Farm Manager' },
-            { id: 'S-02', name: 'Sarah Smith', role: 'Veterinarian' },
-            { id: 'S-03', name: 'Mike Johnson', role: 'Field Hand' },
-            { id: 'S-04', name: 'Emma Wilson', role: 'Breeding Specialist' },
-        ];
-
-        const CATTLE = [
-            { id: 'C-101', name: 'Bessie', breed: 'Holstein', status: 'Healthy' },
-            { id: 'C-102', name: 'Daisy', breed: 'Jersey', status: 'Under Observation' },
-            { id: 'C-103', name: 'Luna', breed: 'Angus', status: 'Pregnant' },
-            { id: 'C-104', name: 'Molly', breed: 'Hereford', status: 'Healthy' },
-        ];
-
         let tasks = [
             { id: 1, name: 'Morning Feeding', type: 'Feeding', cattleId: 'C-101', date: '2025-01-02', priority: 'High', assignedTo: 'Mike Johnson', createdBy: 'John Doe', description: 'Provide high-protein mix for Bessie.', completed: true },
             { id: 2, name: 'FMD Vaccination', type: 'Vaccination', cattleId: 'C-102', date: '2025-01-09', priority: 'High', assignedTo: 'Sarah Smith', createdBy: 'Emma Wilson', description: 'Ensure cold chain for vaccine.', completed: false },
@@ -172,118 +119,137 @@
             { id: 4, name: 'Evening Milking', type: 'Milking', cattleId: 'C-101', date: '2025-01-15', priority: 'Low', assignedTo: 'Mike Johnson', createdBy: 'John Doe', description: 'Standard milking procedure.', completed: false },
         ];
 
-        let columns = [
-            { key: 'name', label: 'Task Name', visible: true },
-            { key: 'type', label: 'Category', visible: true },
-            { key: 'cattleId', label: 'Cattle ID', visible: true },
-            { key: 'assignedTo', label: 'Assigned To', visible: true },
-            { key: 'date', label: 'Due Date', visible: true },
-            { key: 'priority', label: 'Priority', visible: true },
-            { key: 'status', label: 'Status', visible: true },
-        ];
+        let currentMonth = new Date(2025, 0, 1);
+        let currentTaskId = null;
 
-        let searchQuery = '';
-        let sortKey = 'date';
-        let sortDir = 'asc';
+        function getTaskIcon(type) {
+            const icons = { 'Feeding': 'beef', 'Vaccination': 'syringe', 'Health Checkup': 'heart', 'Breeding': 'users', 'Veterinary Visit': 'stethoscope', 'Milking': 'milk' };
+            return icons[type] || 'clipboard-list';
+        }
 
-        function renderTaskList() {
-            const filtered = tasks.filter(t => 
-                t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                t.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                t.assignedTo.toLowerCase().includes(searchQuery.toLowerCase())
-            ).sort((a, b) => {
-                let valA = a[sortKey], valB = b[sortKey];
-                if (sortDir === 'asc') return valA > valB ? 1 : -1;
-                return valA < valB ? 1 : -1;
-            });
+        function renderCalendar() {
+            const year = currentMonth.getFullYear();
+            const month = currentMonth.getMonth();
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const monthName = currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' });
 
-            const tbody = document.getElementById('task-table-body');
-            const count = document.getElementById('task-count');
+            document.getElementById('month-title').textContent = monthName;
 
-            if (filtered.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="8" class="p-8 text-center text-gray-500 italic">No tasks found.</td></tr>';
-            } else {
-                tbody.innerHTML = filtered.map(task => `
-                    <tr class="hover:bg-gray-50 transition-colors ${task.completed ? 'opacity-50' : ''}">
-                        <td class="p-4"><span class="font-bold text-gray-900 ${task.completed ? 'line-through' : ''}">${task.name}</span></td>
-                        <td class="p-4"><span class="${TASK_TYPES.find(t => t.label === task.type)?.color || 'bg-gray-100'} px-2.5 py-0.5 rounded-full text-xs font-medium border">${task.type}</span></td>
-                        <td class="p-4">${task.cattleId}</td>
-                        <td class="p-4"><div class="flex items-center gap-2"><div class="w-7 h-7 rounded-full bg-green-50 flex items-center justify-center text-[10px] font-black text-[#34554a] border border-green-100">${task.assignedTo.split(' ').map(n => n[0]).join('')}</div><span class="text-sm font-medium">${task.assignedTo}</span></div></td>
-                        <td class="p-4">${task.date}</td>
-                        <td class="p-4"><span class="${task.priority === 'High' ? 'bg-red-100 text-red-800 border-red-200' : task.priority === 'Medium' ? 'bg-amber-100 text-amber-800 border-amber-200' : 'bg-gray-100 text-gray-600 border-gray-200'} px-2.5 py-0.5 rounded-full text-xs font-medium border">${task.priority}</span></td>
-                        <td class="p-4"><span class="${task.completed ? 'bg-green-100 text-green-800 border-green-200' : 'bg-amber-100 text-amber-800 border-amber-200'} px-2.5 py-0.5 rounded-full text-xs font-medium border">${task.completed ? 'Completed' : 'Pending'}</span></td>
-                        <td class="p-4 text-right">
-                            <div class="flex justify-end gap-3 text-gray-400">
-                                <button onclick="toggleTask(${task.id})" class="hover:text-green-600"><i data-lucide="check" class="w-4 h-4"></i></button>
-                                <button onclick="deleteTask(${task.id})" class="hover:text-red-600"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                            </div>
-                        </td>
-                    </tr>
-                `).join('');
-            }
+            let days = [];
+            for (let i = 0; i < firstDay; i++) days.push(null);
+            for (let i = 1; i <= daysInMonth; i++) days.push(i);
 
-            count.textContent = `Showing ${filtered.length} of ${tasks.length} tasks`;
+            const grid = document.getElementById('calendar-grid');
+            grid.innerHTML = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map(day => `
+                <div class="bg-gray-50 p-3 text-center text-[10px] font-bold text-gray-400 tracking-wider">${day}</div>
+            `).join('') + days.map((day, idx) => {
+                if (!day) return '<div class="bg-white min-h-[100px]"></div>';
+                const dateStr = `2025-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const dayTasks = tasks.filter(t => t.date === dateStr);
+                return `
+                    <div class="bg-white min-h-[100px] p-2 hover:bg-gray-50 transition-all cursor-pointer border-t border-gray-100">
+                        <span class="text-sm font-bold ${dayTasks.length > 0 ? 'text-[#34554a]' : 'text-gray-300'}">${day}</span>
+                        <div class="mt-1 space-y-1">
+                            ${dayTasks.slice(0, 2).map(t => {
+                                const typeInfo = TASK_TYPES.find(type => type.label === t.type);
+                                return `<div class="text-[9px] p-1 rounded font-bold truncate border ${typeInfo?.color || 'bg-gray-100'}">${t.name}</div>`;
+                            }).join('')}
+                            ${dayTasks.length > 2 ? `<div class="text-[9px] text-gray-400 font-medium">+${dayTasks.length - 2} more</div>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
             lucide.createIcons();
         }
 
-        function handleSearch(value) {
-            searchQuery = value;
-            renderTaskList();
+        function changeMonth(delta) {
+            currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + delta, 1);
+            renderCalendar();
         }
 
-        function handleSort(key) {
-            if (sortKey === key) {
-                sortDir = sortDir === 'asc' ? 'desc' : 'asc';
-            } else {
-                sortKey = key;
-                sortDir = 'asc';
-            }
-            renderTaskList();
-        }
+        function openDetailModal(id) {
+            const task = tasks.find(t => t.id === id);
+            if (!task) return;
+            currentTaskId = id;
 
-        function toggleTask(id) {
-            tasks = tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t);
-            renderTaskList();
-        }
-
-        function deleteTask(id) {
-            if (confirm('Delete this task?')) {
-                tasks = tasks.filter(t => t.id !== id);
-                renderTaskList();
-            }
-        }
-
-        function openColumnModal() {
-            document.getElementById('column-options').innerHTML = columns.map((col, i) => `
-                <div class="flex items-center justify-between p-3 border rounded-lg bg-white shadow-sm">
-                    <div class="flex items-center gap-3">
-                        <input type="checkbox" ${col.visible ? 'checked' : ''} onchange="toggleColumn(${i})" class="w-4 h-4 text-[#34554a] rounded focus:ring-[#34554a] cursor-pointer">
-                        <span class="text-sm font-medium text-gray-700">${col.label}</span>
+            const typeInfo = TASK_TYPES.find(t => t.label === task.type);
+            const content = document.getElementById('detail-modal-content');
+            
+            content.innerHTML = `
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-16 h-16 rounded-full ${typeInfo?.color || 'bg-gray-100'} flex items-center justify-center shadow-inner">
+                        <i data-lucide="${getTaskIcon(task.type)}" class="w-8 h-8"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-bold text-gray-900 tracking-tight">${task.name}</h4>
+                        <p class="text-sm text-gray-500 font-medium">${task.type}</p>
                     </div>
                 </div>
-            `).join('');
+                <div class="space-y-3">
+                    ${[
+                        { label: 'Created By', val: task.createdBy },
+                        { label: 'Assigned To', val: task.assignedTo },
+                        { label: 'Cattle ID', val: task.cattleId },
+                        { label: 'Due Date', val: task.date },
+                        { label: 'Priority', val: task.priority }
+                    ].map(item => `
+                        <div class="flex justify-between border-b pb-2 border-gray-100">
+                            <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">${item.label}</span>
+                            <span class="text-sm font-semibold text-gray-900">${item.val}</span>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="bg-gray-50 p-4 rounded-lg border border-gray-100 mt-4">
+                    <p class="text-xs font-bold text-gray-400 uppercase mb-2">Description</p>
+                    <p class="text-sm text-gray-600 font-medium">${task.description || 'No description provided.'}</p>
+                </div>
+            `;
 
-            const modal = document.getElementById('column-modal');
+            const modal = document.getElementById('detail-modal');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
+            lucide.createIcons();
         }
 
-        function toggleColumn(index) {
-            columns[index].visible = !columns[index].visible;
-        }
-
-        function closeColumnModal() {
-            const modal = document.getElementById('column-modal');
+        function closeDetailModal() {
+            const modal = document.getElementById('detail-modal');
             modal.classList.add('hidden');
             modal.classList.remove('flex');
-            renderTaskList();
         }
 
-        function openAddModal() {
-            alert('Add Task functionality - would open a form modal');
+        function toggleTaskAndClose() {
+            if (currentTaskId) {
+                tasks = tasks.map(t => t.id === currentTaskId ? { ...t, completed: !t.completed } : t);
+                closeDetailModal();
+                renderCalendar();
+            }
         }
 
-        document.addEventListener('DOMContentLoaded', renderTaskList);
+        // Override click handler for calendar days
+        function setupCalendarClicks() {
+            const grid = document.getElementById('calendar-grid');
+            grid.addEventListener('click', (e) => {
+                const dayCell = e.target.closest('.min-h-\\[100px\\]');
+                if (dayCell) {
+                    const daySpan = dayCell.querySelector('span');
+                    if (daySpan) {
+                        const day = parseInt(daySpan.textContent);
+                        const dateStr = `2025-01-${String(day).padStart(2, '0')}`;
+                        const dayTasks = tasks.filter(t => t.date === dateStr);
+                        if (dayTasks.length > 0) {
+                            openDetailModal(dayTasks[0].id);
+                        }
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCalendar();
+            setupCalendarClicks();
+        });
     </script>
 </body>
 </html>
