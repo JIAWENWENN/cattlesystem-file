@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worker Task Tracking</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div id="app" class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white border-r border-gray-200 p-6 flex-col hidden lg:flex shadow-sm">
+            <div class="flex items-center gap-3 mb-10 px-2">
+                <div class="bg-[#34554a] p-2 rounded-lg text-white shadow-lg">
+                    <i data-lucide="clipboard-list" class="w-5 h-5"></i>
+                </div>
+                <span class="text-lg font-black tracking-tight text-[#34554a] uppercase">Task CMS</span>
+            </div>
+
+            <nav class="space-y-2 flex-1" id="nav-menu">
+                <!-- Navigation items will be rendered by JS -->
+            </nav>
+
+            <div class="mt-auto p-4 bg-[#34554a] rounded-xl flex items-center gap-3 shadow-lg">
+                <div class="w-10 h-10 rounded-full bg-white/20 border border-white/30 flex items-center justify-center text-white font-black text-sm">JD</div>
+                <div>
+                    <p class="text-sm font-bold text-white">John Doe</p>
+                    <p class="text-[10px] text-white/60 font-bold uppercase tracking-wider">Farm Admin</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto p-8">
+            <div id="page-header" class="mb-8">
+                <!-- Header rendered by JS -->
+            </div>
+            <div id="page-content">
+                <!-- Content rendered by JS -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Detail Modal -->
+    <div id="detail-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-md mx-4 overflow-hidden flex flex-col border border-gray-100">
+            <div class="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50">
+                <h3 class="text-lg font-bold text-gray-900">Task Details</h3>
+                <button onclick="closeDetailModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div id="detail-modal-content" class="p-6 space-y-4 bg-white">
+                <!-- Content rendered by JS -->
+            </div>
+            <div id="detail-modal-footer" class="p-4 bg-gray-50 flex justify-end gap-3 rounded-b-xl border-t">
+                <!-- Footer rendered by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Modal -->
+    <div id="form-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-lg mx-4 overflow-hidden max-h-[90vh] flex flex-col border border-gray-100">
+            <div class="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50">
+                <h3 id="form-modal-title" class="text-lg font-bold text-gray-900">Add Task</h3>
+                <button onclick="closeFormModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto bg-white custom-scrollbar">
+                <form id="task-form" class="space-y-5">
+                    <!-- Form fields rendered by JS -->
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Column Manager Modal -->
+    <div id="column-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-2xl mx-4 overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="flex justify-between items-center p-6 border-b bg-gray-50">
+                <h3 class="text-lg font-bold text-gray-900">Manage Columns</h3>
+                <button onclick="closeColumnModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div id="column-modal-content" class="p-6 overflow-y-auto custom-scrollbar">
+                <!-- Content rendered by JS -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA ---
+        const STAFF = [
+            { id: 'S-01', name: 'John Doe', role: 'Farm Manager' },
+            { id: 'S-02', name: 'Sarah Smith', role: 'Veterinarian' },
+            { id: 'S-03', name: 'Mike Johnson', role: 'Field Hand' },
+            { id: 'S-04', name: 'Emma Wilson', role: 'Breeding Specialist' },
+        ];
+
+        const CATTLE = [
+            { id: 'C-101', name: 'Bessie', breed: 'Holstein', status: 'Healthy' },
+            { id: 'C-102', name: 'Daisy', breed: 'Jersey', status: 'Under Observation' },
+            { id: 'C-103', name: 'Luna', breed: 'Angus', status: 'Pregnant' },
+            { id: 'C-104', name: 'Molly', breed: 'Hereford', status: 'Healthy' },
+        ];
+
+        const TASK_TYPES = [
+            { label: 'Feeding', color: 'bg-orange-100 text-orange-800 border-orange-200' },
+            { label: 'Vaccination', color: 'bg-blue-100 text-blue-800 border-blue-200' },
+            { label: 'Health Checkup', color: 'bg-red-100 text-red-800 border-red-200' },
+            { label: 'Breeding', color: 'bg-purple-100 text-purple-800 border-purple-200' },
+            { label: 'Veterinary Visit', color: 'bg-emerald-100 text-emerald-800 border-emerald-200' },
+            { label: 'Milking', color: 'bg-cyan-100 text-cyan-800 border-cyan-200' },
+        ];
+
+        let tasks = [
+            { id: 1, name: 'Morning Feeding', type: 'Feeding', cattleId: 'C-101', date: '2025-01-02', priority: 'High', assignedTo: 'Mike Johnson', createdBy: 'John Doe', description: 'Provide high-protein mix for Bessie.', completed: true },
+            { id: 2, name: 'FMD Vaccination', type: 'Vaccination', cattleId: 'C-102', date: '2025-01-09', priority: 'High', assignedTo: 'Sarah Smith', createdBy: 'Emma Wilson', description: 'Ensure cold chain for vaccine.', completed: false },
+            { id: 3, name: 'Monthly Checkup', type: 'Health Checkup', cattleId: 'All', date: '2025-01-20', priority: 'Medium', assignedTo: 'Sarah Smith', createdBy: 'John Doe', description: 'General herd exam focusing on hoof health.', completed: false },
+            { id: 4, name: 'Evening Milking', type: 'Milking', cattleId: 'C-101', date: '2025-01-15', priority: 'Low', assignedTo: 'Mike Johnson', createdBy: 'John Doe', description: 'Standard milking procedure.', completed: false },
+        ];
+
+        let columns = [
+            { key: 'name', label: 'Task Name', visible: true },
+            { key: 'type', label: 'Category', visible: true },
+            { key: 'cattleId', label: 'Cattle ID', visible: true },
+            { key: 'assignedTo', label: 'Assigned To', visible: true },
+            { key: 'date', label: 'Due Date', visible: true },
+            { key: 'priority', label: 'Priority', visible: true },
+            { key: 'status', label: 'Status', visible: true },
+        ];
+
+        let currentView = 'dashboard';
+        let currentMonth = new Date(2025, 0, 1);
+        let searchQuery = '';
+        let sortKey = 'date';
+        let sortDir = 'asc';
+        let editingTaskId = null;
+
+        // --- RENDER FUNCTIONS ---
+        function render() {
+            renderNav();
+            renderHeader();
+            renderContent();
+            lucide.createIcons();
+        }
+
+        function renderNav() {
+            const navItems = [
+                { id: 'dashboard', icon: 'layout-dashboard', label: 'Overview' },
+                { id: 'create', icon: 'plus', label: 'Log Task' },
+                { id: 'calendar', icon: 'calendar', label: 'Calendar View' },
+                { id: 'list', icon: 'list', label: 'Task List' },
+                { id: 'herd', icon: 'users', label: 'Herd Management' },
+            ];
+
+            document.getElementById('nav-menu').innerHTML = navItems.map(item => `
+                <button onclick="setView('${item.id}')" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                    currentView === item.id 
+                        ? 'bg-[#34554a] text-white shadow-md' 
+                        : 'text-gray-600 hover:bg-gray-50 hover:text-[#34554a]'
+                }">
+                    <i data-lucide="${item.icon}" class="w-4 h-4"></i>
+                    <span class="text-sm font-bold">${item.label}</span>
+                </button>
+            `).join('');
+        }
+
+        function renderHeader() {
+            const titles = {
+                dashboard: 'Task Overview',
+                create: 'Log New Task',
+                calendar: 'Calendar View',
+                list: 'Task Management',
+                herd: 'Herd Management'
+            };
+
+            document.getElementById('page-header').innerHTML = `
+                <h1 class="text-2xl font-bold text-gray-900 tracking-tight">${titles[currentView]}</h1>
+                <p class="text-sm text-gray-500 mt-1">Manage tasks, track progress, and monitor worker assignments.</p>
+            `;
+        }
+
+        function renderContent() {
+            const content = document.getElementById('page-content');
+            switch(currentView) {
+                case 'dashboard': content.innerHTML = renderDashboard(); break;
+                case 'create': content.innerHTML = renderCreateForm(); break;
+                case 'calendar': content.innerHTML = renderCalendar(); break;
+                case 'list': content.innerHTML = renderList(); break;
+                case 'herd': content.innerHTML = renderHerd(); break;
+            }
+        }
+
+        function renderDashboard() {
+            const pending = tasks.filter(t => !t.completed).length;
+            const completed = tasks.filter(t => t.completed).length;
+            const highPriority = tasks.filter(t => t.priority === 'High' && !t.completed).length;
+
+            return `
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-xl border border-gray-100 flex items-center gap-5 shadow-sm">
+                        <div class="w-14 h-14 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center">
+                            <i data-lucide="clipboard-list" class="w-7 h-7"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 font-bold uppercase">Total Tasks</p>
+                            <p class="text-3xl font-black text-gray-900">${tasks.length}</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-gray-100 flex items-center gap-5 shadow-sm">
+                        <div class="w-14 h-14 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center">
+                            <i data-lucide="clock" class="w-7 h-7"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 font-bold uppercase">Pending</p>
+                            <p class="text-3xl font-black text-gray-900">${pending}</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-green-100 flex items-center gap-5 shadow-sm">
+                        <div class="w-14 h-14 rounded-full bg-green-50 text-green-600 flex items-center justify-center">
+                            <i data-lucide="check-circle-2" class="w-7 h-7"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 font-bold uppercase">Completed</p>
+                            <p class="text-3xl font-black text-green-600">${completed}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
+                    <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+                        <h2 class="text-lg font-bold text-gray-900">Upcoming Tasks</h2>
+                        <button onclick="setView('list')" class="text-sm text-[#34554a] font-bold hover:underline">View All →</button>
+                    </div>
+                    <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        ${tasks.filter(t => !t.completed).slice(0, 4).map(task => {
+                            const typeInfo = TASK_TYPES.find(t => t.label === task.type);
+                            return `
+                                <div class="flex items-center justify-between p-4 rounded-lg border border-gray-100 hover:bg-gray-50 transition-all cursor-pointer" onclick="openDetailModal(${task.id})">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-10 h-10 rounded-full ${typeInfo?.color || 'bg-gray-100'} flex items-center justify-center">
+                                            <i data-lucide="${getTaskIcon(task.type)}" class="w-5 h-5"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-bold text-gray-800">${task.name}</p>
+                                            <div class="flex gap-2 mt-1">
+                                                <span class="text-[10px] font-bold uppercase text-[#34554a] bg-green-50 px-2 py-0.5 rounded border border-green-100">${task.assignedTo}</span>
+                                                <span class="text-[10px] font-bold text-gray-400">${task.date}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="p-2 text-gray-300 hover:text-[#34554a]">
+                                        <i data-lucide="eye" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderCreateForm() {
+            return `
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 max-w-2xl">
+                    <div class="p-6 border-b border-gray-100 bg-gray-50 flex items-center gap-3">
+                        <div class="w-10 h-10 bg-green-50 text-[#34554a] rounded-full flex items-center justify-center">
+                            <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                        </div>
+                        <h2 class="text-lg font-bold text-gray-900">Create New Task</h2>
+                    </div>
+                    <form id="create-task-form" onsubmit="handleCreateTask(event)" class="p-6 space-y-5">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div class="space-y-1">
+                                <label class="block text-sm font-bold text-gray-700">Task Name</label>
+                                <input type="text" name="name" required class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-[#34554a] outline-none shadow-sm" placeholder="Enter task name">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-sm font-bold text-gray-700">Category</label>
+                                <select name="type" class="w-full p-2.5 border rounded-lg bg-white focus:ring-2 focus:ring-[#34554a] outline-none shadow-sm">
+                                    ${TASK_TYPES.map(t => `<option value="${t.label}">${t.label}</option>`).join('')}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div class="space-y-1">
+                                <label class="block text-sm font-bold text-gray-700">Cattle ID</label>
+                                <select name="cattleId" class="w-full p-2.5 border rounded-lg bg-white focus:ring-2 focus:ring-[#34554a] outline-none shadow-sm">
+                                    <option value="All">All Cattle</option>
+                                    ${CATTLE.map(c => `<option value="${c.id}">${c.id} - ${c.name}</option>`).join('')}
+                                </select>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-sm font-bold text-gray-700">Due Date</label>
+                                <input type="date" name="date" required class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-[#34554a] outline-none shadow-sm">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div class="space-y-1">
+                                <label class="block text-sm font-bold text-gray-700">Assigned To</label>
+                                <select name="assignedTo" class="w-full p-2.5 border rounded-lg bg-white focus:ring-2 focus:ring-[#34554a] outline-none shadow-sm">
+                                    ${STAFF.map(s => `<option value="${s.name}">${s.name} (${s.role})</option>`).join('')}
+                                </select>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-sm font-bold text-gray-700">Priority</label>
+                                <div class="flex gap-4 items-center h-[42px]">
+                                    ${['High', 'Medium', 'Low'].map((p, i) => `
+                                        <label class="flex items-center gap-2 cursor-pointer">
+                                            <input type="radio" name="priority" value="${p}" ${i === 1 ? 'checked' : ''} class="w-4 h-4 text-[#34554a]">
+                                            <span class="text-sm font-medium text-gray-700">${p}</span>
+                                        </label>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-sm font-bold text-gray-700">Description</label>
+                            <textarea name="description" rows="3" class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-[#34554a] outline-none shadow-sm" placeholder="Task details..."></textarea>
+                        </div>
+                        <div class="flex gap-3 pt-4 border-t border-gray-100">
+                            <button type="button" onclick="setView('dashboard')" class="flex-1 px-4 py-2.5 border rounded-lg text-gray-600 hover:bg-gray-50 transition-all font-medium">Cancel</button>
+                            <button type="submit" class="flex-1 px-4 py-2.5 bg-[#34554a] text-white rounded-lg hover:bg-opacity-90 shadow-md font-bold transition-all">Create Task</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+        }
+
+        function renderList() {
+            const filtered = tasks.filter(t => 
+                t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                t.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                t.assignedTo.toLowerCase().includes(searchQuery.toLowerCase())
+            ).sort((a, b) => {
+                let valA = a[sortKey], valB = b[sortKey];
+                if (sortKey === 'status') { valA = a.completed ? 1 : 0; valB = b.completed ? 1 : 0; }
+                if (sortDir === 'asc') return valA > valB ? 1 : -1;
+                return valA < valB ? 1 : -1;
+            });
+
+            const visibleCols = columns.filter(c => c.visible);
+
+            return `
+                <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+                    <div class="flex flex-1 gap-2 w-full md:w-auto">
+                        <div class="relative flex-1">
+                            <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4"></i>
+                            <input type="text" placeholder="Search tasks..." value="${searchQuery}" oninput="handleSearch(this.value)" class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 outline-none text-sm focus:ring-2 focus:ring-[#34554a]">
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="openColumnModal()" class="flex items-center gap-2 bg-white border border-gray-200 px-4 py-2 rounded-lg hover:bg-gray-50 text-sm shadow-sm transition-colors">
+                            <i data-lucide="settings-2" class="w-4 h-4"></i> Columns
+                        </button>
+                        <button onclick="setView('create')" class="flex items-center gap-2 bg-[#34554a] text-white px-4 py-2 rounded-lg font-medium hover:bg-opacity-90 text-sm shadow-sm">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Add Task
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left whitespace-nowrap">
+                            <thead>
+                                <tr class="bg-[#34554a] text-white text-sm">
+                                    ${visibleCols.map(col => `
+                                        <th class="p-4 font-semibold cursor-pointer hover:bg-[#2a443b]" onclick="handleSort('${col.key}')">
+                                            <div class="flex items-center gap-2">
+                                                ${col.label}
+                                                ${sortKey === col.key 
+                                                    ? `<i data-lucide="${sortDir === 'asc' ? 'chevron-up' : 'chevron-down'}" class="w-3 h-3"></i>`
+                                                    : '<i data-lucide="chevrons-up-down" class="w-3 h-3 opacity-30"></i>'
+                                                }
+                                            </div>
+                                        </th>
+                                    `).join('')}
+                                    <th class="p-4 text-right font-semibold">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y text-sm text-gray-700">
+                                ${filtered.length === 0 ? `
+                                    <tr><td colspan="${visibleCols.length + 1}" class="p-8 text-center text-gray-500 italic">No tasks found.</td></tr>
+                                ` : filtered.map(task => `
+                                    <tr class="hover:bg-gray-50 transition-colors ${task.completed ? 'opacity-50' : ''}">
+                                        ${visibleCols.map(col => {
+                                            if (col.key === 'status') {
+                                                return `<td class="p-4"><span class="${task.completed ? 'bg-green-100 text-green-800 border-green-200' : 'bg-amber-100 text-amber-800 border-amber-200'} px-2.5 py-0.5 rounded-full text-xs font-medium border">${task.completed ? 'Completed' : 'Pending'}</span></td>`;
+                                            }
+                                            if (col.key === 'name') {
+                                                return `<td class="p-4"><span class="font-bold text-gray-900 ${task.completed ? 'line-through' : ''}">${task.name}</span></td>`;
+                                            }
+                                            if (col.key === 'type') {
+                                                const typeInfo = TASK_TYPES.find(t => t.label === task.type);
+                                                return `<td class="p-4"><span class="${typeInfo?.color || 'bg-gray-100'} px-2.5 py-0.5 rounded-full text-xs font-medium border">${task.type}</span></td>`;
+                                            }
+                                            if (col.key === 'priority') {
+                                                const prioClass = task.priority === 'High' ? 'bg-red-100 text-red-800 border-red-200' : task.priority === 'Medium' ? 'bg-amber-100 text-amber-800 border-amber-200' : 'bg-gray-100 text-gray-600 border-gray-200';
+                                                return `<td class="p-4"><span class="${prioClass} px-2.5 py-0.5 rounded-full text-xs font-medium border">${task.priority}</span></td>`;
+                                            }
+                                            if (col.key === 'assignedTo') {
+                                                return `<td class="p-4"><div class="flex items-center gap-2"><div class="w-7 h-7 rounded-full bg-green-50 flex items-center justify-center text-[10px] font-black text-[#34554a] border border-green-100">${task.assignedTo.split(' ').map(n => n[0]).join('')}</div><span class="text-sm font-medium">${task.assignedTo}</span></div></td>`;
+                                            }
+                                            return `<td class="p-4">${task[col.key] || '-'}</td>`;
+                                        }).join('')}
+                                        <td class="p-4 text-right">
+                                            <div class="flex justify-end gap-3 text-gray-400">
+                                                <button onclick="openDetailModal(${task.id})" class="hover:text-blue-600"><i data-lucide="eye" class="w-4 h-4"></i></button>
+                                                <button onclick="openEditModal(${task.id})" class="hover:text-green-600"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+                                                <button onclick="deleteTask(${task.id})" class="hover:text-red-600"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="p-4 border-t bg-gray-50 flex items-center justify-between">
+                        <p class="text-sm text-gray-500 font-medium">Showing ${filtered.length} of ${tasks.length} tasks</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderCalendar() {
+            const year = currentMonth.getFullYear();
+            const month = currentMonth.getMonth();
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const monthName = currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+            let days = [];
+            for (let i = 0; i < firstDay; i++) days.push(null);
+            for (let i = 1; i <= daysInMonth; i++) days.push(i);
+
+            return `
+                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-bold text-gray-900">${monthName}</h2>
+                        <div class="flex gap-2">
+                            <button onclick="changeMonth(-1)" class="p-2 rounded-lg border hover:bg-gray-50"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+                            <button onclick="changeMonth(1)" class="p-2 rounded-lg border hover:bg-gray-50"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-7 gap-px bg-gray-200 rounded-xl overflow-hidden border border-gray-200">
+                        ${['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map(day => `
+                            <div class="bg-gray-50 p-3 text-center text-[10px] font-bold text-gray-400 tracking-wider">${day}</div>
+                        `).join('')}
+                        ${days.map((day, idx) => {
+                            if (!day) return '<div class="bg-white min-h-[100px]"></div>';
+                            const dateStr = `2025-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                            const dayTasks = tasks.filter(t => t.date === dateStr);
+                            return `
+                                <div class="bg-white min-h-[100px] p-2 hover:bg-gray-50 transition-all cursor-pointer border-t border-gray-100" onclick="${dayTasks[0] ? `openDetailModal(${dayTasks[0].id})` : ''}">
+                                    <span class="text-sm font-bold ${dayTasks.length > 0 ? 'text-[#34554a]' : 'text-gray-300'}">${day}</span>
+                                    <div class="mt-1 space-y-1">
+                                        ${dayTasks.slice(0, 2).map(t => {
+                                            const typeInfo = TASK_TYPES.find(type => type.label === t.type);
+                                            return `<div class="text-[9px] p-1 rounded font-bold truncate border ${typeInfo?.color || 'bg-gray-100'}">${t.name}</div>`;
+                                        }).join('')}
+                                        ${dayTasks.length > 2 ? `<div class="text-[9px] text-gray-400 font-medium">+${dayTasks.length - 2} more</div>` : ''}
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderHerd() {
+            return `
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    ${CATTLE.map(c => `
+                        <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm hover:border-[#34554a] transition-all">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="w-12 h-12 rounded-full bg-blue-50 text-[#34554a] flex items-center justify-center font-black text-lg shadow-inner border border-blue-100">
+                                    ${c.id.slice(-1)}
+                                </div>
+                                <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase border ${
+                                    c.status === 'Healthy' ? 'bg-green-100 text-green-800 border-green-200' : 'bg-amber-100 text-amber-800 border-amber-200'
+                                }">
+                                    ${c.status}
+                                </span>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900">${c.name}</h3>
+                            <p class="text-xs font-medium text-gray-400 uppercase tracking-wide mb-4">${c.breed} • ${c.id}</p>
+                            <div class="flex gap-2">
+                                <button class="flex-1 py-2 rounded-lg bg-gray-50 text-xs font-bold text-gray-600 hover:bg-[#34554a] hover:text-white transition-all">Health</button>
+                                <button class="flex-1 py-2 rounded-lg bg-gray-50 text-xs font-bold text-gray-600 hover:bg-[#34554a] hover:text-white transition-all">Tasks</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // --- HELPERS ---
+        function getTaskIcon(type) {
+            const icons = { 'Feeding': 'beef', 'Vaccination': 'syringe', 'Health Checkup': 'heart', 'Breeding': 'users', 'Veterinary Visit': 'stethoscope', 'Milking': 'milk' };
+            return icons[type] || 'clipboard-list';
+        }
+
+        function setView(view) {
+            currentView = view;
+            render();
+        }
+
+        function handleSearch(value) {
+            searchQuery = value;
+            render();
+        }
+
+        function handleSort(key) {
+            if (sortKey === key) {
+                sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortKey = key;
+                sortDir = 'asc';
+            }
+            render();
+        }
+
+        function changeMonth(delta) {
+            currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + delta, 1);
+            render();
+        }
+
+        function handleCreateTask(e) {
+            e.preventDefault();
+            const form = e.target;
+            const newTask = {
+                id: Date.now(),
+                name: form.name.value,
+                type: form.type.value,
+                cattleId: form.cattleId.value,
+                date: form.date.value,
+                priority: form.priority.value,
+                assignedTo: form.assignedTo.value,
+                description: form.description.value,
+                createdBy: 'John Doe',
+                completed: false
+            };
+            tasks.push(newTask);
+            setView('list');
+        }
+
+        function toggleTask(id) {
+            tasks = tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t);
+            render();
+        }
+
+        function deleteTask(id) {
+            if (confirm('Delete this task?')) {
+                tasks = tasks.filter(t => t.id !== id);
+                render();
+            }
+        }
+
+        // --- MODALS ---
+        function openDetailModal(id) {
+            const task = tasks.find(t => t.id === id);
+            if (!task) return;
+
+            const typeInfo = TASK_TYPES.find(t => t.label === task.type);
+            const modal = document.getElementById('detail-modal');
+            
+            document.getElementById('detail-modal-content').innerHTML = `
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-16 h-16 rounded-full ${typeInfo?.color || 'bg-gray-100'} flex items-center justify-center shadow-inner">
+                        <i data-lucide="${getTaskIcon(task.type)}" class="w-8 h-8"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-bold text-gray-900 tracking-tight">${task.name}</h4>
+                        <p class="text-sm text-gray-500 font-medium">${task.type}</p>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    ${[
+                        { label: 'Created By', val: task.createdBy },
+                        { label: 'Assigned To', val: task.assignedTo },
+                        { label: 'Cattle ID', val: task.cattleId },
+                        { label: 'Due Date', val: task.date },
+                        { label: 'Priority', val: task.priority }
+                    ].map(item => `
+                        <div class="flex justify-between border-b pb-2 border-gray-100">
+                            <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">${item.label}</span>
+                            <span class="text-sm font-semibold text-gray-900">${item.val}</span>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="bg-gray-50 p-4 rounded-lg border border-gray-100 mt-4">
+                    <p class="text-xs font-bold text-gray-400 uppercase mb-2">Description</p>
+                    <p class="text-sm text-gray-600 font-medium">${task.description || 'No description provided.'}</p>
+                </div>
+            `;
+
+            document.getElementById('detail-modal-footer').innerHTML = `
+                <button onclick="closeDetailModal()" class="px-4 py-2 border rounded-lg text-gray-600 hover:bg-gray-50 font-medium">Close</button>
+                <button onclick="toggleTask(${task.id}); closeDetailModal();" class="px-6 py-2 ${task.completed ? 'bg-gray-200 text-gray-600' : 'bg-[#34554a] text-white'} rounded-lg font-bold shadow-sm">
+                    ${task.completed ? 'Reopen Task' : 'Mark Complete'}
+                </button>
+            `;
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            lucide.createIcons();
+        }
+
+        function closeDetailModal() {
+            const modal = document.getElementById('detail-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function openEditModal(id) {
+            editingTaskId = id;
+            const task = tasks.find(t => t.id === id);
+            if (!task) return;
+
+            document.getElementById('form-modal-title').textContent = 'Edit Task';
+            document.getElementById('task-form').innerHTML = `
+                <div class="space-y-1">
+                    <label class="block text-sm font-bold text-gray-700">Task Name</label>
+                    <input type="text" name="name" value="${task.name}" required class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-[#34554a] outline-none shadow-sm">
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-sm font-bold text-gray-700">Category</label>
+                    <select name="type" class="w-full p-2.5 border rounded-lg bg-white focus:ring-2 focus:ring-[#34554a] outline-none shadow-sm">
+                        ${TASK_TYPES.map(t => `<option value="${t.label}" ${t.label === task.type ? 'selected' : ''}>${t.label}</option>`).join('')}
+                    </select>
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-sm font-bold text-gray-700">Due Date</label>
+                    <input type="date" name="date" value="${task.date}" required class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-[#34554a] outline-none shadow-sm">
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-sm font-bold text-gray-700">Description</label>
+                    <textarea name="description" rows="3" class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-[#34554a] outline-none shadow-sm">${task.description || ''}</textarea>
+                </div>
+                <div class="flex gap-3 pt-4 border-t border-gray-100">
+                    <button type="button" onclick="closeFormModal()" class="flex-1 px-4 py-2.5 border rounded-lg text-gray-600 hover:bg-gray-50 font-medium">Cancel</button>
+                    <button type="submit" class="flex-1 px-4 py-2.5 bg-[#34554a] text-white rounded-lg font-bold shadow-md">Save Changes</button>
+                </div>
+            `;
+
+            document.getElementById('task-form').onsubmit = (e) => {
+                e.preventDefault();
+                const form = e.target;
+                tasks = tasks.map(t => t.id === editingTaskId ? {
+                    ...t,
+                    name: form.name.value,
+                    type: form.type.value,
+                    date: form.date.value,
+                    description: form.description.value
+                } : t);
+                closeFormModal();
+                render();
+            };
+
+            const modal = document.getElementById('form-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            lucide.createIcons();
+        }
+
+        function closeFormModal() {
+            editingTaskId = null;
+            const modal = document.getElementById('form-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function openColumnModal() {
+            document.getElementById('column-modal-content').innerHTML = `
+                <h4 class="text-xs font-bold text-gray-500 uppercase mb-3 tracking-wider">Toggle Column Visibility</h4>
+                <div class="space-y-2">
+                    ${columns.map((col, i) => `
+                        <div class="flex items-center justify-between p-3 border rounded-lg bg-white shadow-sm">
+                            <div class="flex items-center gap-3">
+                                <input type="checkbox" ${col.visible ? 'checked' : ''} onchange="toggleColumn(${i})" class="w-4 h-4 text-[#34554a] rounded focus:ring-[#34554a] cursor-pointer">
+                                <span class="text-sm font-medium text-gray-700">${col.label}</span>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                <button onclick="closeColumnModal()" class="mt-6 w-full bg-[#34554a] text-white py-2.5 rounded-lg text-sm font-bold hover:bg-opacity-90 shadow-md">Done</button>
+            `;
+
+            const modal = document.getElementById('column-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function toggleColumn(index) {
+            columns[index].visible = !columns[index].visible;
+        }
+
+        function closeColumnModal() {
+            const modal = document.getElementById('column-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            render();
+        }
+
+        // --- INIT ---
+        document.addEventListener('DOMContentLoaded', render);
+    </script>
+</body>
+</html>
