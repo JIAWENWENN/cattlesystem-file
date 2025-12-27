@@ -3,14 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>View Driver Modal - CattleLog</title>
+  <title>Schedule View - CattleLog</title>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Inter', sans-serif; background: #f3f4f6; min-height: 100vh; }
-    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    body { font-family: 'Inter', sans-serif; }
     @keyframes fadeIn {
       from { opacity: 0; transform: scale(0.95); }
       to { opacity: 1; transform: scale(1); }
@@ -18,131 +15,134 @@
     .animate-fade-in { animation: fadeIn 0.2s ease-out; }
   </style>
 </head>
-<body class="p-8">
-  <!-- View Driver Modal -->
-  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-    <div class="bg-white rounded-xl shadow-xl w-full max-w-md mx-4 overflow-hidden flex flex-col border border-gray-100 animate-fade-in">
-      <!-- Header -->
-      <div class="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50">
-        <h3 class="text-lg font-bold text-gray-900">Driver Details</h3>
-        <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-        </button>
-      </div>
-
-      <!-- Content -->
-      <div class="p-6 space-y-4 bg-white max-h-[60vh] overflow-y-auto custom-scrollbar">
-        <!-- Profile Section -->
-        <div class="flex items-center gap-4 mb-4">
-          <div class="w-16 h-16 bg-[#34554a]/10 text-[#34554a] rounded-full flex items-center justify-center shadow-inner">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          </div>
-          <div>
-            <h4 class="text-xl font-bold text-gray-900 tracking-tight" id="driver-name">John Smith</h4>
-            <p class="text-sm text-gray-500 font-medium" id="driver-id">D01</p>
-          </div>
-        </div>
-
-        <!-- Details Section -->
-        <div class="space-y-3">
-          <div class="flex justify-between border-b pb-2 border-gray-100">
-            <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Phone</span>
-            <span class="text-sm font-semibold text-gray-900" id="driver-phone">+1-555-0101</span>
-          </div>
-          <div class="flex justify-between border-b pb-2 border-gray-100">
-            <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">License</span>
-            <span class="text-sm font-semibold text-gray-900" id="driver-license">TX-99210</span>
-          </div>
-          <div class="flex justify-between border-b pb-2 border-gray-100">
-            <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">License Expiry</span>
-            <span class="text-sm font-semibold text-gray-900" id="driver-expiry">2025-06-15</span>
-          </div>
-          <div class="flex justify-between border-b pb-2 border-gray-100">
-            <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Vehicle</span>
-            <span class="text-sm font-semibold text-gray-900" id="driver-vehicle">VH-001</span>
-          </div>
-          <div class="flex justify-between border-b pb-2 border-gray-100">
-            <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Status</span>
-            <span id="driver-status"></span>
-          </div>
-        </div>
-        
-        <!-- Assignment Schedule Section -->
-        <div class="pt-4 mt-4 border-t border-gray-200">
-          <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Assignment Schedule</h4>
-          <div class="space-y-3">
-            <div class="flex justify-between border-b pb-2 border-gray-100">
-              <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Shift Time</span>
-              <span class="text-sm font-semibold text-gray-900" id="driver-shift">06:00 - 14:00</span>
-            </div>
-            <div class="flex justify-between border-b pb-2 border-gray-100">
-              <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Source</span>
-              <span class="text-sm font-semibold text-gray-900" id="driver-source">Farm A</span>
-            </div>
-            <div class="flex justify-between">
-              <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Destination</span>
-              <span class="text-sm font-semibold text-gray-900" id="driver-destination">Market B</span>
-            </div>
+<body class="min-h-screen bg-gray-50 text-gray-900">
+  <!-- Schedule View Content -->
+  <div id="schedule-view">
+    <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
+      <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+        <h3 class="font-bold text-gray-900">Weekly Shift Planner</h3>
+        <div class="flex gap-2">
+          <button class="px-4 py-2 bg-[#34554a] text-white rounded-lg text-sm font-semibold hover:bg-opacity-90 transition-colors shadow-sm">+ Add Shift</button>
+          <div class="flex items-center gap-1 bg-white border border-gray-200 p-1 rounded-lg">
+            <button class="px-3 py-1 bg-[#34554a] text-white shadow-sm rounded-md text-xs font-bold">Week View</button>
+            <button class="px-3 py-1 text-xs font-bold text-gray-500 hover:bg-gray-100 rounded-md transition-colors">Day View</button>
           </div>
         </div>
       </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-center border-collapse">
+          <thead>
+            <tr class="bg-[#34554a] text-white text-sm">
+              <th class="px-4 py-4 text-left font-semibold border-r border-[#2a443b]">Driver</th>
+              <th class="px-4 py-4 font-semibold">Mon 15</th>
+              <th class="px-4 py-4 font-semibold">Tue 16</th>
+              <th class="px-4 py-4 font-semibold">Wed 17</th>
+              <th class="px-4 py-4 font-semibold">Thu 18</th>
+              <th class="px-4 py-4 font-semibold text-amber-200">Fri 19</th>
+              <th class="px-4 py-4 font-semibold text-red-200">Sat 20</th>
+              <th class="px-4 py-4 font-semibold text-red-200">Sun 21</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 text-sm">
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-6 py-4 text-left font-bold text-gray-900 border-r border-gray-100">John Smith</td>
+              <td class="px-2 py-4"><div class="bg-[#34554a]/10 text-[#34554a] text-[10px] p-1.5 rounded-md border border-[#34554a]/20 font-bold whitespace-nowrap">06:00-14:00</div></td>
+              <td class="px-2 py-4"><div class="bg-[#34554a]/10 text-[#34554a] text-[10px] p-1.5 rounded-md border border-[#34554a]/20 font-bold whitespace-nowrap">06:00-14:00</div></td>
+              <td class="px-2 py-4"><span class="text-gray-300 text-xs font-bold italic">OFF</span></td>
+              <td class="px-2 py-4"><div class="bg-[#34554a]/10 text-[#34554a] text-[10px] p-1.5 rounded-md border border-[#34554a]/20 font-bold whitespace-nowrap">06:00-14:00</div></td>
+              <td class="px-2 py-4 bg-amber-50/30"><div class="bg-[#34554a]/10 text-[#34554a] text-[10px] p-1.5 rounded-md border border-[#34554a]/20 font-bold whitespace-nowrap">06:00-14:00</div></td>
+              <td class="px-2 py-4 bg-red-50/30"><div class="bg-[#34554a]/10 text-[#34554a] text-[10px] p-1.5 rounded-md border border-[#34554a]/20 font-bold whitespace-nowrap">08:00-12:00</div></td>
+              <td class="px-2 py-4 bg-red-50/30"><span class="text-gray-300 text-xs font-bold italic">OFF</span></td>
+            </tr>
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-6 py-4 text-left font-bold text-gray-900 border-r border-gray-100">Maria Garcia</td>
+              <td class="px-2 py-4"><div class="bg-[#34554a]/10 text-[#34554a] text-[10px] p-1.5 rounded-md border border-[#34554a]/20 font-bold whitespace-nowrap">14:00-22:00</div></td>
+              <td class="px-2 py-4"><div class="bg-[#34554a]/10 text-[#34554a] text-[10px] p-1.5 rounded-md border border-[#34554a]/20 font-bold whitespace-nowrap">14:00-22:00</div></td>
+              <td class="px-2 py-4"><div class="bg-[#34554a]/10 text-[#34554a] text-[10px] p-1.5 rounded-md border border-[#34554a]/20 font-bold whitespace-nowrap">14:00-22:00</div></td>
+              <td class="px-2 py-4"><span class="text-gray-300 text-xs font-bold italic">OFF</span></td>
+              <td class="px-2 py-4 bg-amber-50/30"><span class="text-gray-300 text-xs font-bold italic">OFF</span></td>
+              <td class="px-2 py-4 bg-red-50/30"><div class="bg-[#34554a]/10 text-[#34554a] text-[10px] p-1.5 rounded-md border border-[#34554a]/20 font-bold whitespace-nowrap">06:00-14:00</div></td>
+              <td class="px-2 py-4 bg-red-50/30"><div class="bg-[#34554a]/10 text-[#34554a] text-[10px] p-1.5 rounded-md border border-[#34554a]/20 font-bold whitespace-nowrap">06:00-14:00</div></td>
+            </tr>
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-6 py-4 text-left font-bold text-gray-900 border-r border-gray-100">James Wilson</td>
+              <td class="px-2 py-4"><span class="text-gray-300 text-xs font-bold italic">OFF</span></td>
+              <td class="px-2 py-4"><span class="text-gray-300 text-xs font-bold italic">OFF</span></td>
+              <td class="px-2 py-4"><div class="bg-[#34554a]/10 text-[#34554a] text-[10px] p-1.5 rounded-md border border-[#34554a]/20 font-bold whitespace-nowrap">06:00-14:00</div></td>
+              <td class="px-2 py-4"><div class="bg-[#34554a]/10 text-[#34554a] text-[10px] p-1.5 rounded-md border border-[#34554a]/20 font-bold whitespace-nowrap">14:00-22:00</div></td>
+              <td class="px-2 py-4 bg-amber-50/30"><div class="bg-[#34554a]/10 text-[#34554a] text-[10px] p-1.5 rounded-md border border-[#34554a]/20 font-bold whitespace-nowrap">14:00-22:00</div></td>
+              <td class="px-2 py-4 bg-red-50/30"><span class="text-gray-300 text-xs font-bold italic">OFF</span></td>
+              <td class="px-2 py-4 bg-red-50/30"><span class="text-gray-300 text-xs font-bold italic">OFF</span></td>
+            </tr>
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-6 py-4 text-left font-bold text-gray-900 border-r border-gray-100">Sarah Johnson</td>
+              <td class="px-2 py-4"><div class="bg-[#34554a]/10 text-[#34554a] text-[10px] p-1.5 rounded-md border border-[#34554a]/20 font-bold whitespace-nowrap">06:00-14:00</div></td>
+              <td class="px-2 py-4"><div class="bg-[#34554a]/10 text-[#34554a] text-[10px] p-1.5 rounded-md border border-[#34554a]/20 font-bold whitespace-nowrap">06:00-14:00</div></td>
+              <td class="px-2 py-4"><span class="text-gray-300 text-xs font-bold italic">OFF</span></td>
+              <td class="px-2 py-4"><div class="bg-[#34554a]/10 text-[#34554a] text-[10px] p-1.5 rounded-md border border-[#34554a]/20 font-bold whitespace-nowrap">06:00-14:00</div></td>
+              <td class="px-2 py-4 bg-amber-50/30"><div class="bg-[#34554a]/10 text-[#34554a] text-[10px] p-1.5 rounded-md border border-[#34554a]/20 font-bold whitespace-nowrap">06:00-14:00</div></td>
+              <td class="px-2 py-4 bg-red-50/30"><span class="text-gray-300 text-xs font-bold italic">OFF</span></td>
+              <td class="px-2 py-4 bg-red-50/30"><span class="text-gray-300 text-xs font-bold italic">OFF</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-      <!-- Footer -->
-      <div class="p-4 bg-gray-50 flex justify-end rounded-b-xl border-t">
-        <button onclick="closeModal()" class="px-6 py-2 border bg-white rounded-lg text-sm font-bold shadow-sm hover:bg-gray-50 transition-all text-gray-700">Close Details</button>
+    <!-- Legend -->
+    <div class="mt-6 flex gap-6 text-sm">
+      <div class="flex items-center gap-2">
+        <div class="w-4 h-4 rounded bg-[#34554a]/10 border border-[#34554a]/20"></div>
+        <span class="text-gray-600">Shift Assigned</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="w-4 h-4 rounded bg-gray-100 flex items-center justify-center">
+          <span class="text-gray-400 text-xs font-bold italic">OFF</span>
+        </div>
+        <span class="text-gray-600">Day Off</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="w-4 h-4 rounded bg-amber-50/30"></div>
+        <span class="text-gray-600">Friday</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="w-4 h-4 rounded bg-red-50/30"></div>
+        <span class="text-gray-600">Weekend</span>
       </div>
     </div>
   </div>
 
   <script>
-    // Mock Driver Data
-    const driverData = {
-      id: 'D01',
-      name: 'John Smith',
-      phone: '+1-555-0101',
-      status: 'Active',
-      license: 'TX-99210',
-      vehicle: 'VH-001',
-      expiry_date: '2025-06-15',
-      shift_start: '06:00',
-      shift_end: '14:00',
-      source: 'Farm A',
-      destination: 'Market B'
-    };
+    // Schedule data
+    const scheduleData = [
+      { name: 'John Smith', shifts: { mon: '06:00-14:00', tue: '06:00-14:00', wed: 'OFF', thu: '06:00-14:00', fri: '06:00-14:00', sat: '08:00-12:00', sun: 'OFF' } },
+      { name: 'Maria Garcia', shifts: { mon: '14:00-22:00', tue: '14:00-22:00', wed: '14:00-22:00', thu: 'OFF', fri: 'OFF', sat: '06:00-14:00', sun: '06:00-14:00' } },
+      { name: 'James Wilson', shifts: { mon: 'OFF', tue: 'OFF', wed: '06:00-14:00', thu: '14:00-22:00', fri: '14:00-22:00', sat: 'OFF', sun: 'OFF' } },
+      { name: 'Sarah Johnson', shifts: { mon: '06:00-14:00', tue: '06:00-14:00', wed: 'OFF', thu: '06:00-14:00', fri: '06:00-14:00', sat: 'OFF', sun: 'OFF' } },
+    ];
 
-    function getStatusBadge(status) {
-      const styles = {
-        'Active': 'bg-green-100 text-green-800 border-green-200',
-        'Inactive': 'bg-gray-100 text-gray-800 border-gray-200',
-        'On Route': 'bg-blue-100 text-blue-800 border-blue-200',
-        'Available': 'bg-green-100 text-green-800 border-green-200',
-        'In Use': 'bg-purple-100 text-purple-800 border-purple-200',
-        'Maintenance': 'bg-orange-100 text-orange-800 border-orange-200',
-        'Completed': 'bg-green-100 text-green-800 border-green-200',
-        'Issue': 'bg-red-100 text-red-800 border-red-200',
-      };
-      return `<span class="px-2.5 py-0.5 rounded-full text-xs font-medium border ${styles[status] || 'bg-gray-100'}">${status}</span>`;
-    }
+    const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+    const dayHeaders = ['Mon 15', 'Tue 16', 'Wed 17', 'Thu 18', 'Fri 19', 'Sat 20', 'Sun 21'];
 
-    function renderDriverDetails() {
-      document.getElementById('driver-name').textContent = driverData.name;
-      document.getElementById('driver-id').textContent = driverData.id;
-      document.getElementById('driver-phone').textContent = driverData.phone;
-      document.getElementById('driver-license').textContent = driverData.license;
-      document.getElementById('driver-expiry').textContent = driverData.expiry_date || '-';
-      document.getElementById('driver-vehicle').textContent = driverData.vehicle === 'None' ? '-' : driverData.vehicle;
-      document.getElementById('driver-status').innerHTML = getStatusBadge(driverData.status);
-      document.getElementById('driver-shift').textContent = driverData.shift_start && driverData.shift_end ? `${driverData.shift_start} - ${driverData.shift_end}` : '-';
-      document.getElementById('driver-source').textContent = driverData.source || '-';
-      document.getElementById('driver-destination').textContent = driverData.destination || '-';
-    }
-
-    function closeModal() {
-      alert('Modal closed');
+    function renderSchedule() {
+      const tbody = document.querySelector('#schedule-view tbody');
+      tbody.innerHTML = scheduleData.map(driver => `
+        <tr class="hover:bg-gray-50 transition-colors">
+          <td class="px-6 py-4 text-left font-bold text-gray-900 border-r border-gray-100">${driver.name}</td>
+          ${days.map((day, i) => `
+            <td class="px-2 py-4 ${i === 5 ? 'bg-amber-50/30' : ''} ${i === 6 ? 'bg-red-50/30' : ''}">
+              ${driver.shifts[day] === 'OFF' 
+                ? '<span class="text-gray-300 text-xs font-bold italic">OFF</span>'
+                : `<div class="bg-[#34554a]/10 text-[#34554a] text-[10px] p-1.5 rounded-md border border-[#34554a]/20 font-bold whitespace-nowrap">${driver.shifts[day]}</div>`
+              }
+            </td>
+          `).join('')}
+        </tr>
+      `).join('');
     }
 
     // Initialize
-    renderDriverDetails();
+    renderSchedule();
   </script>
 </body>
 </html>
