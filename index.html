@@ -1,255 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendar View - Task CMS</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        body { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View Driver Modal - CattleLog</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #f3f4f6; min-height: 100vh; }
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .animate-fade-in { animation: fadeIn 0.2s ease-out; }
+  </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
-    <div id="app" class="flex min-h-screen">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-white border-r border-gray-200 p-6 flex-col hidden lg:flex shadow-sm">
-            <div class="flex items-center gap-3 mb-10 px-2">
-                <div class="bg-[#34554a] p-2 rounded-lg text-white shadow-lg">
-                    <i data-lucide="clipboard-list" class="w-5 h-5"></i>
-                </div>
-                <span class="text-lg font-black tracking-tight text-[#34554a] uppercase">Task CMS</span>
-            </div>
+<body class="p-8">
+  <!-- View Driver Modal -->
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+    <div class="bg-white rounded-xl shadow-xl w-full max-w-md mx-4 overflow-hidden flex flex-col border border-gray-100 animate-fade-in">
+      <!-- Header -->
+      <div class="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50">
+        <h3 class="text-lg font-bold text-gray-900">Driver Details</h3>
+        <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </div>
 
-            <nav class="space-y-2 flex-1">
-                <button onclick="window.location.href='overview.html'" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-gray-600 hover:bg-gray-50 hover:text-[#34554a]">
-                    <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
-                    <span class="text-sm font-bold">Overview</span>
-                </button>
-                <button onclick="window.location.href='calendar.html'" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all bg-[#34554a] text-white shadow-md">
-                    <i data-lucide="calendar" class="w-4 h-4"></i>
-                    <span class="text-sm font-bold">Calendar View</span>
-                </button>
-                <button onclick="window.location.href='task-list.html'" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-gray-600 hover:bg-gray-50 hover:text-[#34554a]">
-                    <i data-lucide="list" class="w-4 h-4"></i>
-                    <span class="text-sm font-bold">Task List</span>
-                </button>
-                <button onclick="window.location.href='popup.html'" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-gray-600 hover:bg-gray-50 hover:text-[#34554a]">
-                    <i data-lucide="pop-up" class="w-4 h-4"></i>
-                    <span class="text-sm font-bold">Popups</span>
-                </button>
-            </nav>
-
-            <div class="mt-auto p-4 bg-[#34554a] rounded-xl flex items-center gap-3 shadow-lg">
-                <div class="w-10 h-10 rounded-full bg-white/20 border border-white/30 flex items-center justify-center text-white font-black text-sm">JD</div>
-                <div>
-                    <p class="text-sm font-bold text-white">John Doe</p>
-                    <p class="text-[10px] text-white/60 font-bold uppercase tracking-wider">Farm Admin</p>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="flex-1 overflow-y-auto p-8">
-            <div class="mb-8">
-                <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Calendar View</h1>
-                <p class="text-sm text-gray-500 mt-1">View and manage tasks on a calendar timeline.</p>
-            </div>
-
-            <!-- Calendar Content -->
-            <div id="calendar-content">
-                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-xl font-bold text-gray-900" id="month-title">January 2025</h2>
-                        <div class="flex gap-2">
-                            <button onclick="changeMonth(-1)" class="p-2 rounded-lg border hover:bg-gray-50 transition-colors">
-                                <i data-lucide="chevron-left" class="w-4 h-4"></i>
-                            </button>
-                            <button onclick="changeMonth(1)" class="p-2 rounded-lg border hover:bg-gray-50 transition-colors">
-                                <i data-lucide="chevron-right" class="w-4 h-4"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-7 gap-px bg-gray-200 rounded-xl overflow-hidden border border-gray-200" id="calendar-grid">
-                        <!-- Calendar rendered by JS -->
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- Detail Modal for Calendar -->
-    <div id="detail-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm">
-        <div class="bg-white rounded-xl shadow-xl w-full max-w-md mx-4 overflow-hidden flex flex-col border border-gray-100">
-            <div class="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50">
-                <h3 class="text-lg font-bold text-gray-900">Task Details</h3>
-                <button onclick="closeDetailModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-            </div>
-            <div id="detail-modal-content" class="p-6 space-y-4 bg-white">
-                <!-- Content rendered by JS -->
-            </div>
-            <div class="p-4 bg-gray-50 flex justify-end gap-3 rounded-b-xl border-t">
-                <button onclick="closeDetailModal()" class="px-4 py-2 border rounded-lg text-gray-600 hover:bg-gray-50 font-medium">Close</button>
-                <button onclick="toggleTaskAndClose()" class="px-6 py-2 bg-[#34554a] text-white rounded-lg font-bold shadow-sm">Mark Complete</button>
-            </div>
+      <!-- Content -->
+      <div class="p-6 space-y-4 bg-white max-h-[60vh] overflow-y-auto custom-scrollbar">
+        <!-- Profile Section -->
+        <div class="flex items-center gap-4 mb-4">
+          <div class="w-16 h-16 bg-[#34554a]/10 text-[#34554a] rounded-full flex items-center justify-center shadow-inner">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div>
+            <h4 class="text-xl font-bold text-gray-900 tracking-tight" id="driver-name">John Smith</h4>
+            <p class="text-sm text-gray-500 font-medium" id="driver-id">D01</p>
+          </div>
         </div>
+
+        <!-- Details Section -->
+        <div class="space-y-3">
+          <div class="flex justify-between border-b pb-2 border-gray-100">
+            <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Phone</span>
+            <span class="text-sm font-semibold text-gray-900" id="driver-phone">+1-555-0101</span>
+          </div>
+          <div class="flex justify-between border-b pb-2 border-gray-100">
+            <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">License</span>
+            <span class="text-sm font-semibold text-gray-900" id="driver-license">TX-99210</span>
+          </div>
+          <div class="flex justify-between border-b pb-2 border-gray-100">
+            <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">License Expiry</span>
+            <span class="text-sm font-semibold text-gray-900" id="driver-expiry">2025-06-15</span>
+          </div>
+          <div class="flex justify-between border-b pb-2 border-gray-100">
+            <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Vehicle</span>
+            <span class="text-sm font-semibold text-gray-900" id="driver-vehicle">VH-001</span>
+          </div>
+          <div class="flex justify-between border-b pb-2 border-gray-100">
+            <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Status</span>
+            <span id="driver-status"></span>
+          </div>
+        </div>
+        
+        <!-- Assignment Schedule Section -->
+        <div class="pt-4 mt-4 border-t border-gray-200">
+          <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Assignment Schedule</h4>
+          <div class="space-y-3">
+            <div class="flex justify-between border-b pb-2 border-gray-100">
+              <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Shift Time</span>
+              <span class="text-sm font-semibold text-gray-900" id="driver-shift">06:00 - 14:00</span>
+            </div>
+            <div class="flex justify-between border-b pb-2 border-gray-100">
+              <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Source</span>
+              <span class="text-sm font-semibold text-gray-900" id="driver-source">Farm A</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Destination</span>
+              <span class="text-sm font-semibold text-gray-900" id="driver-destination">Market B</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="p-4 bg-gray-50 flex justify-end rounded-b-xl border-t">
+        <button onclick="closeModal()" class="px-6 py-2 border bg-white rounded-lg text-sm font-bold shadow-sm hover:bg-gray-50 transition-all text-gray-700">Close Details</button>
+      </div>
     </div>
+  </div>
 
-    <script>
-        // Shared Data
-        const TASK_TYPES = [
-            { label: 'Feeding', color: 'bg-orange-100 text-orange-800 border-orange-200' },
-            { label: 'Vaccination', color: 'bg-blue-100 text-blue-800 border-blue-200' },
-            { label: 'Health Checkup', color: 'bg-red-100 text-red-800 border-red-200' },
-            { label: 'Breeding', color: 'bg-purple-100 text-purple-800 border-purple-200' },
-            { label: 'Veterinary Visit', color: 'bg-emerald-100 text-emerald-800 border-emerald-200' },
-            { label: 'Milking', color: 'bg-cyan-100 text-cyan-800 border-cyan-200' },
-        ];
+  <script>
+    // Mock Driver Data
+    const driverData = {
+      id: 'D01',
+      name: 'John Smith',
+      phone: '+1-555-0101',
+      status: 'Active',
+      license: 'TX-99210',
+      vehicle: 'VH-001',
+      expiry_date: '2025-06-15',
+      shift_start: '06:00',
+      shift_end: '14:00',
+      source: 'Farm A',
+      destination: 'Market B'
+    };
 
-        let tasks = [
-            { id: 1, name: 'Morning Feeding', type: 'Feeding', cattleId: 'C-101', date: '2025-01-02', priority: 'High', assignedTo: 'Mike Johnson', createdBy: 'John Doe', description: 'Provide high-protein mix for Bessie.', completed: true },
-            { id: 2, name: 'FMD Vaccination', type: 'Vaccination', cattleId: 'C-102', date: '2025-01-09', priority: 'High', assignedTo: 'Sarah Smith', createdBy: 'Emma Wilson', description: 'Ensure cold chain for vaccine.', completed: false },
-            { id: 3, name: 'Monthly Checkup', type: 'Health Checkup', cattleId: 'All', date: '2025-01-20', priority: 'Medium', assignedTo: 'Sarah Smith', createdBy: 'John Doe', description: 'General herd exam focusing on hoof health.', completed: false },
-            { id: 4, name: 'Evening Milking', type: 'Milking', cattleId: 'C-101', date: '2025-01-15', priority: 'Low', assignedTo: 'Mike Johnson', createdBy: 'John Doe', description: 'Standard milking procedure.', completed: false },
-        ];
+    function getStatusBadge(status) {
+      const styles = {
+        'Active': 'bg-green-100 text-green-800 border-green-200',
+        'Inactive': 'bg-gray-100 text-gray-800 border-gray-200',
+        'On Route': 'bg-blue-100 text-blue-800 border-blue-200',
+        'Available': 'bg-green-100 text-green-800 border-green-200',
+        'In Use': 'bg-purple-100 text-purple-800 border-purple-200',
+        'Maintenance': 'bg-orange-100 text-orange-800 border-orange-200',
+        'Completed': 'bg-green-100 text-green-800 border-green-200',
+        'Issue': 'bg-red-100 text-red-800 border-red-200',
+      };
+      return `<span class="px-2.5 py-0.5 rounded-full text-xs font-medium border ${styles[status] || 'bg-gray-100'}">${status}</span>`;
+    }
 
-        let currentMonth = new Date(2025, 0, 1);
-        let currentTaskId = null;
+    function renderDriverDetails() {
+      document.getElementById('driver-name').textContent = driverData.name;
+      document.getElementById('driver-id').textContent = driverData.id;
+      document.getElementById('driver-phone').textContent = driverData.phone;
+      document.getElementById('driver-license').textContent = driverData.license;
+      document.getElementById('driver-expiry').textContent = driverData.expiry_date || '-';
+      document.getElementById('driver-vehicle').textContent = driverData.vehicle === 'None' ? '-' : driverData.vehicle;
+      document.getElementById('driver-status').innerHTML = getStatusBadge(driverData.status);
+      document.getElementById('driver-shift').textContent = driverData.shift_start && driverData.shift_end ? `${driverData.shift_start} - ${driverData.shift_end}` : '-';
+      document.getElementById('driver-source').textContent = driverData.source || '-';
+      document.getElementById('driver-destination').textContent = driverData.destination || '-';
+    }
 
-        function getTaskIcon(type) {
-            const icons = { 'Feeding': 'beef', 'Vaccination': 'syringe', 'Health Checkup': 'heart', 'Breeding': 'users', 'Veterinary Visit': 'stethoscope', 'Milking': 'milk' };
-            return icons[type] || 'clipboard-list';
-        }
+    function closeModal() {
+      alert('Modal closed');
+    }
 
-        function renderCalendar() {
-            const year = currentMonth.getFullYear();
-            const month = currentMonth.getMonth();
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const monthName = currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' });
-
-            document.getElementById('month-title').textContent = monthName;
-
-            let days = [];
-            for (let i = 0; i < firstDay; i++) days.push(null);
-            for (let i = 1; i <= daysInMonth; i++) days.push(i);
-
-            const grid = document.getElementById('calendar-grid');
-            grid.innerHTML = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map(day => `
-                <div class="bg-gray-50 p-3 text-center text-[10px] font-bold text-gray-400 tracking-wider">${day}</div>
-            `).join('') + days.map((day, idx) => {
-                if (!day) return '<div class="bg-white min-h-[100px]"></div>';
-                const dateStr = `2025-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                const dayTasks = tasks.filter(t => t.date === dateStr);
-                return `
-                    <div class="bg-white min-h-[100px] p-2 hover:bg-gray-50 transition-all cursor-pointer border-t border-gray-100">
-                        <span class="text-sm font-bold ${dayTasks.length > 0 ? 'text-[#34554a]' : 'text-gray-300'}">${day}</span>
-                        <div class="mt-1 space-y-1">
-                            ${dayTasks.slice(0, 2).map(t => {
-                                const typeInfo = TASK_TYPES.find(type => type.label === t.type);
-                                return `<div class="text-[9px] p-1 rounded font-bold truncate border ${typeInfo?.color || 'bg-gray-100'}">${t.name}</div>`;
-                            }).join('')}
-                            ${dayTasks.length > 2 ? `<div class="text-[9px] text-gray-400 font-medium">+${dayTasks.length - 2} more</div>` : ''}
-                        </div>
-                    </div>
-                `;
-            }).join('');
-
-            lucide.createIcons();
-        }
-
-        function changeMonth(delta) {
-            currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + delta, 1);
-            renderCalendar();
-        }
-
-        function openDetailModal(id) {
-            const task = tasks.find(t => t.id === id);
-            if (!task) return;
-            currentTaskId = id;
-
-            const typeInfo = TASK_TYPES.find(t => t.label === task.type);
-            const content = document.getElementById('detail-modal-content');
-            
-            content.innerHTML = `
-                <div class="flex items-center gap-4 mb-4">
-                    <div class="w-16 h-16 rounded-full ${typeInfo?.color || 'bg-gray-100'} flex items-center justify-center shadow-inner">
-                        <i data-lucide="${getTaskIcon(task.type)}" class="w-8 h-8"></i>
-                    </div>
-                    <div>
-                        <h4 class="text-xl font-bold text-gray-900 tracking-tight">${task.name}</h4>
-                        <p class="text-sm text-gray-500 font-medium">${task.type}</p>
-                    </div>
-                </div>
-                <div class="space-y-3">
-                    ${[
-                        { label: 'Created By', val: task.createdBy },
-                        { label: 'Assigned To', val: task.assignedTo },
-                        { label: 'Cattle ID', val: task.cattleId },
-                        { label: 'Due Date', val: task.date },
-                        { label: 'Priority', val: task.priority }
-                    ].map(item => `
-                        <div class="flex justify-between border-b pb-2 border-gray-100">
-                            <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">${item.label}</span>
-                            <span class="text-sm font-semibold text-gray-900">${item.val}</span>
-                        </div>
-                    `).join('')}
-                </div>
-                <div class="bg-gray-50 p-4 rounded-lg border border-gray-100 mt-4">
-                    <p class="text-xs font-bold text-gray-400 uppercase mb-2">Description</p>
-                    <p class="text-sm text-gray-600 font-medium">${task.description || 'No description provided.'}</p>
-                </div>
-            `;
-
-            const modal = document.getElementById('detail-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            lucide.createIcons();
-        }
-
-        function closeDetailModal() {
-            const modal = document.getElementById('detail-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        function toggleTaskAndClose() {
-            if (currentTaskId) {
-                tasks = tasks.map(t => t.id === currentTaskId ? { ...t, completed: !t.completed } : t);
-                closeDetailModal();
-                renderCalendar();
-            }
-        }
-
-        // Override click handler for calendar days
-        function setupCalendarClicks() {
-            const grid = document.getElementById('calendar-grid');
-            grid.addEventListener('click', (e) => {
-                const dayCell = e.target.closest('.min-h-\\[100px\\]');
-                if (dayCell) {
-                    const daySpan = dayCell.querySelector('span');
-                    if (daySpan) {
-                        const day = parseInt(daySpan.textContent);
-                        const dateStr = `2025-01-${String(day).padStart(2, '0')}`;
-                        const dayTasks = tasks.filter(t => t.date === dateStr);
-                        if (dayTasks.length > 0) {
-                            openDetailModal(dayTasks[0].id);
-                        }
-                    }
-                }
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            renderCalendar();
-            setupCalendarClicks();
-        });
-    </script>
+    // Initialize
+    renderDriverDetails();
+  </script>
 </body>
 </html>
