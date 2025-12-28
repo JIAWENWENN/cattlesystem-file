@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BovineFlow - View Case Detail</title>
+  <title>BovineFlow - PM Examination Detail</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -26,10 +26,8 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
     .modal-overlay { background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); }
-    .workflow-step { transition: all 0.3s ease; }
-    .workflow-step.completed { background-color: #34554a; color: white; }
-    .workflow-step.active { background-color: white; border: 2px solid #34554a; color: #34554a; }
-    .workflow-step.pending { background-color: #e5e7eb; color: #9ca3af; }
+    .step-indicator { transition: all 0.3s ease; }
+    .step-indicator.active { transform: scale(1.1); }
   </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
@@ -41,14 +39,14 @@
       <div class="flex justify-between items-center p-6 border-b border-gray-100 bg-gradient-to-r from-primary to-primary-dark">
         <div class="flex items-center gap-4">
           <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-            <i class="fas fa-file-medical-alt text-2xl text-white"></i>
+            <i class="fas fa-microscope text-2xl text-white"></i>
           </div>
           <div>
-            <h2 class="text-xl font-bold text-white">Mortality Case Details</h2>
-            <p class="text-white/70 text-sm">LMC-2025-001 - Complete Case Overview</p>
+            <h2 class="text-xl font-bold text-white">Post-Mortem Examination Report</h2>
+            <p class="text-white/70 text-sm">LMC-2025-001 - SK 24 2549</p>
           </div>
         </div>
-        <a href="pending-approvals.html" class="text-white/70 hover:text-white transition-colors w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/10">
+        <a href="pm-examination.html" class="text-white/70 hover:text-white transition-colors w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/10">
           <i class="fas fa-times text-xl"></i>
         </a>
       </div>
@@ -57,285 +55,238 @@
       <div class="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
         <!-- Workflow Stepper -->
         <div class="bg-gray-50 rounded-xl p-4 mb-6">
-          <h4 class="text-sm font-semibold text-gray-600 mb-3 flex items-center gap-2">
-            <i class="fas fa-tasks text-primary"></i> Workflow Progress
-          </h4>
-          <div class="flex items-center justify-between flex-wrap gap-2">
+          <div class="flex items-center justify-between flex-wrap gap-4">
             <div class="flex items-center gap-2">
-              <div class="workflow-step completed w-10 h-10 rounded-full flex items-center justify-center text-sm">
-                <i class="fas fa-check"></i>
-              </div>
-              <span class="text-xs font-medium">Issued</span>
+              <span class="text-sm font-semibold text-gray-600">Workflow Status:</span>
             </div>
-            <div class="flex-1 h-1 bg-primary rounded"></div>
-            <div class="flex items-center gap-2">
-              <div class="workflow-step active w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold">
-                <i class="fas fa-spinner"></i>
-              </div>
-              <span class="text-xs font-medium">Verified</span>
-            </div>
-            <div class="flex-1 h-1 bg-gray-200 rounded"></div>
-            <div class="flex items-center gap-2">
-              <div class="workflow-step pending w-10 h-10 rounded-full flex items-center justify-center text-sm">
-                <i class="fas fa-clipboard-check"></i>
-              </div>
-              <span class="text-xs font-medium">Checked</span>
-            </div>
-            <div class="flex-1 h-1 bg-gray-200 rounded"></div>
-            <div class="flex items-center gap-2">
-              <div class="workflow-step pending w-10 h-10 rounded-full flex items-center justify-center text-sm">
-                <i class="fas fa-user-shield"></i>
-              </div>
-              <span class="text-xs font-medium">Witness</span>
-            </div>
-            <div class="flex-1 h-1 bg-gray-200 rounded"></div>
-            <div class="flex items-center gap-2">
-              <div class="workflow-step pending w-10 h-10 rounded-full flex items-center justify-center text-sm">
-                <i class="fas fa-stamp"></i>
-              </div>
-              <span class="text-xs font-medium">Approved</span>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-semibold">Pending Verification</span>
             </div>
           </div>
         </div>
 
-        <!-- Case Overview Cards -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                <i class="fas fa-tag text-blue-600"></i>
-              </div>
-              <div>
-                <p class="text-xs text-gray-500 uppercase">Tag Number</p>
-                <p class="font-bold text-gray-900">SK 24 2549</p>
-              </div>
+        <!-- Case Information -->
+        <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6">
+          <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <i class="fas fa-info-circle text-primary"></i> Case Information
+          </h3>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="bg-gray-50 rounded-lg p-3">
+              <span class="text-xs text-gray-500 uppercase tracking-wide">Tag Number</span>
+              <p class="font-semibold text-gray-900">SK 24 2549</p>
             </div>
-          </div>
-          <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                <i class="fas fa-layer-group text-green-600"></i>
-              </div>
-              <div>
-                <p class="text-xs text-gray-500 uppercase">Category</p>
-                <p class="font-bold text-gray-900">BC</p>
-              </div>
+            <div class="bg-gray-50 rounded-lg p-3">
+              <span class="text-xs text-gray-500 uppercase tracking-wide">Category</span>
+              <p class="font-semibold text-gray-900">BC (Breed Cattle)</p>
             </div>
-          </div>
-          <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
-                <i class="fas fa-calendar text-amber-600"></i>
-              </div>
-              <div>
-                <p class="text-xs text-gray-500 uppercase">Date Reported</p>
-                <p class="font-bold text-gray-900">2025-01-20</p>
-              </div>
+            <div class="bg-gray-50 rounded-lg p-3">
+              <span class="text-xs text-gray-500 uppercase tracking-wide">Date of Death</span>
+              <p class="font-semibold text-gray-900">2025-01-20</p>
             </div>
-          </div>
-          <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                <i class="fas fa-map-marker-alt text-purple-600"></i>
-              </div>
-              <div>
-                <p class="text-xs text-gray-500 uppercase">Location</p>
-                <p class="font-bold text-gray-900">SG FALDA</p>
-              </div>
+            <div class="bg-gray-50 rounded-lg p-3">
+              <span class="text-xs text-gray-500 uppercase tracking-wide">Location</span>
+              <p class="font-semibold text-gray-900">SG FALDA</p>
             </div>
           </div>
         </div>
 
-        <!-- Main Content Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          <!-- Left Column -->
-          <div class="space-y-4">
-            <!-- Basic Information -->
-            <div class="bg-white rounded-xl border border-gray-200 p-5">
-              <h4 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
-                <i class="fas fa-info-circle text-primary"></i> Basic Information
-              </h4>
-              <div class="space-y-3">
-                <div class="flex justify-between py-2 border-b border-gray-100">
-                  <span class="text-sm text-gray-500">LMC Number</span>
-                  <span class="text-sm font-semibold text-gray-900">LMC-2025-001</span>
-                </div>
-                <div class="flex justify-between py-2 border-b border-gray-100">
-                  <span class="text-sm text-gray-500">Date & Time</span>
-                  <span class="text-sm font-semibold text-gray-900">2025-01-20 14:30</span>
-                </div>
-                <div class="flex justify-between py-2 border-b border-gray-100">
-                  <span class="text-sm text-gray-500">Tag Number</span>
-                  <span class="text-sm font-semibold text-gray-900">SK 24 2549</span>
-                </div>
-                <div class="flex justify-between py-2 border-b border-gray-100">
-                  <span class="text-sm text-gray-500">Category</span>
-                  <span class="text-sm font-semibold text-gray-900">BC (Breed Cattle)</span>
-                </div>
-                <div class="flex justify-between py-2 border-b border-gray-100">
-                  <span class="text-sm text-gray-500">Location</span>
-                  <span class="text-sm font-semibold text-gray-900">SG FALDA</span>
-                </div>
-                <div class="flex justify-between py-2 border-b border-gray-100">
-                  <span class="text-sm text-gray-500">Herd</span>
-                  <span class="text-sm font-semibold text-gray-900">Herd A</span>
-                </div>
-                <div class="flex justify-between py-2">
-                  <span class="text-sm text-gray-500">Reported By</span>
-                  <span class="text-sm font-semibold text-gray-900">Nur Aziza</span>
-                </div>
-              </div>
+        <!-- External Findings -->
+        <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6">
+          <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <i class="fas fa-eye text-primary"></i> External Examination Findings
+          </h3>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+            <div class="border border-gray-200 rounded-lg p-3 text-center">
+              <i class="fas fa-skin text-2xl text-gray-400 mb-2"></i>
+              <p class="text-sm font-medium">Skin</p>
+              <span class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">Normal</span>
             </div>
-
-            <!-- Clinical Information -->
-            <div class="bg-white rounded-xl border border-gray-200 p-5">
-              <h4 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
-                <i class="fas fa-stethoscope text-primary"></i> Clinical Information
-              </h4>
-              <div class="space-y-3">
-                <div>
-                  <span class="text-xs text-gray-500 uppercase tracking-wide">Clinical Signs Observed</span>
-                  <p class="text-sm text-gray-700 mt-1">Labored breathing, nasal discharge, coughing observed for 2 days</p>
-                </div>
-                <div>
-                  <span class="text-xs text-gray-500 uppercase tracking-wide">Cause of Death</span>
-                  <p class="text-sm font-medium text-gray-900 mt-1">Respiratory Disorder</p>
-                </div>
-                <div>
-                  <span class="text-xs text-gray-500 uppercase tracking-wide">Treatment</span>
-                  <p class="text-sm text-gray-700 mt-1">Antibiotics administered (Penicillin G) for 3 days</p>
-                </div>
-                <div>
-                  <span class="text-xs text-gray-500 uppercase tracking-wide">Additional Info</span>
-                  <p class="text-sm text-gray-700 mt-1">Animal showed symptoms for 2 days before death</p>
-                </div>
-              </div>
+            <div class="border border-gray-200 rounded-lg p-3 text-center">
+              <i class="fas fa-eye text-2xl text-gray-400 mb-2"></i>
+              <p class="text-sm font-medium">Eyes</p>
+              <span class="text-xs px-2 py-1 bg-amber-100 text-amber-700 rounded-full">Abnormal</span>
+            </div>
+            <div class="border border-gray-200 rounded-lg p-3 text-center">
+              <i class="fas fa-mouth text-2xl text-gray-400 mb-2"></i>
+              <p class="text-sm font-medium">Mouth</p>
+              <span class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">Normal</span>
+            </div>
+            <div class="border border-gray-200 rounded-lg p-3 text-center">
+              <i class="fas fa-nose text-2xl text-gray-400 mb-2"></i>
+              <p class="text-sm font-medium">Nostrils</p>
+              <span class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">Normal</span>
+            </div>
+            <div class="border border-gray-200 rounded-lg p-3 text-center">
+              <i class="fas fa-ear text-2xl text-gray-400 mb-2"></i>
+              <p class="text-sm font-medium">Ears</p>
+              <span class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">Normal</span>
+            </div>
+            <div class="border border-gray-200 rounded-lg p-3 text-center">
+              <i class="fas fa-paw text-2xl text-gray-400 mb-2"></i>
+              <p class="text-sm font-medium">Limbs</p>
+              <span class="text-xs px-2 py-1 bg-amber-100 text-amber-700 rounded-full">Abnormal</span>
+            </div>
+            <div class="border border-gray-200 rounded-lg p-3 text-center">
+              <i class="fas fa-bowel text-2xl text-gray-400 mb-2"></i>
+              <p class="text-sm font-medium">Anus</p>
+              <span class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">Normal</span>
+            </div>
+            <div class="border border-gray-200 rounded-lg p-3 text-center">
+              <i class="fas fa-venus text-2xl text-gray-400 mb-2"></i>
+              <p class="text-sm font-medium">Genital</p>
+              <span class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">Normal</span>
             </div>
           </div>
+          <div class="bg-gray-50 rounded-lg p-4">
+            <span class="text-xs text-gray-500 uppercase tracking-wide">External Findings Notes</span>
+            <p class="text-sm text-gray-700 mt-1">Slight discharge from eyes (bilateral). Mild swelling observed on left hind limb. No visible wounds or lesions on skin surface.</p>
+          </div>
+        </div>
 
-          <!-- Right Column -->
-          <div class="space-y-4">
-            <!-- Status & Actions -->
-            <div class="bg-white rounded-xl border border-gray-200 p-5">
-              <h4 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
-                <i class="fas fa-flag text-primary"></i> Current Status
+        <!-- Internal Organ Examination -->
+        <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6">
+          <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <i class="fas fa-heart text-primary"></i> Internal Organ Examination
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div class="border border-gray-200 rounded-lg p-4">
+              <h4 class="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                <i class="fas fa-heartbeat text-red-500"></i> Heart
               </h4>
-              <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
-                <div class="flex items-center gap-2">
-                  <i class="fas fa-clock text-amber-500"></i>
-                  <span class="font-semibold text-amber-700">Awaiting Verification</span>
-                </div>
-                <p class="text-sm text-amber-600 mt-1">This case is pending verification by Veterinary Staff</p>
-              </div>
               <div class="space-y-2">
-                <button class="w-full px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary-dark transition-colors">
-                  <i class="fas fa-check mr-2"></i>Verify Case
-                </button>
-                <button class="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-600 font-medium hover:bg-gray-50 transition-colors">
-                  <i class="fas fa-undo mr-2"></i>Return for Revision
-                </button>
-              </div>
-            </div>
-
-            <!-- Timeline -->
-            <div class="bg-white rounded-xl border border-gray-200 p-5">
-              <h4 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
-                <i class="fas fa-history text-primary"></i> Case Timeline
-              </h4>
-              <div class="space-y-4">
-                <div class="flex gap-3">
-                  <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
-                    <i class="fas fa-check text-white text-xs"></i>
-                  </div>
-                  <div class="flex-1">
-                    <p class="text-sm font-medium text-gray-900">Case Issued</p>
-                    <p class="text-xs text-gray-500">By Nur Aziza</p>
-                    <p class="text-xs text-gray-400">2025-01-20 14:30</p>
-                  </div>
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                  <span class="text-sm">Normal size and appearance</span>
                 </div>
-                <div class="flex gap-3">
-                  <div class="w-8 h-8 bg-amber-100 border-2 border-amber-500 rounded-full flex items-center justify-center flex-shrink-0">
-                    <i class="fas fa-spinner text-amber-500 text-xs"></i>
-                  </div>
-                  <div class="flex-1">
-                    <p class="text-sm font-medium text-gray-900">Awaiting Verification</p>
-                    <p class="text-xs text-gray-500">Pending Veterinary Staff action</p>
-                    <p class="text-xs text-gray-400">Current Step</p>
-                  </div>
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                  <span class="text-sm">No signs of pericarditis</span>
                 </div>
               </div>
             </div>
-
-            <!-- Quick Info -->
-            <div class="bg-white rounded-xl border border-gray-200 p-5">
-              <h4 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
-                <i class="fas fa-clipboard-check text-primary"></i> Quick Actions
+            <div class="border border-gray-200 rounded-lg p-4">
+              <h4 class="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                <i class="fas fa-wind text-blue-500"></i> Trachea
               </h4>
-              <div class="grid grid-cols-2 gap-2">
-                <a href="pm-examination-detail.html" class="px-3 py-2 bg-amber-50 text-amber-700 rounded-lg text-sm font-medium text-center hover:bg-amber-100 transition-colors">
-                  <i class="fas fa-microscope mr-1"></i>PM Exam
-                </a>
-                <button class="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
-                  <i class="fas fa-download mr-1"></i>Download
-                </button>
-                <button class="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
-                  <i class="fas fa-print mr-1"></i>Print
-                </button>
-                <button class="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
-                  <i class="fas fa-envelope mr-1"></i>Email
-                </button>
+              <div class="space-y-2">
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 bg-amber-500 rounded-full"></span>
+                  <span class="text-sm">Foamy mucus present</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                  <span class="text-sm">No obstruction</span>
+                </div>
               </div>
+            </div>
+            <div class="border border-gray-200 rounded-lg p-4">
+              <h4 class="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                <i class="fas fa-lungs text-pink-500"></i> Lung Floating Test
+              </h4>
+              <div class="space-y-2">
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 bg-red-500 rounded-full"></span>
+                  <span class="text-sm font-medium">Negative (Sink)</span>
+                </div>
+                <p class="text-xs text-gray-500">Indicates lungs were not aerated - signs of pneumonia</p>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div class="border border-gray-200 rounded-lg p-4">
+              <h4 class="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                <i class="fas fa-dna text-purple-500"></i> Diaphragma Test
+              </h4>
+              <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">Positive (+)</span>
+            </div>
+            <div class="border border-gray-200 rounded-lg p-4">
+              <h4 class="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                <i class="fas fa-filter text-orange-500"></i> Kidney
+              </h4>
+              <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">Normal</span>
+            </div>
+            <div class="border border-gray-200 rounded-lg p-4">
+              <h4 class="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                <i class="fas fa-prescription-bottle text-teal-500"></i> Urinary Bladder
+              </h4>
+              <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">Normal</span>
             </div>
           </div>
         </div>
 
-        <!-- Audit Log -->
-        <div class="bg-white rounded-xl border border-gray-200 p-5">
-          <h4 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
-            <i class="fas fa-list-alt text-primary"></i> Audit Log
-          </h4>
-          <div class="overflow-x-auto">
-            <table class="w-full text-left whitespace-nowrap">
-              <thead>
-                <tr class="bg-gray-50 text-gray-600 text-sm">
-                  <th class="p-3 font-semibold">Timestamp</th>
-                  <th class="p-3 font-semibold">Action</th>
-                  <th class="p-3 font-semibold">User</th>
-                  <th class="p-3 font-semibold">Role</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-gray-100 text-sm">
-                <tr>
-                  <td class="p-3 text-gray-600">2025-01-20 14:30</td>
-                  <td class="p-3 font-medium text-gray-900">Mortality case created</td>
-                  <td class="p-3 text-gray-700">Nur Aziza</td>
-                  <td class="p-3"><span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">Estate Personal</span></td>
-                </tr>
-                <tr>
-                  <td class="p-3 text-gray-600">2025-01-20 14:31</td>
-                  <td class="p-3 font-medium text-gray-900">Case submitted for verification</td>
-                  <td class="p-3 text-gray-700">System</td>
-                  <td class="p-3"><span class="px-2 py-1 bg-gray-100 text-gray-600 rounded-full text-xs">Automated</span></td>
-                </tr>
-              </tbody>
-            </table>
+        <!-- Digestive System -->
+        <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6">
+          <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <i class="fas fa-stomach text-primary"></i> Digestive System (Ruminant Stomach)
+          </h3>
+          <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+            <div class="border border-gray-200 rounded-lg p-3 text-center">
+              <p class="text-xs font-semibold text-gray-600 uppercase mb-2">Rumen</p>
+              <span class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">Normal</span>
+            </div>
+            <div class="border border-gray-200 rounded-lg p-3 text-center">
+              <p class="text-xs font-semibold text-gray-600 uppercase mb-2">Reticulum</p>
+              <span class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">Normal</span>
+            </div>
+            <div class="border border-gray-200 rounded-lg p-3 text-center">
+              <p class="text-xs font-semibold text-gray-600 uppercase mb-2">Omasum</p>
+              <span class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">Normal</span>
+            </div>
+            <div class="border border-gray-200 rounded-lg p-3 text-center">
+              <p class="text-xs font-semibold text-gray-600 uppercase mb-2">Abomasum</p>
+              <span class="text-xs px-2 py-1 bg-amber-100 text-amber-700 rounded-full">Abnormal</span>
+            </div>
+            <div class="border border-gray-200 rounded-lg p-3 text-center">
+              <p class="text-xs font-semibold text-gray-600 uppercase mb-2">Small Intestine</p>
+              <span class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">Normal</span>
+            </div>
+          </div>
+          <div class="mt-4 bg-gray-50 rounded-lg p-4">
+            <span class="text-xs text-gray-500 uppercase tracking-wide">Digestive Notes</span>
+            <p class="text-sm text-gray-700 mt-1">Abomasum shows signs of inflammation (abomasitis). Contents appear normal with no evidence of bloat or impaction.</p>
+          </div>
+        </div>
+
+        <!-- Final Diagnosis -->
+        <div class="bg-white rounded-xl border border-gray-200 p-6">
+          <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <i class="fas fa-diagnoses text-primary"></i> Final Diagnosis
+          </h3>
+          <div class="bg-red-50 border border-red-200 rounded-xl p-4 mb-4">
+            <div class="flex items-center gap-2 mb-2">
+              <i class="fas fa-skull-crossbones text-red-500"></i>
+              <span class="text-sm font-semibold text-red-700 uppercase">Confirmed Cause of Death</span>
+            </div>
+            <p class="text-xl font-bold text-red-600">Respiratory Disorder - Pneumonia</p>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-4">
+            <span class="text-xs text-gray-500 uppercase tracking-wide">Diagnostic Notes</span>
+            <p class="text-sm text-gray-700 mt-1">Post-mortem examination reveals severe pneumonia affecting both lungs. Lung floating test negative confirms that lungs were consolidated. Signs of chronic respiratory disease observed. No evidence of traumatic injuries or other concurrent diseases.</p>
+          </div>
+          <div class="mt-4 grid grid-cols-2 gap-4">
+            <div>
+              <span class="text-xs text-gray-500 uppercase tracking-wide">Examined By</span>
+              <p class="font-medium text-gray-900">Dr. Ahmad</p>
+            </div>
+            <div>
+              <span class="text-xs text-gray-500 uppercase tracking-wide">Examination Date</span>
+              <p class="font-medium text-gray-900">2025-01-20</p>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- Modal Footer -->
-      <div class="flex justify-between items-center p-4 border-t border-gray-100 bg-gray-50">
-        <a href="pending-approvals.html" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-600 font-medium hover:bg-gray-100 transition-colors">
-          <i class="fas fa-arrow-left mr-2"></i>Back to List
+      <div class="flex justify-end gap-3 p-4 border-t border-gray-100 bg-gray-50">
+        <a href="pm-examination.html" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-600 font-medium hover:bg-gray-100 transition-colors">
+          <i class="fas fa-arrow-left mr-2"></i>Back
         </a>
-        <div class="flex gap-2">
-          <button class="px-4 py-2 border border-gray-300 rounded-lg text-gray-600 font-medium hover:bg-gray-100 transition-colors">
-            <i class="fas fa-history mr-2"></i>View History
-          </button>
-          <button class="px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary-dark transition-colors">
-            <i class="fas fa-check-double mr-2"></i>Authorize Next Step
-          </button>
-        </div>
+        <button class="px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary-dark transition-colors">
+          <i class="fas fa-print mr-2"></i>Print Report
+        </button>
+        <button class="px-4 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors">
+          <i class="fas fa-check mr-2"></i>Complete PM Exam
+        </button>
       </div>
     </div>
   </div>
@@ -344,14 +295,14 @@
     // Close modal when clicking outside
     document.querySelector('.modal-overlay').addEventListener('click', function(e) {
       if (e.target === this) {
-        window.location.href = 'pending-approvals.html';
+        window.location.href = 'pm-examination.html';
       }
     });
 
     // Handle keyboard escape
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
-        window.location.href = 'pending-approvals.html';
+        window.location.href = 'pm-examination.html';
       }
     });
   </script>
