@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BovineFlow - Completed Cases</title>
+  <title>BovineFlow - Mortality Analytics</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -65,26 +65,26 @@
         <i class="fas fa-clock w-5 text-lg"></i><span class="nav-text">Pending</span>
         <span class="ml-auto bg-orange-500 text-white px-2.5 py-0.5 rounded-full text-xs font-bold">2</span>
       </a>
-      <div class="flex items-center gap-3 px-5 py-3.5 border-l-[3px] border-l-white bg-white/15 text-white font-medium">
+      <a href="completed-cases.html" class="flex items-center gap-3 px-5 py-3.5 border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium">
         <i class="fas fa-check-circle w-5 text-lg"></i><span class="nav-text">Completed</span>
-      </div>
+      </a>
       <a href="history.html" class="flex items-center gap-3 px-5 py-3.5 border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium">
         <i class="fas fa-history w-5 text-lg"></i><span class="nav-text">History</span>
       </a>
     </div>
     <div class="py-2">
       <div class="px-5 pb-2 text-xs uppercase tracking-widest opacity-50 font-semibold">Reports</div>
-      <a href="analytics.html" class="flex items-center gap-3 px-5 py-3.5 border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium">
+      <div class="flex items-center gap-3 px-5 py-3.5 border-l-[3px] border-l-white bg-white/15 text-white font-medium">
         <i class="fas fa-chart-bar w-5 text-lg"></i><span class="nav-text">Analytics</span>
-      </a>
+      </div>
     </div>
   </nav>
 
   <main class="main-content ml-[280px] min-h-screen">
     <header class="bg-white px-8 py-4 flex justify-between items-center shadow-sm sticky top-0 z-40 border-b border-gray-100">
       <div>
-        <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Completed Cases</h1>
-        <p class="text-sm text-gray-500 mt-0.5">Successfully completed mortality investigations.</p>
+        <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Mortality Analytics</h1>
+        <p class="text-sm text-gray-500 mt-0.5">Statistical analysis and reports on mortality cases.</p>
       </div>
       <div class="flex items-center gap-4">
         <div class="flex items-center gap-3 bg-gray-100 px-4 py-2 rounded-lg">
@@ -117,154 +117,144 @@
 
     <div class="p-8">
       <div class="mb-8">
-        <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Completed Cases</h1>
-        <p class="text-sm text-gray-500 mt-1">Successfully completed mortality investigations.</p>
+        <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Mortality Analytics</h1>
+        <p class="text-sm text-gray-500 mt-1">Statistical analysis and reports on mortality cases.</p>
       </div>
       
       <div class="bg-white rounded-xl border border-gray-200 p-4 mb-6">
         <div class="flex flex-wrap items-end gap-4">
           <div class="flex items-center gap-2">
-            <i class="fas fa-calendar text-primary"></i>
-            <span class="text-sm font-medium text-gray-700">Date Filter:</span>
+            <i class="fas fa-calendar-alt text-primary"></i>
+            <span class="text-sm font-medium text-gray-700">Analytics Period:</span>
           </div>
           <div>
             <label class="block text-xs text-gray-500 mb-1">From Date</label>
-            <input type="date" id="completed-date-from" class="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
+            <input type="date" id="analytics-date-from" class="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
           </div>
           <div>
             <label class="block text-xs text-gray-500 mb-1">To Date</label>
-            <input type="date" id="completed-date-to" class="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
+            <input type="date" id="analytics-date-to" class="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
           </div>
-          <button onclick="filterCompletedByDate()" class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary-dark transition-colors">
-            <i class="fas fa-filter mr-2"></i>Apply Filter
+          <button onclick="filterAnalyticsByDate()" class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary-dark transition-colors">
+            <i class="fas fa-chart-line mr-2"></i>Update Analytics
           </button>
-          <button onclick="clearCompletedDateFilter()" class="px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors">
-            <i class="fas fa-times mr-2"></i>Clear
+          <button onclick="clearAnalyticsDateFilter()" class="px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors">
+            <i class="fas fa-sync-alt mr-2"></i>Reset
           </button>
         </div>
       </div>
       
-      <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
-        <div class="overflow-x-auto">
-          <table class="w-full text-left whitespace-nowrap">
-            <thead>
-              <tr class="bg-primary text-white text-sm">
-                <th class="p-4 font-semibold">LMC No.</th>
-                <th class="p-4 font-semibold">Date</th>
-                <th class="p-4 font-semibold">Tag No.</th>
-                <th class="p-4 font-semibold">Category</th>
-                <th class="p-4 font-semibold">Final COD</th>
-                <th class="p-4 font-semibold">Verified By</th>
-                <th class="p-4 font-semibold text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="mortality-completed-table" class="divide-y text-sm text-gray-700"></tbody>
-          </table>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+          <h3 class="text-lg font-bold text-gray-900 mb-4">Total Cases (YTD)</h3>
+          <p class="text-4xl font-black text-primary">47</p>
+          <p class="text-sm text-gray-500 mt-2">vs. 52 same period last year</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+          <h3 class="text-lg font-bold text-gray-900 mb-4">Top Cause</h3>
+          <p class="text-4xl font-black text-gray-900">Respiratory</p>
+          <p class="text-sm text-gray-500 mt-2">42% of all cases</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+          <h3 class="text-lg font-bold text-gray-900 mb-4">Average PM Turnaround</h3>
+          <p class="text-4xl font-black text-gray-900">2.3 days</p>
+          <p class="text-sm text-gray-500 mt-2">From report to completion</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+          <h3 class="text-lg font-bold text-gray-900 mb-4">Monthly Distribution</h3>
+          <div class="space-y-3">
+            <div class="flex items-center gap-4">
+              <span class="w-16 text-sm text-gray-600">Jan 2025</span>
+              <div class="flex-1 h-8 bg-gray-100 rounded overflow-hidden">
+                <div class="h-full bg-primary rounded" style="width: 75%"></div>
+              </div>
+              <span class="w-8 text-sm font-semibold">8</span>
+            </div>
+            <div class="flex items-center gap-4">
+              <span class="w-16 text-sm text-gray-600">Feb 2025</span>
+              <div class="flex-1 h-8 bg-gray-100 rounded overflow-hidden">
+                <div class="h-full bg-primary rounded" style="width: 50%"></div>
+              </div>
+              <span class="w-8 text-sm font-semibold">5</span>
+            </div>
+            <div class="flex items-center gap-4">
+              <span class="w-16 text-sm text-gray-600">Mar 2025</span>
+              <div class="flex-1 h-8 bg-gray-100 rounded overflow-hidden">
+                <div class="h-full bg-primary rounded" style="width: 60%"></div>
+              </div>
+              <span class="w-8 text-sm font-semibold">6</span>
+            </div>
+            <div class="flex items-center gap-4">
+              <span class="w-16 text-sm text-gray-600">Apr 2025</span>
+              <div class="flex-1 h-8 bg-gray-100 rounded overflow-hidden">
+                <div class="h-full bg-primary rounded" style="width: 90%"></div>
+              </div>
+              <span class="w-8 text-sm font-semibold">9</span>
+            </div>
+            <div class="flex items-center gap-4">
+              <span class="w-16 text-sm text-gray-600">May 2025</span>
+              <div class="flex-1 h-8 bg-gray-100 rounded overflow-hidden">
+                <div class="h-full bg-primary rounded" style="width: 40%"></div>
+              </div>
+              <span class="w-8 text-sm font-semibold">4</span>
+            </div>
+            <div class="flex items-center gap-4">
+              <span class="w-16 text-sm text-gray-600">Jun 2025</span>
+              <div class="flex-1 h-8 bg-gray-100 rounded overflow-hidden">
+                <div class="h-full bg-primary rounded" style="width: 85%"></div>
+              </div>
+              <span class="w-8 text-sm font-semibold">9</span>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+          <h3 class="text-lg font-bold text-gray-900 mb-4">Category Breakdown</h3>
+          <div class="space-y-4">
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span class="text-gray-600">BC (Breed Cattle)</span>
+                <span class="font-semibold">22 cases (47%)</span>
+              </div>
+              <div class="h-4 bg-gray-100 rounded-full overflow-hidden">
+                <div class="h-full bg-primary rounded-full" style="width: 47%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span class="text-gray-600">WB (Wagyu Beef)</span>
+                <span class="font-semibold">15 cases (32%)</span>
+              </div>
+              <div class="h-4 bg-gray-100 rounded-full overflow-hidden">
+                <div class="h-full bg-primary/70 rounded-full" style="width: 32%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span class="text-gray-600">Bull</span>
+                <span class="font-semibold">6 cases (13%)</span>
+              </div>
+              <div class="h-4 bg-gray-100 rounded-full overflow-hidden">
+                <div class="h-full bg-primary/50 rounded-full" style="width: 13%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span class="text-gray-600">Other</span>
+                <span class="font-semibold">4 cases (8%)</span>
+              </div>
+              <div class="h-4 bg-gray-100 rounded-full overflow-hidden">
+                <div class="h-full bg-gray-300 rounded-full" style="width: 8%"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </main>
 
-  <div id="detail-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm p-5 overflow-y-auto">
-    <div class="bg-white rounded-xl shadow-xl w-full max-w-5xl mx-auto overflow-hidden border border-gray-100 max-h-[90vh] flex flex-col">
-      <div class="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50 sticky top-0">
-        <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
-          <i class="fas fa-file-medical-alt text-primary"></i>
-          <span id="modal-doc-id">Document Details</span>
-        </h3>
-        <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-      <div class="p-6 overflow-y-auto custom-scrollbar flex-1">
-        <div id="workflow-stepper" class="flex justify-center gap-2 flex-wrap p-4 bg-gray-50 rounded-xl mb-6"></div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="space-y-5">
-            <div class="bg-gray-50 rounded-xl p-4">
-              <h4 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2"><i class="fas fa-info-circle text-primary"></i> Case Information</h4>
-              <div class="space-y-2 text-sm">
-                <div class="flex justify-between py-1.5 border-b border-gray-200">
-                  <span class="text-gray-500">LMC Number</span>
-                  <span id="modal-lmc-id" class="font-semibold text-gray-900">-</span>
-                </div>
-                <div class="flex justify-between py-1.5 border-b border-gray-200">
-                  <span class="text-gray-500">Date Reported</span>
-                  <span id="modal-date" class="font-semibold text-gray-900">-</span>
-                </div>
-                <div class="flex justify-between py-1.5 border-b border-gray-200">
-                  <span class="text-gray-500">Tag Number</span>
-                  <span id="modal-tag" class="font-semibold text-gray-900">-</span>
-                </div>
-                <div class="flex justify-between py-1.5 border-b border-gray-200">
-                  <span class="text-gray-500">Category</span>
-                  <span id="modal-category" class="font-semibold text-gray-900">-</span>
-                </div>
-                <div class="flex justify-between py-1.5 border-b border-gray-200">
-                  <span class="text-gray-500">Location</span>
-                  <span id="modal-location" class="font-semibold text-gray-900">-</span>
-                </div>
-                <div class="flex justify-between py-1.5 border-b border-gray-200">
-                  <span class="text-gray-500">Herd</span>
-                  <span id="modal-herd" class="font-semibold text-gray-900">-</span>
-                </div>
-                <div class="flex justify-between py-1.5">
-                  <span class="text-gray-500">Reported By</span>
-                  <span id="modal-reported-by" class="font-semibold text-gray-900">-</span>
-                </div>
-              </div>
-            </div>
-            <div class="bg-gray-50 rounded-xl p-4">
-              <h4 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2"><i class="fas fa-history text-primary"></i> Case Timeline</h4>
-              <div id="modal-timeline" class="space-y-4"></div>
-            </div>
-          </div>
-          <div class="space-y-5">
-            <div class="bg-gray-50 rounded-xl p-4">
-              <h4 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2"><i class="fas fa-stethoscope text-primary"></i> Findings Summary</h4>
-              <div class="space-y-3">
-                <div>
-                  <span class="text-xs text-gray-500 uppercase tracking-wide">Cause of Death</span>
-                  <p id="modal-cause-of-death" class="font-semibold text-gray-900">-</p>
-                </div>
-                <div>
-                  <span class="text-xs text-gray-500 uppercase tracking-wide">Clinical Signs</span>
-                  <p id="modal-clinical-signs" class="font-semibold text-gray-900 text-xs">-</p>
-                </div>
-                <div>
-                  <span class="text-xs text-gray-500 uppercase tracking-wide">Treatment</span>
-                  <p id="modal-treatment" class="font-semibold text-gray-900 text-xs">-</p>
-                </div>
-                <div>
-                  <span class="text-xs text-gray-500 uppercase tracking-wide">Final Diagnosis</span>
-                  <p id="modal-final-cod" class="font-semibold text-green-600">Pending</p>
-                </div>
-              </div>
-            </div>
-            <div class="bg-gray-50 rounded-xl p-4">
-              <h4 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2"><i class="fas fa-tasks text-primary"></i> Status</h4>
-              <div id="modal-status-info" class="mb-3"></div>
-              <div id="modal-download-section"></div>
-            </div>
-            <div class="bg-gray-50 rounded-xl p-4">
-              <h4 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2"><i class="fas fa-clipboard-check text-primary"></i> Audit Log</h4>
-              <div id="modal-audit" class="max-h-48 overflow-y-auto custom-scrollbar space-y-2"></div>
-            </div>
-          </div>
-        </div>
-        <div id="modal-actions" class="flex gap-3 mt-6 p-4 bg-gray-50 rounded-xl"></div>
-      </div>
-    </div>
-  </div>
-
   <script>
-    const MORTALITY_WORKFLOW = [
-      { id: 'issued', label: 'Issued', role: 'estate', icon: 'fa-file-signature' },
-      { id: 'verified', label: 'Verified', role: 'veterinary', icon: 'fa-check-circle' },
-      { id: 'checked', label: 'Checked', role: 'supervisor', icon: 'fa-clipboard-check' },
-      { id: 'witness', label: 'Witness', role: 'manager', icon: 'fa-user-shield' },
-      { id: 'approved', label: 'Approved', role: 'security', icon: 'fa-stamp' }
-    ];
-
     const mortalityRoles = {
       'estate': { name: 'Estate Personal', users: ['Nur Aziza', 'Kamran', 'Mazahari', 'Farm Worker 1', 'Farm Worker 2'] },
       'veterinary': { name: 'Veterinary Staff', users: ['Dr. Ahmad', 'Dr. Lim', 'Veterinary Assistant'] },
@@ -273,16 +263,24 @@
       'security': { name: 'Gate House Security', users: ['Shahrinizam', 'Security Staff'] }
     };
 
+    let currentUser = { role: '', name: '', roleLabel: '' };
     let mortalityDocuments = [
-      { id: 'LMC-2024-1712', lmcNumber: 'LMC-2024-1712', date: '2024-09-21', time: '10:00', tagNo: 'SK 24 2549', category: 'BC', location: 'SG AA', herd: 'Herd C', causeOfDeath: 'Respiratory Disorder', preliminaryCOD: 'Respiratory', clinicalSigns: 'Difficulty breathing, coughing, nasal discharge', treatment: 'Antibiotics and anti-inflammatory drugs', additionalInfo: 'Seasonal respiratory issue', reportedBy: 'Estate Worker', currentStep: 5, pmFindings: { finalDiagnosis: 'Respiratory Disorder - Pneumonia' }, steps: [{ stepId: 'issued', completed: true, user: 'Estate Worker', date: '21/09/2024', file: { name: 'LMC-2024-1712_Issued.pdf', size: '185 KB' } }, { stepId: 'verified', completed: true, user: 'Veterinary Staff', date: '21/09/2024', file: { name: 'LMC-2024-1712_Verified.pdf', size: '480 KB' } }, { stepId: 'checked', completed: true, user: 'Noor', date: '21/09/2024', file: { name: 'LMC-2024-1712_Checked.pdf', size: '190 KB' } }, { stepId: 'witness', completed: true, user: 'Nazri B Mohd Noor', date: '21/09/2024', file: { name: 'LMC-2024-1712_Witness.pdf', size: '195 KB' } }, { stepId: 'approved', completed: true, user: 'Security', date: '21/09/2024', file: { name: 'LMC-2024-1712_Approved.pdf', size: '200 KB' } }], audit: [{ action: 'Mortality case issued', user: 'Estate Worker', time: '21/09/2024' }, { action: 'Case verified by veterinary', user: 'Veterinary Staff', time: '21/09/2024' }, { action: 'Case approved', user: 'Security', time: '21/09/2024' }], attachments: [] }
+      { id: 'LMC-2025-001', date: '2025-01-20', category: 'BC', preliminaryCOD: 'Respiratory', currentStep: 1 },
+      { id: 'LMC-2025-002', date: '2025-01-18', category: 'WB', preliminaryCOD: 'Digestive', currentStep: 2 },
+      { id: 'LMC-2025-003', date: '2025-01-15', category: 'Bull', preliminaryCOD: 'Trauma', currentStep: 4 },
+      { id: 'LMC-2024-1712', date: '2024-09-21', category: 'BC', preliminaryCOD: 'Respiratory', currentStep: 5 }
     ];
 
-    let currentUser = { role: '', name: '', roleLabel: '' };
-    let currentDoc = null;
+    const MORTALITY_WORKFLOW = [
+      { id: 'issued', label: 'Issued', role: 'estate' },
+      { id: 'verified', label: 'Verified', role: 'veterinary' },
+      { id: 'checked', label: 'Checked', role: 'supervisor' },
+      { id: 'witness', label: 'Witness', role: 'manager' },
+      { id: 'approved', label: 'Approved', role: 'security' }
+    ];
 
     document.addEventListener('DOMContentLoaded', () => {
       initRoleSwitcher();
-      renderCompletedTable();
     });
 
     function navigateTo(page) { window.location.href = page; }
@@ -321,140 +319,24 @@
       }
     }
 
-    function renderCompletedTable() {
-      const completed = mortalityDocuments.filter(d => d.currentStep >= MORTALITY_WORKFLOW.length);
-      document.getElementById('mortality-completed-table').innerHTML = completed.length ? completed.map(d => {
-        const lastStep = d.steps.filter(s => s.completed).pop();
-        const finalDiagnosis = d.pmFindings?.finalDiagnosis || d.preliminaryCOD;
-        return `<tr class="hover:bg-gray-50 transition-colors">
-          <td class="p-4"><code class="bg-primary/10 text-primary px-2 py-1 rounded font-bold text-xs">${d.id}</code></td>
-          <td class="p-4">${d.date}</td>
-          <td class="p-4 font-medium">${d.tagNo}</td>
-          <td class="p-4"><span class="px-2.5 py-0.5 bg-gray-100 rounded text-xs font-medium">${d.category}</span></td>
-          <td class="p-4 text-primary font-medium">${finalDiagnosis}</td>
-          <td class="p-4 text-gray-600">${lastStep?.user || '-'}</td>
-          <td class="p-4 text-right">
-            <button onclick="viewMortalityDetail('${d.id}')" class="w-7 h-7 text-gray-400 hover:text-primary hover:bg-primary/10 rounded flex items-center justify-center transition-colors">
-              <i class="fas fa-eye text-sm"></i>
-            </button>
-            <button onclick="downloadReport('${d.id}')" class="w-7 h-7 text-gray-400 hover:text-primary hover:bg-primary/10 rounded flex items-center justify-center transition-colors">
-              <i class="fas fa-download text-sm"></i>
-            </button>
-          </td>
-        </tr>`;
-      }).join('') : '<tr><td colspan="7" class="p-8 text-center text-gray-400 italic">No completed cases</td></tr>';
-    }
-
-    function filterCompletedByDate() {
-      const fromDate = document.getElementById('completed-date-from')?.value;
-      const toDate = document.getElementById('completed-date-to')?.value;
+    function filterAnalyticsByDate() {
+      const fromDate = document.getElementById('analytics-date-from')?.value;
+      const toDate = document.getElementById('analytics-date-to')?.value;
       if (!fromDate && !toDate) return;
-      const completed = mortalityDocuments.filter(d => {
-        if (d.currentStep < MORTALITY_WORKFLOW.length) return false;
+      const filtered = mortalityDocuments.filter(d => {
         const docDate = new Date(d.date);
         if (fromDate && docDate < new Date(fromDate)) return false;
         if (toDate && docDate > new Date(toDate)) return false;
         return true;
       });
-      renderFilteredCompletedTable(completed);
+      alert(`Analytics updated: ${filtered.length} cases match the date filter`);
     }
 
-    function clearCompletedDateFilter() {
-      document.getElementById('completed-date-from').value = '';
-      document.getElementById('completed-date-to').value = '';
-      renderCompletedTable();
+    function clearAnalyticsDateFilter() {
+      document.getElementById('analytics-date-from').value = '';
+      document.getElementById('analytics-date-to').value = '';
+      alert('Analytics reset to default view');
     }
-
-    function renderFilteredCompletedTable(filteredDocs) {
-      document.getElementById('mortality-completed-table').innerHTML = filteredDocs.length ? filteredDocs.map(d => {
-        const lastStep = d.steps.filter(s => s.completed).pop();
-        const finalDiagnosis = d.pmFindings?.finalDiagnosis || d.preliminaryCOD;
-        return `<tr class="hover:bg-gray-50 transition-colors">
-          <td class="p-4"><code class="bg-primary/10 text-primary px-2 py-1 rounded font-bold text-xs">${d.id}</code></td>
-          <td class="p-4">${d.date}</td>
-          <td class="p-4 font-medium">${d.tagNo}</td>
-          <td class="p-4"><span class="px-2.5 py-0.5 bg-gray-100 rounded text-xs font-medium">${d.category}</span></td>
-          <td class="p-4 text-primary font-medium">${finalDiagnosis}</td>
-          <td class="p-4 text-gray-600">${lastStep?.user || '-'}</td>
-          <td class="p-4 text-right">
-            <button onclick="viewMortalityDetail('${d.id}')" class="w-7 h-7 text-gray-400 hover:text-primary hover:bg-primary/10 rounded flex items-center justify-center transition-colors">
-              <i class="fas fa-eye text-sm"></i>
-            </button>
-          </td>
-        </tr>`;
-      }).join('') : '<tr><td colspan="7" class="p-8 text-center text-gray-400 italic">No completed cases match the date filter</td></tr>';
-    }
-
-    function viewMortalityDetail(id) {
-      const doc = mortalityDocuments.find(d => d.id === id);
-      if (!doc) return;
-      currentDoc = doc;
-      const wf = MORTALITY_WORKFLOW;
-      const isCompleted = doc.currentStep >= wf.length;
-
-      document.getElementById('modal-doc-id').textContent = doc.id;
-      document.getElementById('modal-lmc-id').textContent = doc.id;
-      document.getElementById('modal-date').textContent = doc.date;
-      document.getElementById('modal-tag').textContent = doc.tagNo;
-      document.getElementById('modal-category').textContent = doc.category;
-      document.getElementById('modal-location').textContent = doc.location;
-      document.getElementById('modal-herd').textContent = doc.herd || '-';
-      document.getElementById('modal-reported-by').textContent = doc.reportedBy;
-      document.getElementById('modal-cause-of-death').textContent = doc.causeOfDeath || doc.preliminaryCOD || '-';
-      document.getElementById('modal-clinical-signs').textContent = doc.clinicalSigns || '-';
-      document.getElementById('modal-treatment').textContent = doc.treatment || '-';
-      document.getElementById('modal-final-cod').textContent = doc.pmFindings?.finalDiagnosis || 'Completed';
-
-      let stepperHtml = '';
-      wf.forEach((step, idx) => {
-        const stepData = doc.steps.find(s => s.stepId === step.id);
-        const isStepCompleted = stepData?.completed;
-        let iconClass = isStepCompleted ? 'bg-primary text-white' : 'bg-gray-200 text-gray-400';
-        stepperHtml += `<div class="flex flex-col items-center min-w-[70px]">
-          <div class="w-10 h-10 rounded-full ${iconClass} flex items-center justify-center text-sm mb-1">
-            <i class="fas ${isStepCompleted ? 'fa-check' : step.icon}"></i>
-          </div>
-          <span class="text-[10px] ${isStepCompleted ? 'text-gray-800 font-semibold' : 'text-gray-400'} text-center">${step.label}</span>
-        </div>`;
-        if (idx < wf.length - 1) stepperHtml += `<div class="text-gray-300 pb-5"><i class="fas fa-chevron-right text-xs"></i></div>`;
-      });
-      document.getElementById('workflow-stepper').innerHTML = stepperHtml;
-
-      let timelineHtml = '';
-      doc.steps.filter(s => s.completed).forEach(step => {
-        const stepDef = wf.find(w => w.id === step.stepId);
-        timelineHtml += `<div class="flex gap-3"><div class="w-3 h-3 bg-primary rounded-full mt-1 flex-shrink-0"></div>
-          <div class="flex-1 pb-4"><div class="flex justify-between items-center"><span class="font-semibold text-gray-800 text-sm">${stepDef?.label || step.stepId}</span><span class="text-xs text-gray-400">${step.date}</span></div><div class="text-xs text-gray-500 mb-2">By ${step.user}</div></div></div>`;
-      });
-      document.getElementById('modal-timeline').innerHTML = timelineHtml || '<p class="text-gray-400 italic text-sm">No steps completed</p>';
-
-      const statusHtml = '<p class="text-green-600 font-semibold text-sm"><i class="fas fa-check-circle mr-2"></i>Case Completed</p>';
-      const downloadHtml = `<button onclick="downloadReport('${doc.id}')" class="mt-3 px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary-dark transition-colors"><i class="fas fa-download mr-2"></i>Download LMC Report</button>`;
-      document.getElementById('modal-status-info').innerHTML = statusHtml;
-      document.getElementById('modal-download-section').innerHTML = downloadHtml;
-      document.getElementById('modal-actions').innerHTML = '';
-
-      document.getElementById('modal-audit').innerHTML = doc.audit.map(a => `<div class="flex gap-2 py-2 border-b border-gray-100 last:border-0"><div class="w-2 h-2 bg-primary rounded-full mt-1.5 flex-shrink-0"></div><div class="flex-1"><div class="text-sm text-gray-800"><strong>${a.user}</strong> - ${a.action}</div><div class="text-xs text-gray-400">${a.time}</div></div></div>`).join('');
-
-      const modal = document.getElementById('detail-modal');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-    }
-
-    function closeModal() {
-      const modal = document.getElementById('detail-modal');
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
-      currentDoc = null;
-    }
-
-    function downloadReport(id) {
-      alert(`Report download initiated for: ${id}`);
-    }
-
-    document.getElementById('detail-modal').addEventListener('click', (e) => {
-      if (e.target.id === 'detail-modal') closeModal();
-    });
   </script>
 </body>
 </html>
