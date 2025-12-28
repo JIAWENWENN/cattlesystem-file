@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Add Supplier Modal - Sawit Kinabalu</title>
+        <title>Supplier Profile - Sawit Kinabalu</title>
         
         <!-- Fonts: Exact matching Figtree weight range (300-900) -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -44,111 +44,98 @@
                 backdrop-filter: blur(4px);
                 transition: all 0.2s ease;
             }
-
-            /* Form field focus styles matching system defaults */
-            .system-input:focus {
-                outline: none;
-                box-shadow: 0 0 0 2px rgba(52, 85, 74, 0.2);
-                border-color: #34554a;
-            }
         </style>
     </head>
     <body class="font-sans text-gray-900 antialiased bg-gray-200 min-h-screen flex items-center justify-center p-4">
 
-        <!-- Add Supplier Modal (Matching Vue Structure Exactly) -->
-        <div id="addSupplierModal" class="relative z-50 w-full max-w-lg mx-4 border border-gray-100 bg-white rounded-2xl shadow-2xl overflow-hidden transition-all transform scale-100">
+        <!-- Supplier Details Modal (Exactly matching the Vue structure for openSupplierDetails) -->
+        <div id="supplierModal" class="relative z-50 w-full max-w-md mx-4 border border-gray-100 bg-white rounded-xl shadow-2xl overflow-hidden transition-all transform scale-100">
             
             <!-- Modal Header -->
-            <div class="flex justify-between items-center p-6 border-b bg-gray-50">
-                <h3 class="text-lg font-black text-gray-900 tracking-widest uppercase">Add New Supplier</h3>
+            <div class="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50">
+                <h3 class="text-lg font-bold text-gray-900 tracking-tight">Supplier Profile</h3>
                 <button class="text-gray-400 hover:text-gray-600 transition-colors">
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
 
-            <!-- Modal Body (Matching the grid-cols-2 gap-4 layout from Vue) -->
-            <div class="p-6">
-                <form id="supplierForm" class="space-y-4" onsubmit="event.preventDefault();">
-                    <div class="grid grid-cols-2 gap-4">
-                        
-                        <!-- Company Name (Full Width) -->
-                        <div class="col-span-2 space-y-1">
-                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Company Name *</label>
-                            <input
-                                type="text"
-                                class="system-input w-full p-2.5 border border-gray-300 rounded-lg font-black text-sm shadow-sm transition-all"
-                                placeholder="Legal corporate name"
-                                required
-                            />
-                        </div>
+            <!-- Modal Body -->
+            <div class="p-6 space-y-4">
+                
+                <!-- Supplier Summary Header -->
+                <div class="flex items-center gap-4 mb-4">
+                    <!-- Icon Container: bg-[#34554a]/10 text-[#34554a] -->
+                    <div class="w-16 h-16 bg-[#34554a]/10 text-[#34554a] rounded-full flex items-center justify-center shadow-inner">
+                        <i data-lucide="truck" class="w-8 h-8"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-bold text-gray-900 tracking-tight">AgroSupply Co.</h4>
+                        <!-- Type Badge: text-[10px] font-bold tracking-widest uppercase -->
+                        <span class="text-[10px] font-bold tracking-widest uppercase text-[#34554a] bg-[#34554a]/10 px-2 py-1 rounded">
+                            Distributor
+                        </span>
+                    </div>
+                </div>
 
-                        <!-- Type -->
-                        <div class="space-y-1">
-                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Type</label>
-                            <select class="system-input w-full p-2.5 border border-gray-300 rounded-lg bg-white font-black text-sm shadow-sm transition-all cursor-pointer">
-                                <option value="Distributor">Distributor</option>
-                                <option value="Manufacturer">Manufacturer</option>
-                                <option value="Wholesaler">Wholesaler</option>
-                            </select>
-                        </div>
-
-                        <!-- Contact Person -->
-                        <div class="space-y-1">
-                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Contact Person</label>
-                            <input
-                                type="text"
-                                class="system-input w-full p-2.5 border border-gray-300 rounded-lg font-black text-sm shadow-sm transition-all"
-                                placeholder="Name"
-                            />
-                        </div>
-
-                        <!-- Phone -->
-                        <div class="space-y-1">
-                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Phone</label>
-                            <input
-                                type="text"
-                                class="system-input w-full p-2.5 border border-gray-300 rounded-lg font-black text-sm shadow-sm transition-all"
-                                placeholder="+60 12-345 6789"
-                            />
-                        </div>
-
-                        <!-- Email -->
-                        <div class="space-y-1">
-                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Email</label>
-                            <input
-                                type="email"
-                                class="system-input w-full p-2.5 border border-gray-300 rounded-lg font-black text-sm shadow-sm transition-all"
-                                placeholder="email@company.com"
-                            />
-                        </div>
-
-                        <!-- Address (Full Width) -->
-                        <div class="col-span-2 space-y-1">
-                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Address</label>
-                            <textarea
-                                rows="2"
-                                class="system-input w-full p-2.5 border border-gray-300 rounded-lg font-black text-sm shadow-sm transition-all"
-                                placeholder="Full address"
-                            ></textarea>
-                        </div>
+                <!-- Detailed Information Grid (Matching Vue Layout) -->
+                <div class="space-y-3">
+                    
+                    <!-- Row: Contact -->
+                    <div class="flex justify-between border-b pb-2 border-gray-100">
+                        <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Contact</span>
+                        <span class="text-sm font-semibold text-gray-900">Mr. Ahmad Kamal</span>
                     </div>
 
-                    <!-- Modal Footer Actions (Replicating exact button typography) -->
-                    <div class="flex justify-end gap-3 pt-6 border-t border-gray-100 mt-4">
-                        <button 
-                            type="button" 
-                            class="px-5 py-2.5 border border-gray-300 rounded-lg text-gray-600 font-bold uppercase text-[10px] tracking-widest hover:bg-gray-50 transition-all"
-                        >
-                            Cancel
-                        </button>
-                        <button 
-                            type="submit" 
-                            class="px-8 py-2.5 bg-brand text-white rounded-lg hover:bg-brand-hover shadow-md font-black uppercase text-[10px] tracking-widest transition-all transform active:scale-95"
-                        >
-                            Add Supplier
-                        </button>
+                    <!-- Row: Phone -->
+                    <div class="flex justify-between border-b pb-2 border-gray-100">
+                        <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Phone</span>
+                        <span class="text-sm font-semibold text-gray-900">+60 12-345 6789</span>
                     </div>
-                </form>
+
+                    <!-- Row: Email -->
+                    <div class="flex justify-between border-b pb-2 border-gray-100">
+                        <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Email</span>
+                        <span class="text-sm font-semibold text-gray-900">kamal@agrosupply.com</span>
+                    </div>
+
+                    <!-- Row: Address (Matching text-right max-w-[200px]) -->
+                    <div class="flex justify-between">
+                        <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Address</span>
+                        <span class="text-sm font-semibold text-gray-900 text-right max-w-[200px]">
+                            No. 24, Kawasan Perindustrian Tawau, 91000 Sabah, Malaysia
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer (Matching specific flex justify-between layout) -->
+            <div class="p-4 bg-gray-50 flex justify-between items-center border-t border-gray-100">
+                
+                <!-- Left Actions: Edit & Delete -->
+                <div class="flex gap-2">
+                    <button 
+                        type="button" 
+                        class="flex items-center gap-1.5 px-4 py-2 border bg-white rounded-lg text-sm font-bold shadow-sm hover:bg-gray-50 transition-all text-gray-700"
+                    >
+                        <i data-lucide="pencil" class="w-4 h-4"></i>
+                        Edit
+                    </button>
+                    <button 
+                        type="button" 
+                        class="flex items-center gap-1.5 px-4 py-2 border border-red-200 bg-white rounded-lg text-sm font-bold shadow-sm hover:bg-red-50 transition-all text-red-600"
+                    >
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        Delete
+                    </button>
+                </div>
+
+                <!-- Right Action: Close -->
+                <button 
+                    type="button" 
+                    class="px-6 py-2 border bg-white rounded-lg text-sm font-bold shadow-sm hover:bg-gray-50 transition-all text-gray-700"
+                >
+                    Close
+                </button>
             </div>
         </div>
 
