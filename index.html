@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BovineFlow - Transfer History</title>
+  <title>BovineFlow - Pending Approvals</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -59,13 +59,13 @@
     </div>
     <div class="py-2">
       <div class="px-5 pb-2 text-xs uppercase tracking-widest opacity-50 font-semibold">Approvals</div>
-      <div class="nav-item flex items-center gap-3 px-5 py-3.5 cursor-pointer border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium" onclick="window.location.href='pending.html'">
+      <div class="nav-item active flex items-center gap-3 px-5 py-3.5 cursor-pointer border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium" onclick="window.location.href='pending.html'">
         <i class="fas fa-clock w-5 text-lg"></i><span>Pending</span><span class="ml-auto bg-orange-500 text-white px-2.5 py-0.5 rounded-full text-xs font-bold">3</span>
       </div>
       <div class="nav-item flex items-center gap-3 px-5 py-3.5 cursor-pointer border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium" onclick="window.location.href='completed.html'">
         <i class="fas fa-check-circle w-5 text-lg"></i><span>Completed</span>
       </div>
-      <div class="nav-item active flex items-center gap-3 px-5 py-3.5 cursor-pointer border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium" onclick="window.location.href='history.html'">
+      <div class="nav-item flex items-center gap-3 px-5 py-3.5 cursor-pointer border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium" onclick="window.location.href='history.html'">
         <i class="fas fa-history w-5 text-lg"></i><span>Transfer History</span>
       </div>
     </div>
@@ -75,27 +75,44 @@
   <main class="main-content ml-[280px] min-h-screen">
     <header class="bg-white px-8 py-4 flex justify-between items-center shadow-sm sticky top-0 z-40 border-b border-gray-100">
       <div>
-        <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Transfer History</h1>
-        <p class="text-sm text-gray-500 mt-0.5">Complete audit trail of all transfers.</p>
+        <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Pending Approvals</h1>
+        <p class="text-sm text-gray-500 mt-0.5">Documents awaiting your action.</p>
       </div>
       <div class="flex items-center gap-4">
         <div class="flex items-center gap-3 bg-gray-100 px-4 py-2 rounded-lg">
           <label class="text-xs font-bold text-gray-500 uppercase tracking-wide"><i class="fas fa-user-tag mr-1"></i>Role:</label>
           <select class="px-3 py-1.5 border border-gray-200 rounded-lg bg-white text-sm font-medium text-gray-700">
-            <option>Select Role</option>
+            <option>Livestock Manager</option>
+            <option>Security</option>
+            <option>Driver</option>
           </select>
         </div>
         <div class="flex items-center gap-3 bg-primary text-white px-4 py-2 rounded-lg">
-          <div class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center font-bold">-</div>
+          <div class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center font-bold">M</div>
           <div>
-            <div class="font-semibold text-sm">-</div>
-            <div class="text-xs opacity-85">-</div>
+            <div class="font-semibold text-sm">M Badrul</div>
+            <div class="text-xs opacity-85">Livestock Manager</div>
           </div>
         </div>
       </div>
     </header>
 
     <div class="p-8">
+      <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+        <div class="flex flex-1 gap-2 w-full md:w-auto">
+          <div class="relative flex-1">
+            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+            <input type="text" placeholder="Search documents..." class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 outline-none text-sm focus:ring-2 focus:ring-primary">
+          </div>
+          <select class="px-3 py-2 rounded-lg border border-gray-200 bg-gray-50 text-gray-600 text-sm outline-none focus:ring-2 focus:ring-primary">
+            <option>All Types</option>
+            <option>CTV</option>
+            <option>Receival</option>
+            <option>SIV</option>
+          </select>
+        </div>
+      </div>
+
       <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
         <div class="overflow-x-auto">
           <table class="w-full text-left whitespace-nowrap">
@@ -107,7 +124,7 @@
                 <th class="p-4 font-semibold">From</th>
                 <th class="p-4 font-semibold">To</th>
                 <th class="p-4 font-semibold">Cattle</th>
-                <th class="p-4 font-semibold">Status</th>
+                <th class="p-4 font-semibold">Current Step</th>
                 <th class="p-4 font-semibold text-right">Actions</th>
               </tr>
             </thead>
@@ -120,8 +137,9 @@
                 <td class="p-4">SELIC</td>
                 <td class="p-4">1</td>
                 <td class="p-4"><span class="px-2.5 py-0.5 bg-blue-100 text-blue-800 rounded-full text-xs font-medium border border-blue-200">Transported</span></td>
-                <td class="p-4 text-right">
+                <td class="p-4 text-right flex justify-end gap-2">
                   <button onclick="window.open('detail-modal.html?id=CTV-2025-001','_blank')" class="w-7 h-7 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded flex items-center justify-center"><i class="fas fa-eye text-sm"></i></button>
+                  <button class="w-7 h-7 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded flex items-center justify-center"><i class="fas fa-edit text-sm"></i></button>
                 </td>
               </tr>
               <tr class="hover:bg-gray-50">
@@ -132,8 +150,9 @@
                 <td class="p-4">SKFP-Butchery</td>
                 <td class="p-4">5</td>
                 <td class="p-4"><span class="px-2.5 py-0.5 bg-blue-100 text-blue-800 rounded-full text-xs font-medium border border-blue-200">Witness</span></td>
-                <td class="p-4 text-right">
+                <td class="p-4 text-right flex justify-end gap-2">
                   <button onclick="window.open('detail-modal.html?id=CR-2025-001','_blank')" class="w-7 h-7 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded flex items-center justify-center"><i class="fas fa-eye text-sm"></i></button>
+                  <button class="w-7 h-7 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded flex items-center justify-center"><i class="fas fa-edit text-sm"></i></button>
                 </td>
               </tr>
               <tr class="hover:bg-gray-50">
@@ -144,36 +163,19 @@
                 <td class="p-4">SKFP-Internal</td>
                 <td class="p-4">5</td>
                 <td class="p-4"><span class="px-2.5 py-0.5 bg-green-100 text-green-800 rounded-full text-xs font-medium border border-green-200">Completed</span></td>
-                <td class="p-4 text-right">
+                <td class="p-4 text-right flex justify-end gap-2">
                   <button onclick="window.open('detail-modal.html?id=SIV-2025-1969','_blank')" class="w-7 h-7 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded flex items-center justify-center"><i class="fas fa-eye text-sm"></i></button>
-                </td>
-              </tr>
-              <tr class="hover:bg-gray-50">
-                <td class="p-4"><code class="bg-green-50 text-primary px-2 py-1 rounded font-bold text-xs">CTV-2024-156</code></td>
-                <td class="p-4"><span class="px-2.5 py-0.5 bg-gray-100 rounded text-xs font-medium">CTV</span></td>
-                <td class="p-4">2024-12-15</td>
-                <td class="p-4">SG FALDA</td>
-                <td class="p-4">SELIC</td>
-                <td class="p-4">3</td>
-                <td class="p-4"><span class="px-2.5 py-0.5 bg-green-100 text-green-800 rounded-full text-xs font-medium border border-green-200">Completed</span></td>
-                <td class="p-4 text-right">
-                  <button onclick="window.open('detail-modal.html?id=CTV-2024-156','_blank')" class="w-7 h-7 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded flex items-center justify-center"><i class="fas fa-eye text-sm"></i></button>
-                </td>
-              </tr>
-              <tr class="hover:bg-gray-50">
-                <td class="p-4"><code class="bg-green-50 text-primary px-2 py-1 rounded font-bold text-xs">CR-2024-089</code></td>
-                <td class="p-4"><span class="px-2.5 py-0.5 bg-gray-100 rounded text-xs font-medium">Receival</span></td>
-                <td class="p-4">2024-12-10</td>
-                <td class="p-4">SKLIC Breedlot</td>
-                <td class="p-4">SKFP-Butchery</td>
-                <td class="p-4">8</td>
-                <td class="p-4"><span class="px-2.5 py-0.5 bg-green-100 text-green-800 rounded-full text-xs font-medium border border-green-200">Completed</span></td>
-                <td class="p-4 text-right">
-                  <button onclick="window.open('detail-modal.html?id=CR-2024-089','_blank')" class="w-7 h-7 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded flex items-center justify-center"><i class="fas fa-eye text-sm"></i></button>
                 </td>
               </tr>
             </tbody>
           </table>
+        </div>
+        <div class="p-4 border-t bg-gray-50 flex items-center justify-between">
+          <p class="text-sm text-gray-500 font-medium">Showing 3 documents</p>
+          <div class="flex gap-2">
+            <button class="w-8 h-8 flex items-center justify-center border rounded-lg bg-white disabled:opacity-50"><i class="fas fa-chevron-left text-xs"></i></button>
+            <button class="w-8 h-8 flex items-center justify-center border rounded-lg bg-white disabled:opacity-50"><i class="fas fa-chevron-right text-xs"></i></button>
+          </div>
         </div>
       </div>
     </div>
