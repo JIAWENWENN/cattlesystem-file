@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>View Medication Details - Sawit Kinabalu</title>
+        <title>Delete Medication - Sawit Kinabalu</title>
         
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -20,23 +20,12 @@
                     extend: {
                         fontFamily: {
                             sans: ['Figtree', 'sans-serif'],
-                        },
-                        colors: {
-                            brand: {
-                                DEFAULT: '#34554a',
-                                hover: '#2c463d',
-                            }
                         }
                     },
                 },
             }
         </script>
         <style>
-            .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-            .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-            .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
-            .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
-            
             .modal-backdrop {
                 background-color: rgba(0, 0, 0, 0.5);
                 backdrop-filter: blur(4px);
@@ -45,89 +34,55 @@
     </head>
     <body class="font-sans text-gray-900 antialiased bg-gray-200 min-h-screen flex items-center justify-center p-4">
 
-        <!-- View Medication Modal (Exactly matching the Vue structure) -->
-        <div id="viewModal" class="relative z-50 w-full max-w-md mx-4 overflow-hidden bg-white rounded-xl shadow-xl flex flex-col border border-gray-100">
+        <!-- Delete Confirmation Modal -->
+        <!-- Replicating the exact structure of the DeleteConfirmationModal component -->
+        <div id="deleteModal" class="relative z-50 w-full max-w-md mx-4 overflow-hidden bg-white rounded-xl shadow-2xl flex flex-col border border-gray-100 transition-all transform">
             
-            <!-- Modal Header -->
-            <div class="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50">
-                <h3 class="text-lg font-bold text-gray-900">Medication Details</h3>
-                <button class="text-gray-400 hover:text-gray-600 transition-colors">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-            </div>
+            <!-- Close Button Top Right -->
+            <button class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
 
-            <!-- Modal Body (Replicating Vue logic) -->
-            <div class="p-6 space-y-4 bg-white">
+            <!-- Modal Content -->
+            <div class="p-8 text-center">
                 
-                <!-- Medication Summary Header -->
-                <div class="flex items-center gap-4 mb-4">
-                    <!-- Icon Container: matching bg-blue-50 text-[#34554a] -->
-                    <div class="w-16 h-16 bg-blue-50 text-[#34554a] rounded-full flex items-center justify-center shadow-inner">
-                        <i data-lucide="pill" class="w-8 h-8"></i>
-                    </div>
-                    <div>
-                        <h4 class="text-xl font-bold text-gray-900 tracking-tight">Penicillin G</h4>
-                        <p class="text-sm text-gray-500 font-medium">Procaine Penicillin</p>
-                    </div>
+                <!-- Warning Icon: matching bg-red-50 text-red-600 from medications dashboard -->
+                <div class="mx-auto w-20 h-20 bg-red-50 text-red-600 rounded-full flex items-center justify-center mb-6 shadow-inner">
+                    <i data-lucide="alert-triangle" class="w-10 h-10"></i>
                 </div>
 
-                <!-- Information Grid Rows (Matching Vue v-for="col in columns") -->
-                <div class="space-y-3">
-                    
-                    <!-- Row: Generic Name -->
-                    <div class="flex justify-between border-b pb-2 border-gray-100">
-                        <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Generic Name</span>
-                        <span class="text-sm font-semibold text-gray-900">Procaine Penicillin</span>
-                    </div>
-
-                    <!-- Row: Category -->
-                    <div class="flex justify-between border-b pb-2 border-gray-100">
-                        <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Category</span>
-                        <span class="text-sm font-semibold text-gray-900">Antibiotics</span>
-                    </div>
-
-                    <!-- Row: Stock -->
-                    <div class="flex justify-between border-b pb-2 border-gray-100">
-                        <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Stock</span>
-                        <span class="text-sm font-semibold text-gray-900">120 ml</span>
-                    </div>
-
-                    <!-- Row: Expiry -->
-                    <div class="flex justify-between border-b pb-2 border-gray-100">
-                        <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Expiry</span>
-                        <span class="text-sm font-semibold text-gray-900">2026-05-15</span>
-                    </div>
-
-                    <!-- Row: Status (Special Badge Styling) -->
-                    <div class="flex justify-between border-b pb-2 border-gray-100 last:border-0">
-                        <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Status</span>
-                        <!-- Status Classes matching getStatus(selectedItem?.stock).class -->
-                        <span class="px-2 py-0.5 rounded-full text-[10px] font-black border bg-green-100 text-green-800 border-green-200 uppercase tracking-wider">
-                            In Stock
-                        </span>
-                    </div>
-
-                    <!-- Simulated Custom Field Row (if !col.standard) -->
-                    <div class="flex justify-between border-b pb-2 border-gray-100 last:border-0">
-                        <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Batch Number</span>
-                        <span class="text-sm font-semibold text-gray-900">#4402-A</span>
-                    </div>
-                </div>
+                <!-- Content Header: font-black and uppercase tracking-tight as per branding -->
+                <h3 class="text-xl font-black text-gray-900 uppercase tracking-tight mb-2">Delete Medication</h3>
+                <p class="text-sm text-gray-500 font-medium leading-relaxed px-2">
+                    Are you sure you want to delete <span class="font-bold text-gray-900">Penicillin G</span>? 
+                    <br>This action is permanent and cannot be undone.
+                </p>
             </div>
 
-            <!-- Modal Footer -->
-            <div class="p-4 bg-gray-50 flex justify-end rounded-b-xl border-t border-gray-100">
+            <!-- Modal Footer: Matching the gray-50 background and border-t from other system modals -->
+            <div class="grid grid-cols-2 gap-3 p-6 bg-gray-50 border-t border-gray-100 rounded-b-xl">
+                <!-- Cancel Button -->
                 <button 
                     type="button" 
-                    class="px-6 py-2 border bg-white border-gray-200 rounded-lg text-sm font-bold shadow-sm hover:bg-gray-50 transition-all text-gray-700"
+                    class="px-6 py-3 border border-gray-300 bg-white rounded-lg text-sm font-bold text-gray-700 hover:bg-gray-100 transition-all shadow-sm active:scale-95"
                 >
-                    Close Details
+                    Cancel
+                </button>
+
+                <!-- Delete Button: bg-red-600 with uppercase tracking-wider -->
+                <button 
+                    type="button" 
+                    class="px-6 py-3 bg-red-600 text-white rounded-lg text-sm font-black uppercase tracking-wider hover:bg-red-700 shadow-md transition-all transform active:scale-95 flex items-center justify-center gap-2"
+                    onclick="alert('Medication record has been successfully removed.')"
+                >
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    Confirm Delete
                 </button>
             </div>
         </div>
 
         <script>
-            // Initialize Lucide Icons
+            // Initialize Icons
             lucide.createIcons();
         </script>
     </body>
