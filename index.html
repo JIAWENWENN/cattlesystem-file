@@ -1,100 +1,502 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Delete Confirmation Modal - CattleLog</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feeding Management Console</title>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Inter', sans-serif; background: #f3f4f6; min-height: 100vh; }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
-    }
-    .animate-fade-in { animation: fadeIn 0.2s ease-out; }
+    /* Custom scrollbar for table */
+    .overflow-x-auto::-webkit-scrollbar { height: 8px; }
+    .overflow-x-auto::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+    .overflow-x-auto::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .overflow-x-auto::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    /* Smooth transitions */
+    .transition { transition: all 0.2s ease; }
+    /* Table input focus */
+    input:focus { outline: none; ring: 2px; }
   </style>
 </head>
-<body class="p-8">
-  <!-- Delete Confirmation Modal -->
-  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-    <div class="bg-white rounded-xl shadow-xl w-full max-w-sm mx-4 overflow-hidden animate-fade-in">
-      <!-- Content -->
-      <div class="p-6 text-center">
-        <!-- Warning Icon -->
-        <div class="w-16 h-16 bg-red-50 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
-          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
-        </div>
-        
-        <!-- Title -->
-        <h3 class="text-lg font-bold text-gray-900 mb-2">Delete Driver?</h3>
-        
-        <!-- Message -->
-        <p class="text-sm text-gray-500">
-          Are you sure you want to delete 
-          <span class="font-bold" id="driver-name">John Smith</span>? 
-          This action cannot be undone.
-        </p>
-        
-        <!-- Driver Info -->
-        <div class="mt-4 p-3 bg-gray-50 rounded-lg text-left">
-          <p class="text-xs text-gray-400 uppercase font-bold tracking-wide mb-1">Driver to Delete</p>
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-[#34554a] text-white flex items-center justify-center font-bold text-sm" id="driver-avatar">J</div>
-            <div>
-              <p class="font-bold text-gray-900" id="driver-name-display">John Smith</p>
-              <p class="text-xs text-gray-500" id="driver-id-display">D01</p>
+<body class="bg-gray-50 text-gray-800">
+  <div class="min-h-screen">
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200 shadow-sm">
+      <div class="max-w-6xl mx-auto px-4 py-6 flex flex-col gap-4">
+        <div class="flex items-start justify-between gap-4 flex-wrap">
+          <div>
+            <p class="text-sm text-[#34554a] font-bold uppercase tracking-wide">Operations · Feeding</p>
+            <h1 id="titleDisplay" class="text-2xl md:text-3xl font-black text-gray-900 tracking-tight">Feeding Management Console</h1>
+            <p id="subtitleDisplay" class="text-sm text-gray-500 mt-1">Matches the medication page layout, color, and table style.</p>
+            <div id="feedTypeDisplay" class="inline-flex items-center gap-2 px-3 py-1 mt-3 rounded-full bg-[#34554a]/10 text-[#34554a] text-xs font-semibold border border-[#34554a]/30 shadow-sm">Feed Type: General</div>
+          </div>
+          <div class="flex flex-col gap-2 w-full max-w-2xl">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+              <div>
+                <label class="text-[11px] font-semibold text-gray-500">Title</label>
+                <input id="titleInput" type="text" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm shadow-sm focus:ring-2 focus:ring-[#34554a] outline-none bg-white" />
+              </div>
+              <div>
+                <label class="text-[11px] font-semibold text-gray-500">Subtitle</label>
+                <input id="subtitleInput" type="text" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm shadow-sm focus:ring-2 focus:ring-[#34554a] outline-none bg-white" />
+              </div>
+              <div>
+                <label class="text-[11px] font-semibold text-gray-500">Feed Type</label>
+                <input id="feedTypeInput" type="text" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm shadow-sm focus:ring-2 focus:ring-[#34554a] outline-none bg-white" placeholder="e.g. Napier, TMR 30.1, PKC Mix" />
+              </div>
             </div>
+            <p class="text-[11px] text-gray-500 italic">Your heading, subheading, and feed type are fully editable and auto-saved locally.</p>
+          </div>
+        </div>
+        <!-- Search and Filters -->
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-3 flex flex-col gap-3">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+            <div class="md:col-span-4">
+              <label class="text-[11px] font-semibold text-gray-500">Search Lot / Remark</label>
+              <div class="relative">
+                <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="16.65" y1="16.65" x2="21" y2="21"></line></svg>
+                <input id="searchInput" type="search" placeholder="Search pharmacy..." class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 bg-white text-sm text-gray-700 shadow-sm outline-none focus:ring-2 focus:ring-[#34554a] focus:border-[#34554a] transition" />
+              </div>
+            </div>
+            <div class="md:col-span-3">
+              <label class="text-[11px] font-semibold text-gray-500">From Date</label>
+              <input id="fromDateInput" type="date" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm shadow-sm focus:ring-2 focus:ring-[#34554a] outline-none bg-white" />
+            </div>
+            <div class="md:col-span-3">
+              <label class="text-[11px] font-semibold text-gray-500">To Date (optional)</label>
+              <input id="toDateInput" type="date" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm shadow-sm focus:ring-2 focus:ring-[#34554a] outline-none bg-white" />
+            </div>
+            <div class="md:col-span-2 flex items-end gap-2">
+              <button id="clearFilters" class="flex-1 bg-white border border-gray-200 px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50 shadow-sm">Clear</button>
+              <button id="exportBtn" class="flex-1 bg-[#34554a] text-white px-3 py-2 rounded-lg text-sm font-semibold shadow-sm hover:bg-opacity-90">Export CSV</button>
+            </div>
+          </div>
+          <div class="flex items-center justify-between text-xs text-gray-500 font-semibold flex-wrap gap-2">
+            <span id="filterSummary" class="px-2 py-1 bg-gray-100 rounded-lg border border-gray-200">Showing all records</span>
+            <span class="italic">Filter by single date (From only) or range (From + To)</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-4 pb-16">
+      <!-- KPI Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+        <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex items-center gap-4" id="card-lots"></div>
+        <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex items-center gap-4" id="card-heads"></div>
+        <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex items-center gap-4" id="card-tonnage"></div>
+      </div>
+
+      <!-- Tab Navigation -->
+      <div class="mt-8 bg-white border border-gray-200 rounded-xl shadow-sm p-3 flex flex-wrap gap-2" id="tabBar"></div>
+
+      <!-- Tab Panels Container -->
+      <div class="mt-6 space-y-6">
+        <!-- Schedule Panel -->
+        <div id="panel-schedule" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <div class="flex items-center justify-between px-6 py-4 bg-gray-50 border-b">
+            <div>
+              <h3 class="text-lg font-bold text-gray-900">Feeding Schedule (Editable)</h3>
+              <p class="text-sm text-gray-500">Tap any number to adjust — layout styled like the medication table.</p>
+            </div>
+            <span class="px-3 py-1 text-xs bg-[#34554a]/10 text-[#34554a] rounded-full border border-[#34554a]/20 font-bold">Live</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs text-left whitespace-nowrap">
+              <thead>
+                <tr class="bg-[#34554a] text-white text-center">
+                  <th class="p-3 border-r border-[#2a443b]">TOTAL CATTLE</th>
+                  <th colspan="6" class="p-3 border-r border-[#2a443b] bg-[#3f6b5c]">TRIP 1 (AM FEED) - INPUTS</th>
+                  <th colspan="6" class="p-3 border-r border-[#2a443b] bg-[#3f6b5c]">TRIP 2 (PM FEED) - INPUTS</th>
+                  <th class="p-3">REMARKS</th>
+                </tr>
+                <tr class="bg-[#2f4d42] text-white text-center text-[11px]">
+                  <th class="p-2 border-r border-[#2a443b]">DATE / LOT / HEAD</th>
+                  <th class="p-1">NAPIER</th><th class="p-1">OPF</th><th class="p-1">CONC.</th><th class="p-1">BAGS</th><th class="p-1">(TOTAL) PLAN</th><th class="p-1 border-r border-[#2a443b]">ACTUAL</th>
+                  <th class="p-1">NAPIER</th><th class="p-1">OPF</th><th class="p-1">CONC.</th><th class="p-1">BAGS</th><th class="p-1">(TOTAL) PLAN</th><th class="p-1 border-r border-[#2a443b]">ACTUAL</th>
+                  <th class="p-2">REMARKS</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200" id="schedule-body"></tbody>
+              <tfoot class="bg-gray-100 text-[11px] font-bold border-t border-gray-200">
+                <tr id="schedule-totals"></tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+
+        <!-- Analysis Panel -->
+        <div id="panel-analysis" class="hidden bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <div class="px-6 py-4 bg-gray-50 border-b flex items-center justify-between">
+            <h3 class="text-lg font-bold text-gray-900">Daily Analysis (Auto)</h3>
+            <p class="text-xs text-gray-500">Calculated from schedule values</p>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs text-left whitespace-nowrap">
+              <thead>
+                <tr class="bg-[#34554a] text-white text-center">
+                  <th class="p-3 border-r border-[#2a443b]">LOT</th>
+                  <th class="p-3 border-r border-[#2a443b]">HEAD COUNT</th>
+                  <th colspan="2" class="p-3 border-r border-[#2a443b] bg-[#3f6b5c]">TOTAL NAPIER</th>
+                  <th colspan="2" class="p-3 border-r border-[#2a443b] bg-[#3f6b5c]">TOTAL OPF</th>
+                  <th colspan="2" class="p-3 border-r border-[#2a443b] bg-[#3f6b5c]">CONCENTRATE</th>
+                  <th class="p-3 border-r border-[#2a443b]">PLANNING</th>
+                  <th class="p-3 border-r border-[#2a443b]">ACTUAL</th>
+                  <th class="p-3">NOTES</th>
+                </tr>
+                <tr class="bg-[#2f4d42] text-white text-center text-[11px]">
+                  <th class="p-2 border-r border-[#2a443b]">ID</th>
+                  <th class="p-2 border-r border-[#2a443b]">Editable</th>
+                  <th class="p-2">TOTAL</th><th class="p-2 border-r border-[#2a443b]">KG/HEAD</th>
+                  <th class="p-2">TOTAL</th><th class="p-2 border-r border-[#2a443b]">KG/HEAD</th>
+                  <th class="p-2">TOTAL</th><th class="p-2 border-r border-[#2a443b]">KG/HEAD</th>
+                  <th class="p-2">(TOTAL)</th><th class="p-2 border-r border-[#2a443b]">(TOTAL)</th>
+                  <th class="p-2">REMARKS</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200" id="analysis-body"></tbody>
+              <tfoot class="bg-gray-100 text-[11px] font-bold border-t border-gray-200 text-center">
+                <tr id="analysis-totals"></tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+
+        <!-- Inventory Panel -->
+        <div id="panel-inventory" class="hidden bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <div class="px-6 py-4 bg-gray-50 border-b flex items-center justify-between">
+            <h3 class="text-lg font-bold text-gray-900">Feed Inventory (Editable)</h3>
+            <span class="text-xs text-gray-500">Carry Forward · Receive · Usage · Balance</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left">
+              <thead>
+                <tr class="bg-[#34554a] text-white text-xs uppercase">
+                  <th class="p-3 border-r border-[#2a443b]">Feed Item</th>
+                  <th class="p-3 border-r border-[#2a443b] text-right">Carry Forward</th>
+                  <th class="p-3 border-r border-[#2a443b] text-right">Receive</th>
+                  <th class="p-3 border-r border-[#2a443b] text-right">Usage</th>
+                  <th class="p-3 text-right">Balance</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200" id="inventory-body"></tbody>
+            </table>
           </div>
         </div>
       </div>
 
-      <!-- Footer Actions -->
-      <div class="p-4 bg-gray-50 flex gap-3 border-t">
-        <button onclick="cancelDelete()" class="flex-1 px-4 py-2 border bg-white rounded-lg text-sm font-bold hover:bg-gray-50 transition-all text-gray-700">
-          Cancel
-        </button>
-        <button onclick="confirmDelete()" class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-bold hover:bg-red-700 transition-all">
-          Delete
-        </button>
+      <!-- Navigation to other screens -->
+      <div class="mt-8 pt-6 border-t border-gray-200">
+        <h4 class="text-sm font-bold text-gray-500 mb-4">Quick Navigation</h4>
+        <div class="flex flex-wrap gap-3">
+          <a href="index-schedule.html" class="px-4 py-2 bg-[#34554a] text-white rounded-lg text-sm font-semibold shadow-sm hover:bg-opacity-90">Feeding Schedule</a>
+          <a href="index-analysis.html" class="px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-semibold shadow-sm hover:border-[#34554a]">Daily Analysis</a>
+          <a href="index-inventory.html" class="px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-semibold shadow-sm hover:border-[#34554a]">Inventory</a>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Export Popup Modal -->
+  <div id="exportModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-xl shadow-xl max-w-md w-full mx-4 overflow-hidden">
+      <div class="px-6 py-4 bg-[#34554a] text-white">
+        <h3 class="font-bold text-lg">Export CSV</h3>
+      </div>
+      <div class="p-6">
+        <p class="text-sm text-gray-600 mb-4">Your feeding schedule data will be exported as a CSV file. The file will include all visible records based on current filters.</p>
+        <div class="bg-gray-50 rounded-lg p-3 mb-4">
+          <p class="text-xs text-gray-500 font-semibold mb-2">Export includes:</p>
+          <ul class="text-xs text-gray-600 space-y-1">
+            <li>• Date and Lot information</li>
+            <li>• Head count and feeding data</li>
+            <li>• Trip 1 and Trip 2 details</li>
+            <li>• Remarks and notes</li>
+          </ul>
+        </div>
+        <div class="flex gap-3">
+          <button id="cancelExport" class="flex-1 px-4 py-2 border border-gray-200 text-gray-700 rounded-lg text-sm font-semibold hover:bg-gray-50">Cancel</button>
+          <button id="confirmExport" class="flex-1 px-4 py-2 bg-[#34554a] text-white rounded-lg text-sm font-semibold hover:bg-opacity-90">Download</button>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
-    // Driver data to be deleted
-    const driverToDelete = {
-      id: 'D01',
-      name: 'John Smith'
-    };
-
-    // Initialize modal content
-    function initModal() {
-      document.getElementById('driver-name').textContent = driverToDelete.name;
-      document.getElementById('driver-name-display').textContent = driverToDelete.name;
-      document.getElementById('driver-id-display').textContent = driverToDelete.id;
-      document.getElementById('driver-avatar').textContent = driverToDelete.name.charAt(0);
+    // --- Local Storage helpers ---
+    const STORAGE_KEY = 'feeding-console-heading';
+    function loadSavedSettings() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } 
+      catch (e) { return {}; }
+    }
+    function saveSettings() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ pageTitle, pageSubtitle, feedType }));
     }
 
-    function confirmDelete() {
-      // In a real app, this would delete the driver from the database
-      console.log('Deleting driver:', driverToDelete);
-      alert(`Driver "${driverToDelete.name}" has been deleted successfully!`);
-      closeModal();
+    // --- State & Data ---
+    const defaults = { title: 'Feeding Management Console', subtitle: 'Matches the medication page layout, color, and table style.', feedType: 'General' };
+    const saved = loadSavedSettings();
+    let pageTitle = saved.pageTitle || defaults.title;
+    let pageSubtitle = saved.pageSubtitle || defaults.subtitle;
+    let feedType = saved.feedType || defaults.feedType;
+    let searchTerm = '';
+    let dateFilterStart = '2025-02-17';
+    let dateFilterEnd = '';
+    let activeTab = 'schedule';
+
+    const scheduleData = [
+      { id: 'r1', date: '2025-02-17', lotId: 'BL2B', headCount: 128, t1Napier: 1000, t1Opf: '', t1Conc: 250, t1Bags: 10, t1TotalPlan: 1250, t1TotalActual: 1250, t2Napier: 1490, t2Opf: '', t2Conc: 400, t2Bags: 16, t2TotalPlan: 1875, t2TotalActual: 1890, remarks: 'EPKC/FL1' },
+      { id: 'r2', date: '2025-02-17', lotId: 'FL1F', headCount: 93, t1Napier: 680, t1Opf: '', t1Conc: 200, t1Bags: 8, t1TotalPlan: 866, t1TotalActual: 880, t2Napier: 1025, t2Opf: '', t2Conc: 275, t2Bags: 11, t2TotalPlan: 1299, t2TotalActual: 1300, remarks: 'EPKC WEAN' },
+      { id: 'r3', date: '2025-02-17', lotId: 'FL1G', headCount: 65, t1Napier: 480, t1Opf: '', t1Conc: 125, t1Bags: 5, t1TotalPlan: 605, t1TotalActual: 605, t2Napier: 715, t2Opf: '', t2Conc: 200, t2Bags: 8, t2TotalPlan: 908, t2TotalActual: 915, remarks: 'EPKC WEAN' },
+      { id: 'r4', date: '2025-02-17', lotId: 'FL2B', headCount: 56, t1Napier: 330, t1Opf: '', t1Conc: 50, t1Bags: 3, t1TotalPlan: 376, t1TotalActual: 380, t2Napier: 335, t2Opf: '', t2Conc: 50, t2Bags: 3, t2TotalPlan: 376, t2TotalActual: 385, remarks: 'FL1/WEAN' },
+      { id: 'r5', date: '2025-02-17', lotId: 'BL1C', headCount: 162, t1Napier: 675, t1Opf: 245, t1Conc: 175, t1Bags: 7, t1TotalPlan: 1088, t1TotalActual: 1085, t2Napier: 915, t2Opf: '', t2Conc: 175, t2Bags: 7, t2TotalPlan: 1088, t2TotalActual: 1090, remarks: 'FL1/WEAN' },
+      { id: 'r6', date: '2025-02-17', lotId: 'BL3A', headCount: 176, t1Napier: 345, t1Opf: 665, t1Conc: 175, t1Bags: 7, t1TotalPlan: 1182, t1TotalActual: 1185, t2Napier: 1000, t2Opf: '', t2Conc: 175, t2Bags: 7, t2TotalPlan: 1182, t2TotalActual: 1175, remarks: 'FL1/WEAN' },
+      { id: 'r7', date: '2025-02-17', lotId: 'FL2C', headCount: 112, t1Napier: 295, t1Opf: '', t1Conc: 125, t1Bags: 5, t1TotalPlan: 420, t1TotalActual: 420, t2Napier: 435, t2Opf: '', t2Conc: 200, t2Bags: 8, t2TotalPlan: 631, t2TotalActual: 635, remarks: 'WEANERS' },
+      { id: 'r8', date: '2025-02-17', lotId: 'FL2D', headCount: 198, t1Napier: 315, t1Opf: '', t1Conc: 150, t1Bags: 6, t1TotalPlan: 457, t1TotalActual: 465, t2Napier: 470, t2Opf: '', t2Conc: 225, t2Bags: 9, t2TotalPlan: 686, t2TotalActual: 695, remarks: 'WEANERS' },
+      { id: 'r9', date: '2025-02-18', lotId: 'BL2B', headCount: 130, t1Napier: 1010, t1Opf: '', t1Conc: 255, t1Bags: 10, t1TotalPlan: 1265, t1TotalActual: 1260, t2Napier: 1500, t2Opf: '', t2Conc: 405, t2Bags: 16, t2TotalPlan: 1885, t2TotalActual: 1895, remarks: 'EPKC/FL1 (D2)' },
+      { id: 'r10', date: '2025-02-18', lotId: 'FL1F', headCount: 94, t1Napier: 685, t1Opf: '', t1Conc: 205, t1Bags: 8, t1TotalPlan: 873, t1TotalActual: 885, t2Napier: 1030, t2Opf: '', t2Conc: 280, t2Bags: 11, t2TotalPlan: 1310, t2TotalActual: 1315, remarks: 'EPKC WEAN (D2)' },
+      { id: 'r11', date: '2025-02-19', lotId: 'FL2D', headCount: 200, t1Napier: 320, t1Opf: '', t1Conc: 150, t1Bags: 6, t1TotalPlan: 470, t1TotalActual: 472, t2Napier: 480, t2Opf: '', t2Conc: 225, t2Bags: 9, t2TotalPlan: 700, t2TotalActual: 702, remarks: 'WEANERS (D3)' }
+    ];
+
+    const inventoryData = [
+      { id: 'napier', name: 'NAPIER', carryForward: 4305, received: 26030, usage: 29045, balance: 1290, unit: 'kg' },
+      { id: 'opf', name: 'OPF', carryForward: 4520, received: 4500, usage: 9020, balance: 0, unit: 'kg' },
+      { id: 'tmr', name: 'TMR 30.1', carryForward: 3690, received: 3525, usage: 7050, balance: 165, unit: 'kg' },
+      { id: 'weaners', name: 'Weaners', carryForward: 165, received: 65, usage: 65, balance: 165, unit: 'kg' }
+    ];
+
+    // --- Helper Functions ---
+    function getFilteredSchedule() {
+      return scheduleData.filter(r => {
+        const term = searchTerm.trim().toLowerCase();
+        const matchesSearch = term === '' || r.lotId.toLowerCase().includes(term) || (r.remarks || '').toLowerCase().includes(term);
+        const d = r.date;
+        let matchesDate = true;
+        if (dateFilterStart && dateFilterEnd) matchesDate = d >= dateFilterStart && d <= dateFilterEnd;
+        else if (dateFilterStart && !dateFilterEnd) matchesDate = d === dateFilterStart;
+        else if (!dateFilterStart && dateFilterEnd) matchesDate = d === dateFilterEnd;
+        return matchesSearch && matchesDate;
+      });
     }
 
-    function cancelDelete() {
-      alert('Delete cancelled');
-      closeModal();
+    function formatNumber(n) { return (Number(n) || 0).toLocaleString(); }
+
+    function totals(data = getFilteredSchedule()) {
+      return data.reduce((acc, r) => {
+        acc.t1Napier += Number(r.t1Napier) || 0; acc.t1Opf += Number(r.t1Opf) || 0;
+        acc.t1Conc += Number(r.t1Conc) || 0; acc.t1Bags += Number(r.t1Bags) || 0;
+        acc.t1Plan += Number(r.t1TotalPlan) || 0; acc.t1Actual += Number(r.t1TotalActual) || 0;
+        acc.t2Napier += Number(r.t2Napier) || 0; acc.t2Opf += Number(r.t2Opf) || 0;
+        acc.t2Conc += Number(r.t2Conc) || 0; acc.t2Bags += Number(r.t2Bags) || 0;
+        acc.t2Plan += Number(r.t2TotalPlan) || 0; acc.t2Actual += Number(r.t2TotalActual) || 0;
+        acc.heads += Number(r.headCount) || 0;
+        return acc;
+      }, { t1Napier:0, t1Opf:0, t1Conc:0, t1Bags:0, t1Plan:0, t1Actual:0, t2Napier:0, t2Opf:0, t2Conc:0, t2Bags:0, t2Plan:0, t2Actual:0, heads:0 });
     }
 
-    function closeModal() {
-      // In a real app, this would remove the modal from DOM
-      alert('Modal closed');
+    // --- Render Functions ---
+    function renderCards() {
+      const filtered = getFilteredSchedule();
+      const t = totals(filtered);
+      const cards = [
+        { el: document.getElementById('card-lots'), title: 'Visible Lots', value: filtered.length, accent: 'bg-blue-50 text-blue-600', icon: '📋' },
+        { el: document.getElementById('card-heads'), title: 'Total Headcount', value: t.heads, accent: 'bg-green-50 text-green-700', icon: '🐮' },
+        { el: document.getElementById('card-tonnage'), title: 'Total Plan (kg)', value: t.t1Plan + t.t2Plan, accent: 'bg-amber-50 text-amber-700', icon: '⚖️' }
+      ];
+      cards.forEach(c => {
+        c.el.innerHTML = `<div class="w-12 h-12 rounded-full ${c.accent} flex items-center justify-center text-lg font-bold shadow-inner">${c.icon}</div><div><p class="text-xs text-gray-500 font-bold uppercase">${c.title}</p><p class="text-3xl font-black text-gray-900">${formatNumber(c.value)}</p></div>`;
+      });
     }
 
-    // Initialize
-    initModal();
+    function renderSchedule() {
+      const data = getFilteredSchedule();
+      const t = totals(data);
+      const tbody = document.getElementById('schedule-body');
+      tbody.innerHTML = data.map(r => `
+        <tr class="hover:bg-gray-50">
+          <td class="p-3 border-r font-bold text-gray-900"><div class="flex flex-col"><span>${r.lotId}</span><span class="text-[10px] text-gray-500 font-medium">${r.headCount} Head · ${r.date}</span></div></td>
+          ${['t1Napier','t1Opf','t1Conc','t1Bags','t1TotalPlan','t1TotalActual','t2Napier','t2Opf','t2Conc','t2Bags','t2TotalPlan','t2TotalActual'].map(key => `
+            <td class="p-0 ${key.includes('TotalActual') ? 'bg-green-50 border-r border-gray-200' : ''} ${key.includes('TotalPlan') ? 'bg-amber-50/40' : ''}">
+              <input type="number" data-id="${r.id}" data-field="${key}" value="${r[key] ?? ''}" class="w-full text-center bg-transparent border-none focus:ring-2 focus:ring-[#34554a] p-2 text-xs" placeholder="-" />
+            </td>`).join('')}
+          <td class="p-2 text-xs text-gray-500">${r.remarks}</td>
+        </tr>`).join('');
+
+      const tf = document.getElementById('schedule-totals');
+      tf.innerHTML = `<td class="p-3 border-r">TOTALS</td>
+        <td class="p-2 text-center">${t.t1Napier}</td><td class="p-2 text-center">${t.t1Opf}</td><td class="p-2 text-center">${t.t1Conc}</td><td class="p-2 text-center">${t.t1Bags}</td>
+        <td class="p-2 text-center bg-amber-50/60">${t.t1Plan}</td><td class="p-2 text-center bg-green-50 border-r">${t.t1Actual}</td>
+        <td class="p-2 text-center">${t.t2Napier}</td><td class="p-2 text-center">${t.t2Opf}</td><td class="p-2 text-center">${t.t2Conc}</td><td class="p-2 text-center">${t.t2Bags}</td>
+        <td class="p-2 text-center bg-amber-50/60">${t.t2Plan}</td><td class="p-2 text-center bg-green-50 border-r">${t.t2Actual}</td><td class="p-2"></td>`;
+
+      tbody.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', e => {
+          const id = e.target.dataset.id;
+          const field = e.target.dataset.field;
+          const record = scheduleData.find(r => r.id === id);
+          if (!record) return;
+          record[field] = e.target.value === '' ? '' : Number(e.target.value);
+          renderAll();
+        });
+      });
+    }
+
+    function renderAnalysis() {
+      const data = getFilteredSchedule();
+      const t = totals(data);
+      const tbody = document.getElementById('analysis-body');
+      tbody.innerHTML = data.map(r => {
+        const totalNapier = (Number(r.t1Napier)||0)+(Number(r.t2Napier)||0);
+        const totalOpf = (Number(r.t1Opf)||0)+(Number(r.t2Opf)||0);
+        const totalConc = (Number(r.t1Conc)||0)+(Number(r.t2Conc)||0);
+        const totalPlan = (Number(r.t1TotalPlan)||0)+(Number(r.t2TotalPlan)||0);
+        const totalActual = (Number(r.t1TotalActual)||0)+(Number(r.t2TotalActual)||0);
+        return `<tr class="hover:bg-gray-50">
+          <td class="p-3 border-r font-bold text-gray-900">${r.lotId} <span class="text-[10px] text-gray-500 font-medium block">${r.date}</span></td>
+          <td class="p-0 border-r bg-amber-50"><input type="number" data-id="${r.id}" data-field="headCount" value="${r.headCount}" class="w-full text-center bg-transparent border-none focus:ring-2 focus:ring-[#34554a] p-2" /></td>
+          <td class="p-2 text-center bg-green-50 font-semibold">${totalNapier||'-'}</td><td class="p-2 text-center border-r text-gray-600">${totalNapier ? (totalNapier/r.headCount).toFixed(1) : '-'}</td>
+          <td class="p-2 text-center bg-green-50 font-semibold">${totalOpf||'-'}</td><td class="p-2 text-center border-r text-gray-600">${totalOpf ? (totalOpf/r.headCount).toFixed(1) : '-'}</td>
+          <td class="p-2 text-center bg-blue-50 font-bold text-blue-700">${totalConc||'-'}</td><td class="p-2 text-center border-r text-blue-700">${totalConc ? (totalConc/r.headCount).toFixed(1) : '-'}</td>
+          <td class="p-2 text-center font-bold text-gray-800">${totalPlan}</td><td class="p-2 text-center font-bold text-green-700 border-r">${totalActual}</td>
+          <td class="p-2 text-xs text-gray-500">${r.remarks}</td>
+        </tr>`;
+      }).join('');
+
+      const tf = document.getElementById('analysis-totals');
+      tf.innerHTML = `<td class="p-2 border-r" colspan="2">GRAND TOTALS</td>
+        <td class="p-2">${t.t1Napier + t.t2Napier}</td><td class="p-2 border-r">-</td>
+        <td class="p-2">${t.t1Opf + t.t2Opf}</td><td class="p-2 border-r">-</td>
+        <td class="p-2">${t.t1Conc + t.t2Conc}</td><td class="p-2 border-r">-</td>
+        <td class="p-2">${t.t1Plan + t.t2Plan}</td><td class="p-2 border-r">${t.t1Actual + t.t2Actual}</td><td class="p-2"></td>`;
+
+      tbody.querySelectorAll('input[data-field="headCount"]').forEach(input => {
+        input.addEventListener('input', e => {
+          const id = e.target.dataset.id;
+          const record = scheduleData.find(r => r.id === id);
+          if (!record) return;
+          record.headCount = Number(e.target.value) || 0;
+          renderAll();
+        });
+      });
+    }
+
+    function renderInventory() {
+      const tbody = document.getElementById('inventory-body');
+      tbody.innerHTML = inventoryData.map(item => `
+        <tr class="hover:bg-gray-50">
+          <td class="p-3 font-bold text-gray-900">${item.name}</td>
+          <td class="p-0"><input type="number" data-id="${item.id}" data-field="carryForward" value="${item.carryForward}" class="w-full text-right bg-transparent border-none p-3 focus:ring-2 focus:ring-[#34554a] text-sm" /></td>
+          <td class="p-0"><input type="number" data-id="${item.id}" data-field="received" value="${item.received}" class="w-full text-right bg-transparent border-none p-3 focus:ring-2 focus:ring-[#34554a] text-sm text-blue-700" /></td>
+          <td class="p-0"><input type="number" data-id="${item.id}" data-field="usage" value="${item.usage}" class="w-full text-right bg-transparent border-none p-3 focus:ring-2 focus:ring-[#34554a] text-sm text-red-600" /></td>
+          <td class="p-3 font-mono font-bold text-right bg-gray-50">${formatNumber(item.balance)}</td>
+        </tr>`).join('');
+
+      tbody.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', e => {
+          const id = e.target.dataset.id;
+          const field = e.target.dataset.field;
+          const item = inventoryData.find(i => i.id === id);
+          if (!item) return;
+          item[field] = Number(e.target.value) || 0;
+          item.balance = (Number(item.carryForward)||0) + (Number(item.received)||0) - (Number(item.usage)||0);
+          renderAll();
+        });
+      });
+    }
+
+    function renderTabs() {
+      const tabBar = document.getElementById('tabBar');
+      const tabs = [
+        { id: 'schedule', label: 'Feeding Schedule (Page 1)', hint: 'Edit mode' },
+        { id: 'analysis', label: 'Daily Analysis (Page 6)', hint: 'Auto-calculated' },
+        { id: 'inventory', label: 'Inventory (Page 2-3)', hint: 'Edit stock' }
+      ];
+      tabBar.innerHTML = '';
+      tabs.forEach(tab => {
+        const btn = document.createElement('button');
+        btn.dataset.tab = tab.id;
+        btn.className = `px-4 py-2 border border-gray-200 rounded-lg text-sm font-semibold text-gray-700 hover:border-[#34554a] hover:text-[#34554a] transition flex items-center gap-2 shadow-sm ${activeTab === tab.id ? 'bg-[#34554a] text-white border-[#34554a]' : ''}`;
+        btn.innerHTML = `<span>${tab.label}</span><span class="text-[11px] text-gray-400">${tab.hint}</span>`;
+        btn.addEventListener('click', () => { activeTab = tab.id; renderAll(); });
+        tabBar.appendChild(btn);
+      });
+    }
+
+    function setActivePanel() {
+      document.getElementById('panel-schedule').classList.toggle('hidden', activeTab !== 'schedule');
+      document.getElementById('panel-analysis').classList.toggle('hidden', activeTab !== 'analysis');
+      document.getElementById('panel-inventory').classList.toggle('hidden', activeTab !== 'inventory');
+    }
+
+    function updateFilterSummary() {
+      const filtered = getFilteredSchedule();
+      const total = scheduleData.length;
+      const dateText = dateFilterStart && dateFilterEnd ? `${dateFilterStart} → ${dateFilterEnd}` : (dateFilterStart || dateFilterEnd || 'All dates');
+      document.getElementById('filterSummary').textContent = `Showing ${filtered.length} of ${total} records · Date: ${dateText}${searchTerm ? ` · Search: "${searchTerm}"` : ''}`;
+      document.getElementById('titleDisplay').textContent = pageTitle || defaults.title;
+      document.getElementById('subtitleDisplay').textContent = pageSubtitle || '';
+      document.getElementById('feedTypeDisplay').textContent = `Feed Type: ${feedType || defaults.feedType}`;
+    }
+
+    function exportCSV() {
+      const rows = getFilteredSchedule();
+      const headers = ['Date','Lot','Head','t1Napier','t1Opf','t1Conc','t1Bags','t1Plan','t1Actual','t2Napier','t2Opf','t2Conc','t2Bags','t2Plan','t2Actual','Remarks'];
+      const csv = [headers.join(',')].concat(rows.map(r => [r.date,r.lotId,r.headCount,r.t1Napier,r.t1Opf,r.t1Conc,r.t1Bags,r.t1TotalPlan,r.t1TotalActual,r.t2Napier,r.t2Opf,r.t2Conc,r.t2Bags,r.t2TotalPlan,r.t2TotalActual,`"${(r.remarks||'').replace(/"/g,'""')}"`].join(','))).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `feeding_export_${Date.now()}.csv`;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function renderAll() {
+      renderCards();
+      renderSchedule();
+      renderAnalysis();
+      renderInventory();
+      renderTabs();
+      setActivePanel();
+      updateFilterSummary();
+    }
+
+    function attachControls() {
+      const titleInput = document.getElementById('titleInput');
+      const subtitleInput = document.getElementById('subtitleInput');
+      const searchInput = document.getElementById('searchInput');
+      const fromDateInput = document.getElementById('fromDateInput');
+      const toDateInput = document.getElementById('toDateInput');
+      const clearBtn = document.getElementById('clearFilters');
+      const exportBtn = document.getElementById('exportBtn');
+      const feedTypeInput = document.getElementById('feedTypeInput');
+
+      titleInput.value = pageTitle;
+      subtitleInput.value = pageSubtitle;
+      feedTypeInput.value = feedType;
+      searchInput.value = searchTerm;
+      fromDateInput.value = dateFilterStart;
+      toDateInput.value = dateFilterEnd;
+
+      titleInput.addEventListener('input', e => { pageTitle = e.target.value; saveSettings(); renderAll(); });
+      subtitleInput.addEventListener('input', e => { pageSubtitle = e.target.value; saveSettings(); renderAll(); });
+      feedTypeInput.addEventListener('input', e => { feedType = e.target.value; saveSettings(); renderAll(); });
+      searchInput.addEventListener('input', e => { searchTerm = e.target.value; renderAll(); });
+      fromDateInput.addEventListener('change', e => { dateFilterStart = e.target.value; renderAll(); });
+      toDateInput.addEventListener('change', e => { dateFilterEnd = e.target.value; renderAll(); });
+      clearBtn.addEventListener('click', () => { searchTerm = ''; dateFilterStart = ''; dateFilterEnd = ''; searchInput.value = ''; fromDateInput.value = ''; toDateInput.value = ''; renderAll(); });
+
+      // Export modal
+      const modal = document.getElementById('exportModal');
+      exportBtn.addEventListener('click', () => { modal.classList.remove('hidden'); modal.classList.add('flex'); });
+      document.getElementById('cancelExport').addEventListener('click', () => { modal.classList.add('hidden'); modal.classList.remove('flex'); });
+      document.getElementById('confirmExport').addEventListener('click', () => { exportCSV(); modal.classList.add('hidden'); modal.classList.remove('flex'); });
+      modal.addEventListener('click', e => { if (e.target === modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); } });
+    }
+
+    // --- Initialize ---
+    renderAll();
+    attachControls();
   </script>
 </body>
 </html>
