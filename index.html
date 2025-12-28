@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BovineFlow - Create SIV</title>
+  <title>BovineFlow - Document Detail</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -21,219 +21,219 @@
   <style>
     :root { --primary: #2E7D32; --primary-dark: #1B5E20; --grey-50: #FAFAFA; --grey-100: #F5F5F5; --grey-200: #EEEEEE; --grey-300: #E0E0E0; --grey-500: #9E9E9E; --grey-600: #757575; --grey-700: #616161; --grey-800: #424242; --grey-900: #212121; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: var(--grey-100); min-height: 100vh; }
-    .sidebar { position: fixed; left: 0; top: 0; width: 280px; height: 100vh; background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary) 100%); color: white; z-index: 1000; box-shadow: 0 8px 24px rgba(0,0,0,0.12); overflow-y: auto; }
-    .nav-item { display: flex; align-items: center; gap: 14px; padding: 14px 20px; color: rgba(255,255,255,0.85); cursor: pointer; transition: all 0.3s ease; border-left: 3px solid transparent; font-weight: 500; }
-    .nav-item:hover { background: rgba(255,255,255,0.1); color: white; }
-    .nav-item.active { background: rgba(255,255,255,0.15); color: white; border-left-color: white; }
-    .nav-item i { width: 22px; font-size: 18px; }
-    .main-content { margin-left: 280px; min-height: 100vh; }
-    @media (max-width: 1200px) { .sidebar { width: 80px; } .sidebar-title, .sidebar-subtitle, .nav-section-title, .nav-item span { display: none; } .nav-item { justify-content: center; padding: 16px; } .main-content { margin-left: 80px; } }
+    body { font-family: 'Inter', sans-serif; background: rgba(0,0,0,0.5); min-height: 100vh; }
+    .modal-overlay { position: fixed; inset: 0; z-50; display: flex; align-items: flex-start; justify-content: center; padding: 40px 20px; overflow-y: auto; background: rgba(0,0,0,0.5); }
+    .modal { background: white; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.15); width: 100%; max-width: 1000px; overflow: hidden; }
   </style>
 </head>
 
-<body class="bg-gray-100 min-h-screen">
-  <!-- Sidebar -->
-  <nav class="sidebar fixed left-0 top-0 h-screen bg-gradient-to-b from-primary-dark to-primary text-white z-50 shadow-xl overflow-y-auto">
-    <div class="p-6 border-b border-white/10 flex items-center gap-3">
-      <div class="w-12 h-12 bg-white/15 rounded-xl flex items-center justify-center text-2xl"><i class="fas fa-cow"></i></div>
-      <div>
-        <div class="text-xl font-bold tracking-tight">BovineFlow</div>
-        <div class="text-xs opacity-70 uppercase tracking-widest">Cattle Management</div>
+<body>
+  <div class="modal-overlay">
+    <div class="modal">
+      <!-- Modal Header -->
+      <div class="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50 sticky top-0">
+        <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+          <i class="fas fa-file-alt text-primary"></i>
+          <span id="modal-doc-id">CTV-2025-001</span>
+        </h3>
+        <button onclick="window.close()" class="text-gray-400 hover:text-gray-600 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200">
+          <i class="fas fa-times"></i>
+        </button>
       </div>
-    </div>
-    <div class="py-5">
-      <div class="px-5 pb-2 text-xs uppercase tracking-widest opacity-50 font-semibold">Main Menu</div>
-      <div class="nav-item flex items-center gap-3 px-5 py-3.5 cursor-pointer border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium" onclick="window.location.href='dashboard.html'">
-        <i class="fas fa-th-large w-5 text-lg"></i><span>Dashboard</span>
-      </div>
-      <div class="nav-item flex items-center gap-3 px-5 py-3.5 cursor-pointer border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium" onclick="window.location.href='create-ctv.html'">
-        <i class="fas fa-plus-circle w-5 text-lg"></i><span>Create CTV</span>
-      </div>
-      <div class="nav-item flex items-center gap-3 px-5 py-3.5 cursor-pointer border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium" onclick="window.location.href='create-receival.html'">
-        <i class="fas fa-truck-loading w-5 text-lg"></i><span>Create Receival Form</span>
-      </div>
-      <div class="nav-item active flex items-center gap-3 px-5 py-3.5 cursor-pointer border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium" onclick="window.location.href='create-siv.html'">
-        <i class="fas fa-file-invoice w-5 text-lg"></i><span>Create SIV</span>
-      </div>
-    </div>
-    <div class="py-2">
-      <div class="px-5 pb-2 text-xs uppercase tracking-widest opacity-50 font-semibold">Approvals</div>
-      <div class="nav-item flex items-center gap-3 px-5 py-3.5 cursor-pointer border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium" onclick="window.location.href='pending.html'">
-        <i class="fas fa-clock w-5 text-lg"></i><span>Pending</span><span class="ml-auto bg-orange-500 text-white px-2.5 py-0.5 rounded-full text-xs font-bold">3</span>
-      </div>
-      <div class="nav-item flex items-center gap-3 px-5 py-3.5 cursor-pointer border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium" onclick="window.location.href='completed.html'">
-        <i class="fas fa-check-circle w-5 text-lg"></i><span>Completed</span>
-      </div>
-      <div class="nav-item flex items-center gap-3 px-5 py-3.5 cursor-pointer border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium" onclick="window.location.href='history.html'">
-        <i class="fas fa-history w-5 text-lg"></i><span>Transfer History</span>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Main Content -->
-  <main class="main-content ml-[280px] min-h-screen">
-    <header class="bg-white px-8 py-4 flex justify-between items-center shadow-sm sticky top-0 z-40 border-b border-gray-100">
-      <div>
-        <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Sales Issue Voucher (SIV)</h1>
-        <p class="text-sm text-gray-500 mt-0.5">Process sales and cattle transfers.</p>
-      </div>
-      <div class="flex items-center gap-4">
-        <div class="flex items-center gap-3 bg-gray-100 px-4 py-2 rounded-lg">
-          <label class="text-xs font-bold text-gray-500 uppercase tracking-wide"><i class="fas fa-user-tag mr-1"></i>Role:</label>
-          <select class="px-3 py-1.5 border border-gray-200 rounded-lg bg-white text-sm font-medium text-gray-700">
-            <option>Livestock Manager</option>
-            <option>Operator</option>
-          </select>
-        </div>
-        <div class="flex items-center gap-3 bg-primary text-white px-4 py-2 rounded-lg">
-          <div class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center font-bold">M</div>
-          <div>
-            <div class="font-semibold text-sm">M Badrul</div>
-            <div class="text-xs opacity-85">Livestock Manager</div>
+      
+      <!-- Modal Body -->
+      <div class="p-6 overflow-y-auto">
+        <!-- Workflow Stepper -->
+        <div class="flex justify-center gap-2 flex-wrap p-4 bg-gray-50 rounded-xl mb-6">
+          <div class="flex flex-col items-center min-w-[70px]">
+            <div class="w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center text-sm mb-1"><i class="fas fa-check"></i></div>
+            <span class="text-[10px] text-gray-800 font-semibold text-center">Issued</span>
+          </div>
+          <div class="text-gray-300 pb-5"><i class="fas fa-chevron-right text-xs"></i></div>
+          <div class="flex flex-col items-center min-w-[70px]">
+            <div class="w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center text-sm mb-1"><i class="fas fa-check"></i></div>
+            <span class="text-[10px] text-gray-800 font-semibold text-center">Approved</span>
+          </div>
+          <div class="text-gray-300 pb-5"><i class="fas fa-chevron-right text-xs"></i></div>
+          <div class="flex flex-col items-center min-w-[70px]">
+            <div class="w-10 h-10 rounded-full bg-white border-2 border-primary text-primary flex items-center justify-center text-sm mb-1"><i class="fas fa-truck"></i></div>
+            <span class="text-[10px] text-gray-800 font-semibold text-center">Transported</span>
+          </div>
+          <div class="text-gray-300 pb-5"><i class="fas fa-chevron-right text-xs"></i></div>
+          <div class="flex flex-col items-center min-w-[70px]">
+            <div class="w-10 h-10 rounded-full bg-gray-200 text-gray-400 flex items-center justify-center text-sm mb-1"><i class="fas fa-eye"></i></div>
+            <span class="text-[10px] text-gray-400 text-center">Witness (T)</span>
+          </div>
+          <div class="text-gray-300 pb-5"><i class="fas fa-chevron-right text-xs"></i></div>
+          <div class="flex flex-col items-center min-w-[70px]">
+            <div class="w-10 h-10 rounded-full bg-gray-200 text-gray-400 flex items-center justify-center text-sm mb-1"><i class="fas fa-shield-alt"></i></div>
+            <span class="text-[10px] text-gray-400 text-center">Verified (T)</span>
+          </div>
+          <div class="text-gray-300 pb-5"><i class="fas fa-chevron-right text-xs"></i></div>
+          <div class="flex flex-col items-center min-w-[70px]">
+            <div class="w-10 h-10 rounded-full bg-gray-200 text-gray-400 flex items-center justify-center text-sm mb-1"><i class="fas fa-eye"></i></div>
+            <span class="text-[10px] text-gray-400 text-center">Witness (R)</span>
+          </div>
+          <div class="text-gray-300 pb-5"><i class="fas fa-chevron-right text-xs"></i></div>
+          <div class="flex flex-col items-center min-w-[70px]">
+            <div class="w-10 h-10 rounded-full bg-gray-200 text-gray-400 flex items-center justify-center text-sm mb-1"><i class="fas fa-clipboard-check"></i></div>
+            <span class="text-[10px] text-gray-400 text-center">Received</span>
+          </div>
+          <div class="text-gray-300 pb-5"><i class="fas fa-chevron-right text-xs"></i></div>
+          <div class="flex flex-col items-center min-w-[70px]">
+            <div class="w-10 h-10 rounded-full bg-gray-200 text-gray-400 flex items-center justify-center text-sm mb-1"><i class="fas fa-check-double"></i></div>
+            <span class="text-[10px] text-gray-400 text-center">Completed</span>
           </div>
         </div>
-      </div>
-    </header>
 
-    <div class="p-8">
-      <form>
-        <div class="bg-gray-900 text-white px-5 py-3 rounded-lg mb-6 flex justify-between items-center">
-          <div class="font-bold text-sm">SAWIT KINABALU FARM PRODUCTS SDN BHD</div>
-          <span class="text-primary-light font-mono font-bold">SIV-2025-0001</span>
-        </div>
-        
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div class="p-5 border-b border-gray-100">
-            <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2"><i class="fas fa-file-invoice text-primary"></i> SALES ISSUE VOUCHER</h3>
-          </div>
-          <div class="p-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-              <div>
-                <label class="block text-xs font-bold text-gray-600 uppercase mb-1.5">Date/Time *</label>
-                <input type="datetime-local" class="w-full p-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none" required>
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-gray-600 uppercase mb-1.5">Customer *</label>
-                <input type="text" class="w-full p-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none" required>
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-gray-600 uppercase mb-1.5">Vehicle *</label>
-                <input type="text" class="w-full p-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none" required>
-              </div>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              <div>
-                <label class="block text-xs font-bold text-gray-600 uppercase mb-1.5">Driver *</label>
-                <input type="text" class="w-full p-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none" required>
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-gray-600 uppercase mb-1.5">Tel</label>
-                <input type="tel" class="w-full p-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-gray-600 uppercase mb-1.5">IC</label>
-                <input type="text" class="w-full p-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
-              </div>
-            </div>
-
-            <h4 class="text-sm font-bold text-gray-800 mb-3 pb-2 border-b-2 border-primary flex items-center gap-2">
-              <i class="fas fa-list text-primary"></i> Sales Details
-            </h4>
-            
-            <div class="overflow-x-auto mb-4">
-              <table class="w-full text-left whitespace-nowrap min-w-[800px]">
-                <thead>
-                  <tr class="bg-primary text-white text-xs">
-                    <th class="p-3">No.</th>
-                    <th class="p-3">Cattle ID</th>
-                    <th class="p-3">Category</th>
-                    <th class="p-3">Colour</th>
-                    <th class="p-3">Weight</th>
-                    <th class="p-3">Unit Cost</th>
-                    <th class="p-3">Value</th>
-                    <th class="p-3">Remarks</th>
-                    <th class="p-3"></th>
-                  </tr>
-                </thead>
-                <tbody class="text-sm">
-                  <tr class="border-b hover:bg-gray-50">
-                    <td class="p-3">1</td>
-                    <td class="p-3"><input type="text" class="w-full p-1.5 border rounded text-sm" placeholder="ID"></td>
-                    <td class="p-3">
-                      <select class="p-1.5 border rounded text-sm w-full">
-                        <option>WB</option>
-                        <option>BC</option>
-                      </select>
-                    </td>
-                    <td class="p-3"><input type="text" class="w-20 p-1.5 border rounded text-sm" placeholder="Colour"></td>
-                    <td class="p-3"><input type="number" class="w-20 p-1.5 border rounded text-sm" placeholder="KG"></td>
-                    <td class="p-3"><input type="number" class="w-20 p-1.5 border rounded text-sm" step="0.01" placeholder="RM"></td>
-                    <td class="p-3"><span class="font-semibold">0.00</span></td>
-                    <td class="p-3"><input type="text" class="w-24 p-1.5 border rounded text-sm" placeholder="Remarks"></td>
-                    <td class="p-3"><button type="button" class="w-7 h-7 bg-red-100 text-red-500 rounded flex items-center justify-center hover:bg-red-200"><i class="fas fa-times text-xs"></i></button></td>
-                  </tr>
-                </tbody>
-                <tfoot>
-                  <tr class="bg-gray-100 font-bold text-sm">
-                    <td colspan="4" class="p-3 text-right">TOTAL:</td>
-                    <td class="p-3">0</td>
-                    <td class="p-3"></td>
-                    <td class="p-3">0.00</td>
-                    <td colspan="2"></td>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
-            
-            <button type="button" class="px-4 py-2 border-2 border-dashed border-gray-300 rounded-lg text-gray-500 text-sm font-medium hover:border-primary hover:text-primary transition-colors">
-              <i class="fas fa-plus mr-2"></i>Add Item
-            </button>
-
-            <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 mt-6">
-              <h4 class="text-sm font-bold text-gray-800 mb-4 pb-2 border-b-2 border-primary flex items-center gap-2">
-                <i class="fas fa-signature text-primary"></i> Signatures
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Left Column -->
+          <div class="space-y-5">
+            <div class="bg-gray-50 rounded-xl p-4">
+              <h4 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+                <i class="fas fa-info-circle text-primary"></i> Document Information
               </h4>
-              <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                <div class="bg-white border border-gray-200 rounded-lg p-3">
-                  <div class="text-[10px] font-bold text-gray-600 uppercase mb-2">Requested By</div>
-                  <div class="h-12 border-2 border-dashed border-gray-200 rounded mb-2"></div>
-                  <input type="text" placeholder="Name" class="w-full text-xs p-1.5 border rounded">
-                  <input type="date" class="w-full text-xs p-1.5 border rounded mt-1">
+              <div class="space-y-2 text-sm">
+                <div class="flex justify-between py-1.5 border-b border-gray-200">
+                  <span class="text-gray-500">Type</span>
+                  <span class="font-semibold text-gray-900">Cattle Transfer Voucher</span>
                 </div>
-                <div class="bg-white border border-gray-200 rounded-lg p-3">
-                  <div class="text-[10px] font-bold text-gray-600 uppercase mb-2">Verified By</div>
-                  <div class="h-12 border-2 border-dashed border-gray-200 rounded mb-2"></div>
-                  <input type="text" placeholder="Name" class="w-full text-xs p-1.5 border rounded">
-                  <input type="date" class="w-full text-xs p-1.5 border rounded mt-1">
+                <div class="flex justify-between py-1.5 border-b border-gray-200">
+                  <span class="text-gray-500">Date</span>
+                  <span class="font-semibold text-gray-900">2025-01-22</span>
                 </div>
-                <div class="bg-white border border-gray-200 rounded-lg p-3">
-                  <div class="text-[10px] font-bold text-gray-600 uppercase mb-2">Approved By</div>
-                  <div class="h-12 border-2 border-dashed border-gray-200 rounded mb-2"></div>
-                  <input type="text" placeholder="Name" class="w-full text-xs p-1.5 border rounded">
-                  <input type="date" class="w-full text-xs p-1.5 border rounded mt-1">
+                <div class="flex justify-between py-1.5 border-b border-gray-200">
+                  <span class="text-gray-500">From</span>
+                  <span class="font-semibold text-gray-900">SG AA</span>
                 </div>
-                <div class="bg-white border border-gray-200 rounded-lg p-3">
-                  <div class="text-[10px] font-bold text-gray-600 uppercase mb-2">Received By</div>
-                  <div class="h-12 border-2 border-dashed border-gray-200 rounded mb-2"></div>
-                  <input type="text" placeholder="Name" class="w-full text-xs p-1.5 border rounded">
-                  <input type="date" class="w-full text-xs p-1.5 border rounded mt-1">
+                <div class="flex justify-between py-1.5 border-b border-gray-200">
+                  <span class="text-gray-500">To</span>
+                  <span class="font-semibold text-gray-900">SELIC</span>
+                </div>
+                <div class="flex justify-between py-1.5 border-b border-gray-200">
+                  <span class="text-gray-500">Vehicle</span>
+                  <span class="font-semibold text-gray-900">SYK 6112</span>
+                </div>
+                <div class="flex justify-between py-1.5">
+                  <span class="text-gray-500">Cattle</span>
+                  <span class="font-semibold text-gray-900">1</span>
                 </div>
               </div>
             </div>
-
-            <div class="flex gap-3 mt-6">
-              <button type="submit" class="px-6 py-2.5 bg-primary text-white rounded-lg font-bold hover:bg-primary-dark shadow-md transition-all text-sm">
-                <i class="fas fa-check mr-2"></i>Approve & Complete
+            
+            <div class="bg-gray-50 rounded-xl p-4">
+              <h4 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+                <i class="fas fa-history text-primary"></i> Document Timeline
+              </h4>
+              <div class="space-y-4">
+                <div class="flex gap-3">
+                  <div class="w-3 h-3 bg-primary rounded-full mt-1 flex-shrink-0"></div>
+                  <div class="flex-1 pb-4">
+                    <div class="flex justify-between items-center">
+                      <span class="font-semibold text-gray-800 text-sm">Issued</span>
+                      <span class="text-xs text-gray-400">2025-01-22 08:00</span>
+                    </div>
+                    <div class="text-xs text-gray-500 mb-2">By Anis</div>
+                    <div class="flex items-center gap-3 p-2.5 bg-white border rounded-lg">
+                      <div class="w-8 h-8 bg-red-50 text-red-500 rounded flex items-center justify-center"><i class="fas fa-file-pdf text-sm"></i></div>
+                      <div class="flex-1">
+                        <div class="text-xs font-medium text-gray-800">CTV-2025-001_Original.pdf</div>
+                        <div class="text-[10px] text-gray-400">245 KB</div>
+                      </div>
+                      <button class="w-8 h-8 bg-gray-100 rounded flex items-center justify-center text-gray-500 hover:bg-gray-200"><i class="fas fa-download text-xs"></i></button>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex gap-3">
+                  <div class="w-3 h-3 bg-primary rounded-full mt-1 flex-shrink-0"></div>
+                  <div class="flex-1 pb-4">
+                    <div class="flex justify-between items-center">
+                      <span class="font-semibold text-gray-800 text-sm">Approved</span>
+                      <span class="text-xs text-gray-400">2025-01-22 09:30</span>
+                    </div>
+                    <div class="text-xs text-gray-500 mb-2">By Alexius Ahat</div>
+                    <div class="flex items-center gap-3 p-2.5 bg-white border rounded-lg">
+                      <div class="w-8 h-8 bg-red-50 text-red-500 rounded flex items-center justify-center"><i class="fas fa-file-pdf text-sm"></i></div>
+                      <div class="flex-1">
+                        <div class="text-xs font-medium text-gray-800">CTV-2025-001_Approved.pdf</div>
+                        <div class="text-[10px] text-gray-400">250 KB</div>
+                      </div>
+                      <button class="w-8 h-8 bg-gray-100 rounded flex items-center justify-center text-gray-500 hover:bg-gray-200"><i class="fas fa-download text-xs"></i></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Right Column -->
+          <div class="space-y-5">
+            <div class="bg-gray-50 rounded-xl p-4">
+              <h4 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+                <i class="fas fa-tasks text-primary"></i> Actions Required
+              </h4>
+              <p class="text-sm mb-3">Current step: <strong>Transported</strong></p>
+              <button class="mt-3 px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary-dark transition-colors">
+                <i class="fas fa-download mr-2"></i>Download PDF
               </button>
-              <button type="button" class="px-4 py-2.5 border border-gray-200 rounded-lg text-gray-600 font-medium hover:bg-gray-50 text-sm">Save as Draft</button>
-              <button type="reset" class="px-4 py-2.5 border border-gray-200 rounded-lg text-gray-600 font-medium hover:bg-gray-50 text-sm">Reset</button>
+            </div>
+            
+            <div class="bg-gray-50 rounded-xl p-4">
+              <h4 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+                <i class="fas fa-clipboard-check text-primary"></i> Audit Log
+              </h4>
+              <div class="max-h-48 overflow-y-auto space-y-2">
+                <div class="flex gap-2 py-2 border-b border-gray-100">
+                  <div class="w-2 h-2 bg-primary rounded-full mt-1.5 flex-shrink-0"></div>
+                  <div class="flex-1">
+                    <div class="text-sm text-gray-800"><strong>Anis (SAPP-Integration)</strong> - Created transfer voucher</div>
+                    <div class="text-xs text-gray-400">2025-01-22 08:00</div>
+                  </div>
+                </div>
+                <div class="flex gap-2 py-2 border-b border-gray-100">
+                  <div class="w-2 h-2 bg-primary rounded-full mt-1.5 flex-shrink-0"></div>
+                  <div class="flex-1">
+                    <div class="text-sm text-gray-800"><strong>Anis (SAPP-Integration)</strong> - Submitted for verification</div>
+                    <div class="text-xs text-gray-400">2025-01-22 08:15</div>
+                  </div>
+                </div>
+                <div class="flex gap-2 py-2 border-b border-gray-100">
+                  <div class="w-2 h-2 bg-primary rounded-full mt-1.5 flex-shrink-0"></div>
+                  <div class="flex-1">
+                    <div class="text-sm text-gray-800"><strong>Alexius Ahat</strong> - Approved and uploaded signed document</div>
+                    <div class="text-xs text-gray-400">2025-01-22 09:30</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </form>
+
+        <!-- Workflow Actions -->
+        <div class="flex gap-3 mt-6 p-4 bg-gray-50 rounded-xl">
+          <button class="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-bold hover:bg-green-700 transition-colors">
+            <i class="fas fa-check mr-2"></i>Authorize
+          </button>
+          <button class="px-4 py-2 bg-amber-500 text-white rounded-lg text-sm font-bold hover:bg-amber-600 transition-colors">
+            <i class="fas fa-undo mr-2"></i>Return
+          </button>
+        </div>
+
+        <!-- Attachments -->
+        <div class="mt-6 p-4 bg-gray-50 rounded-xl">
+          <h4 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+            <i class="fas fa-paperclip text-primary"></i> Attachments
+          </h4>
+          <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center bg-white hover:border-primary transition-colors cursor-pointer">
+            <i class="fas fa-cloud-upload-alt text-4xl text-gray-300 mb-3"></i>
+            <p class="text-gray-500 text-sm mb-3">Drag & drop files here or click to upload</p>
+            <button class="px-4 py-2 bg-gray-100 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-200">
+              <i class="fas fa-folder-open mr-2"></i>Browse Files
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-  </main>
+  </div>
 </body>
 </html>
