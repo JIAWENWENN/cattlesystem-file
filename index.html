@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BovineFlow - Post-Mortem Examination</title>
+  <title>BovineFlow - Pending Approvals</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -39,6 +39,7 @@
   </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
+  <!-- Sidebar -->
   <nav class="sidebar fixed left-0 top-0 h-screen bg-gradient-to-b from-primary-dark to-primary text-white z-50 shadow-xl overflow-y-auto">
     <div class="p-6 border-b border-white/10 flex items-center gap-3">
       <div class="w-12 h-12 bg-white/15 rounded-xl flex items-center justify-center text-2xl"><i class="fas fa-skull-crossbones"></i></div>
@@ -55,16 +56,16 @@
       <a href="create-mortality.html" class="flex items-center gap-3 px-5 py-3.5 border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium">
         <i class="fas fa-plus-circle w-5 text-lg"></i><span class="nav-text">Create Mortality</span>
       </a>
-      <div class="flex items-center gap-3 px-5 py-3.5 border-l-[3px] border-l-white bg-white/15 text-white font-medium">
+      <a href="pm-examination.html" class="flex items-center gap-3 px-5 py-3.5 border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium">
         <i class="fas fa-procedures w-5 text-lg"></i><span class="nav-text">Post-Mortem Exam</span>
-      </div>
+      </a>
     </div>
     <div class="py-2">
       <div class="px-5 pb-2 text-xs uppercase tracking-widest opacity-50 font-semibold">Approvals</div>
-      <a href="pending-approvals.html" class="flex items-center gap-3 px-5 py-3.5 border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium">
+      <div class="flex items-center gap-3 px-5 py-3.5 border-l-[3px] border-l-white bg-white/15 text-white font-medium">
         <i class="fas fa-clock w-5 text-lg"></i><span class="nav-text">Pending</span>
         <span class="ml-auto bg-orange-500 text-white px-2.5 py-0.5 rounded-full text-xs font-bold">2</span>
-      </a>
+      </div>
       <a href="completed-cases.html" class="flex items-center gap-3 px-5 py-3.5 border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium">
         <i class="fas fa-check-circle w-5 text-lg"></i><span class="nav-text">Completed</span>
       </a>
@@ -80,11 +81,12 @@
     </div>
   </nav>
 
+  <!-- Main Content -->
   <main class="main-content ml-[280px] min-h-screen">
     <header class="bg-white px-8 py-4 flex justify-between items-center shadow-sm sticky top-0 z-40 border-b border-gray-100">
       <div>
-        <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Post-Mortem Examination</h1>
-        <p class="text-sm text-gray-500 mt-0.5">Conduct detailed post-mortem examination for mortality cases.</p>
+        <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Pending Approvals</h1>
+        <p class="text-sm text-gray-500 mt-0.5">Mortality cases awaiting your action.</p>
       </div>
       <div class="flex items-center gap-4">
         <div class="flex items-center gap-3 bg-gray-100 px-4 py-2 rounded-lg">
@@ -116,258 +118,164 @@
     </header>
 
     <div class="p-8">
-      <div class="mb-8">
-        <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Post-Mortem Examination</h1>
-        <p class="text-sm text-gray-500 mt-1">Conduct detailed post-mortem examination for mortality cases.</p>
-      </div>
-
-      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
-        <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-          <i class="fas fa-search text-primary"></i> Select Case for PM Examination
-        </h3>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">LMC Number</label>
-            <select id="pm-lmc-select" class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
-              <option value="">Select LMC Number</option>
-              <option value="LMC-2025-001">LMC-2025-001 - SK 24 2549 (Respiratory)</option>
-              <option value="LMC-2025-002">LMC-2025-002 - SK 24 2550 (Digestive)</option>
-              <option value="LMC-2025-003">LMC-2025-003 - SK 24 2545 (Trauma)</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">Examination Date</label>
-            <input type="date" class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none" id="pm-date">
-          </div>
-          <div class="flex items-end">
-            <button type="button" onclick="loadPMCase()" class="w-full px-6 py-2.5 bg-primary text-white rounded-lg font-bold hover:bg-primary-dark transition-all text-sm">
-              <i class="fas fa-play mr-2"></i>Load Case
+      <!-- Pending Approvals Page -->
+      <div class="page">
+        <div class="mb-8">
+          <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Pending Approvals</h1>
+          <p class="text-sm text-gray-500 mt-1">Mortality cases awaiting your action.</p>
+        </div>
+        
+        <!-- Date Filter Bar -->
+        <div class="bg-white rounded-xl border border-gray-200 p-4 mb-6">
+          <div class="flex flex-wrap items-end gap-4">
+            <div class="flex items-center gap-2">
+              <i class="fas fa-calendar text-primary"></i>
+              <span class="text-sm font-medium text-gray-700">Date Filter:</span>
+            </div>
+            <div>
+              <label class="block text-xs text-gray-500 mb-1">From Date</label>
+              <input type="date" id="pending-date-from" class="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
+            </div>
+            <div>
+              <label class="block text-xs text-gray-500 mb-1">To Date</label>
+              <input type="date" id="pending-date-to" class="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
+            </div>
+            <button onclick="filterPendingByDate()" class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary-dark transition-colors">
+              <i class="fas fa-filter mr-2"></i>Apply Filter
+            </button>
+            <button onclick="clearPendingDateFilter()" class="px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors">
+              <i class="fas fa-times mr-2"></i>Clear
             </button>
           </div>
         </div>
-      </div>
-
-      <form id="pm-form" class="hidden">
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div class="p-5 border-b border-gray-100 bg-gray-50">
-            <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
-              <i class="fas fa-microscope text-primary"></i> POST-MORTEM EXAMINATION FINDINGS
-            </h3>
-            <p class="text-sm text-gray-500 mt-1">Detailed examination of internal and external organs</p>
-          </div>
-          <div class="p-6">
-            <h4 class="text-sm font-bold text-gray-800 mb-3 pb-2 border-b-2 border-primary flex items-center gap-2">
-              <i class="fas fa-eye text-primary"></i> External Findings
-            </h4>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-              <div>
-                <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">Skin</label>
-                <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
-                  <option value="Normal">Normal</option>
-                  <option value="Abnormal">Abnormal</option>
-                  <option value="NE">Not Examined</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">Eyes</label>
-                <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
-                  <option value="Normal">Normal</option>
-                  <option value="Abnormal">Abnormal</option>
-                  <option value="NE">Not Examined</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">Mouth</label>
-                <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
-                  <option value="Normal">Normal</option>
-                  <option value="Abnormal">Abnormal</option>
-                  <option value="NE">Not Examined</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">Nostrils</label>
-                <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
-                  <option value="Normal">Normal</option>
-                  <option value="Abnormal">Abnormal</option>
-                  <option value="NE">Not Examined</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">Ear</label>
-                <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
-                  <option value="Normal">Normal</option>
-                  <option value="Abnormal">Abnormal</option>
-                  <option value="NE">Not Examined</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">Limbs</label>
-                <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
-                  <option value="Normal">Normal</option>
-                  <option value="Abnormal">Abnormal</option>
-                  <option value="NE">Not Examined</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">Anus</label>
-                <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
-                  <option value="Normal">Normal</option>
-                  <option value="Abnormal">Abnormal</option>
-                  <option value="NE">Not Examined</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">Genital</label>
-                <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
-                  <option value="Normal">Normal</option>
-                  <option value="Abnormal">Abnormal</option>
-                  <option value="NE">Not Examined</option>
-                </select>
-              </div>
-            </div>
-            <div class="mb-6">
-              <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">External Findings Notes</label>
-              <textarea class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none" rows="3" placeholder="Describe any abnormal external findings such as wounds, lesions, discharges, or other observations..."></textarea>
-            </div>
-
-            <h4 class="text-sm font-bold text-gray-800 mb-3 pb-2 border-b-2 border-primary flex items-center gap-2">
-              <i class="fas fa-heart text-primary"></i> Internal Organ Examination
-            </h4>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              <div class="bg-white border border-gray-200 rounded-lg p-4">
-                <h5 class="font-bold text-gray-800 mb-3 flex items-center gap-2"><i class="fas fa-heartbeat text-primary"></i> Heart</h5>
-                <div class="space-y-2">
-                  <div class="flex items-center gap-2"><input type="radio" name="heart" value="Normal" class="accent-primary" checked><span class="text-sm">Normal</span></div>
-                  <div class="flex items-center gap-2"><input type="radio" name="heart" value="Abnormal" class="accent-primary"><span class="text-sm">Abnormal</span></div>
-                </div>
-                <input type="text" placeholder="Details if abnormal..." class="w-full mt-2 p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
-              </div>
-              <div class="bg-white border border-gray-200 rounded-lg p-4">
-                <h5 class="font-bold text-gray-800 mb-3 flex items-center gap-2"><i class="fas fa-wind text-primary"></i> Trachea</h5>
-                <div class="space-y-2">
-                  <div class="flex items-center gap-2"><input type="radio" name="trachea" value="Normal" class="accent-primary" checked><span class="text-sm">Normal</span></div>
-                  <div class="flex items-center gap-2"><input type="radio" name="trachea" value="Abnormal" class="accent-primary"><span class="text-sm">Abnormal</span></div>
-                </div>
-                <input type="text" placeholder="Details if abnormal..." class="w-full mt-2 p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
-              </div>
-              <div class="bg-white border border-gray-200 rounded-lg p-4">
-                <h5 class="font-bold text-gray-800 mb-3 flex items-center gap-2"><i class="fas fa-lungs text-primary"></i> Lung Floating Test</h5>
-                <div class="space-y-2">
-                  <div class="flex items-center gap-2"><input type="radio" name="lung-float" value="Positive" class="accent-primary"><span class="text-sm">Positive (Float)</span></div>
-                  <div class="flex items-center gap-2"><input type="radio" name="lung-float" value="Negative" class="accent-primary"><span class="text-sm">Negative (Sink)</span></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              <div class="bg-white border border-gray-200 rounded-lg p-4">
-                <h5 class="font-bold text-gray-800 mb-3 flex items-center gap-2"><i class="fas fa-dna text-primary"></i> Diaphragma Test</h5>
-                <div class="flex gap-4">
-                  <label class="flex items-center gap-2"><input type="radio" name="diaphragma" value="Positive" class="accent-primary"><span class="text-sm">Positive (+)</span></label>
-                  <label class="flex items-center gap-2"><input type="radio" name="diaphragma" value="Negative" class="accent-primary"><span class="text-sm">Negative (-)</span></label>
-                </div>
-              </div>
-              <div class="bg-white border border-gray-200 rounded-lg p-4">
-                <h5 class="font-bold text-gray-800 mb-3 flex items-center gap-2"><i class="fas fa-filter text-primary"></i> Kidney</h5>
-                <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
-                  <option value="Normal">Normal</option>
-                  <option value="Abnormal">Abnormal</option>
-                  <option value="NE">Not Examined</option>
-                </select>
-                <input type="text" placeholder="Details if abnormal..." class="w-full mt-2 p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
-              </div>
-              <div class="bg-white border border-gray-200 rounded-lg p-4">
-                <h5 class="font-bold text-gray-800 mb-3 flex items-center gap-2"><i class="fas fa-prescription-bottle text-primary"></i> Urinary Bladder</h5>
-                <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
-                  <option value="Normal">Normal</option>
-                  <option value="Abnormal">Abnormal</option>
-                  <option value="NE">Not Examined</option>
-                </select>
-              </div>
-            </div>
-
-            <h4 class="text-sm font-bold text-gray-800 mb-3 pb-2 border-b-2 border-primary flex items-center gap-2">
-              <i class="fas fa-stomach text-primary"></i> Digestive System (Ruminant Stomach)
-            </h4>
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
-              <div>
-                <label class="block text-xs font-bold text-gray-600 uppercase mb-1 text-center">Rumen</label>
-                <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
-                  <option value="Normal">Normal</option>
-                  <option value="Abnormal">Abnormal</option>
-                  <option value="NE">Not Examined</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-gray-600 uppercase mb-1 text-center">Reticulum</label>
-                <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
-                  <option value="Normal">Normal</option>
-                  <option value="Abnormal">Abnormal</option>
-                  <option value="NE">Not Examined</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-gray-600 uppercase mb-1 text-center">Omasum</label>
-                <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
-                  <option value="Normal">Normal</option>
-                  <option value="Abnormal">Abnormal</option>
-                  <option value="NE">Not Examined</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-gray-600 uppercase mb-1 text-center">Abomasum</label>
-                <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
-                  <option value="Normal">Normal</option>
-                  <option value="Abnormal">Abnormal</option>
-                  <option value="NE">Not Examined</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-gray-600 uppercase mb-1 text-center">Small Intestine</label>
-                <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
-                  <option value="Normal">Normal</option>
-                  <option value="Abnormal">Abnormal</option>
-                  <option value="NE">Not Examined</option>
-                </select>
-              </div>
-            </div>
-
-            <h4 class="text-sm font-bold text-gray-800 mb-3 pb-2 border-b-2 border-primary flex items-center gap-2">
-              <i class="fas fa-diagnoses text-primary"></i> Final Diagnosis
-            </h4>
-            <div class="mb-6">
-              <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1">Confirmed Cause of Death *</label>
-              <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none mb-2">
-                <option value="">Select Final Cause</option>
-                <option value="Respiratory Disorder">Respiratory Disorder</option>
-                <option value="Digestive Disorder">Digestive Disorder</option>
-                <option value="Bloat">Bloat (Tympany)</option>
-                <option value="Acidosis">Acidosis</option>
-                <option value="Trauma">Trauma</option>
-                <option value="Metabolic Disease">Metabolic Disease</option>
-                <option value="Infectious Disease">Infectious Disease</option>
-                <option value="Parasitic Infestation">Parasitic Infestation</option>
-                <option value="Toxicity">Toxicity</option>
-                <option value="Unknown">Unknown - Further Tests Required</option>
-              </select>
-              <textarea class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none" rows="3" placeholder="Provide detailed diagnostic findings and final diagnosis..."></textarea>
-            </div>
-
-            <div class="flex gap-3 mt-6">
-              <button type="submit" class="px-6 py-2.5 bg-primary text-white rounded-lg font-bold hover:bg-primary-dark shadow-md transition-all text-sm">
-                <i class="fas fa-check-double mr-2"></i>Complete PM Examination
-              </button>
-              <button type="button" class="px-4 py-2.5 border border-gray-200 rounded-lg text-gray-600 font-medium hover:bg-gray-50 text-sm">
-                Save Draft
-              </button>
-            </div>
+        
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left whitespace-nowrap">
+              <thead>
+                <tr class="bg-primary text-white text-sm">
+                  <th class="p-4 font-semibold">LMC No.</th>
+                  <th class="p-4 font-semibold">Date</th>
+                  <th class="p-4 font-semibold">Tag No.</th>
+                  <th class="p-4 font-semibold">Category</th>
+                  <th class="p-4 font-semibold">Preliminary COD</th>
+                  <th class="p-4 font-semibold">Current Step</th>
+                  <th class="p-4 font-semibold text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="mortality-pending-table" class="divide-y text-sm text-gray-700"></tbody>
+            </table>
           </div>
         </div>
-      </form>
+      </div>
     </div>
   </main>
 
+  <!-- Detail Modal -->
+  <div id="detail-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm p-5 overflow-y-auto">
+    <div class="bg-white rounded-xl shadow-xl w-full max-w-5xl mx-auto overflow-hidden border border-gray-100 max-h-[90vh] flex flex-col">
+      <div class="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50 sticky top-0">
+        <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+          <i class="fas fa-file-medical-alt text-primary"></i>
+          <span id="modal-doc-id">Document Details</span>
+        </h3>
+        <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="p-6 overflow-y-auto custom-scrollbar flex-1">
+        <div id="workflow-stepper" class="flex justify-center gap-2 flex-wrap p-4 bg-gray-50 rounded-xl mb-6"></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-5">
+            <div class="bg-gray-50 rounded-xl p-4">
+              <h4 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2"><i class="fas fa-info-circle text-primary"></i> Case Information</h4>
+              <div class="space-y-2 text-sm">
+                <div class="flex justify-between py-1.5 border-b border-gray-200">
+                  <span class="text-gray-500">LMC Number</span>
+                  <span id="modal-lmc-id" class="font-semibold text-gray-900">-</span>
+                </div>
+                <div class="flex justify-between py-1.5 border-b border-gray-200">
+                  <span class="text-gray-500">Date Reported</span>
+                  <span id="modal-date" class="font-semibold text-gray-900">-</span>
+                </div>
+                <div class="flex justify-between py-1.5 border-b border-gray-200">
+                  <span class="text-gray-500">Tag Number</span>
+                  <span id="modal-tag" class="font-semibold text-gray-900">-</span>
+                </div>
+                <div class="flex justify-between py-1.5 border-b border-gray-200">
+                  <span class="text-gray-500">Category</span>
+                  <span id="modal-category" class="font-semibold text-gray-900">-</span>
+                </div>
+                <div class="flex justify-between py-1.5 border-b border-gray-200">
+                  <span class="text-gray-500">Location</span>
+                  <span id="modal-location" class="font-semibold text-gray-900">-</span>
+                </div>
+                <div class="flex justify-between py-1.5 border-b border-gray-200">
+                  <span class="text-gray-500">Herd</span>
+                  <span id="modal-herd" class="font-semibold text-gray-900">-</span>
+                </div>
+                <div class="flex justify-between py-1.5">
+                  <span class="text-gray-500">Reported By</span>
+                  <span id="modal-reported-by" class="font-semibold text-gray-900">-</span>
+                </div>
+              </div>
+            </div>
+            <div class="bg-gray-50 rounded-xl p-4">
+              <h4 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2"><i class="fas fa-history text-primary"></i> Case Timeline</h4>
+              <div id="modal-timeline" class="space-y-4"></div>
+            </div>
+          </div>
+          <div class="space-y-5">
+            <div class="bg-gray-50 rounded-xl p-4">
+              <h4 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2"><i class="fas fa-stethoscope text-primary"></i> Findings Summary</h4>
+              <div class="space-y-3">
+                <div>
+                  <span class="text-xs text-gray-500 uppercase tracking-wide">Cause of Death</span>
+                  <p id="modal-cause-of-death" class="font-semibold text-gray-900">-</p>
+                </div>
+                <div>
+                  <span class="text-xs text-gray-500 uppercase tracking-wide">Clinical Signs</span>
+                  <p id="modal-clinical-signs" class="font-semibold text-gray-900 text-xs">-</p>
+                </div>
+                <div>
+                  <span class="text-xs text-gray-500 uppercase tracking-wide">Treatment</span>
+                  <p id="modal-treatment" class="font-semibold text-gray-900 text-xs">-</p>
+                </div>
+                <div>
+                  <span class="text-xs text-gray-500 uppercase tracking-wide">Additional Info</span>
+                  <p id="modal-additional-info" class="font-semibold text-gray-900 text-xs">-</p>
+                </div>
+                <div>
+                  <span class="text-xs text-gray-500 uppercase tracking-wide">Final Diagnosis</span>
+                  <p id="modal-final-cod" class="font-semibold text-green-600">Pending</p>
+                </div>
+              </div>
+            </div>
+            <div class="bg-gray-50 rounded-xl p-4">
+              <h4 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2"><i class="fas fa-tasks text-primary"></i> Actions Required</h4>
+              <div id="modal-status-info" class="mb-3"></div>
+              <div id="modal-download-section"></div>
+            </div>
+            <div class="bg-gray-50 rounded-xl p-4">
+              <h4 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2"><i class="fas fa-clipboard-check text-primary"></i> Audit Log</h4>
+              <div id="modal-audit" class="max-h-48 overflow-y-auto custom-scrollbar space-y-2"></div>
+            </div>
+          </div>
+        </div>
+        <div id="modal-actions" class="flex gap-3 mt-6 p-4 bg-gray-50 rounded-xl"></div>
+      </div>
+    </div>
+  </div>
+
   <script>
+    const MORTALITY_WORKFLOW = [
+      { id: 'issued', label: 'Issued', role: 'estate', icon: 'fa-file-signature' },
+      { id: 'verified', label: 'Verified', role: 'veterinary', icon: 'fa-check-circle' },
+      { id: 'checked', label: 'Checked', role: 'supervisor', icon: 'fa-clipboard-check' },
+      { id: 'witness', label: 'Witness', role: 'manager', icon: 'fa-user-shield' },
+      { id: 'approved', label: 'Approved', role: 'security', icon: 'fa-stamp' }
+    ];
+
     const mortalityRoles = {
       'estate': { name: 'Estate Personal', users: ['Nur Aziza', 'Kamran', 'Mazahari', 'Farm Worker 1', 'Farm Worker 2'] },
       'veterinary': { name: 'Veterinary Staff', users: ['Dr. Ahmad', 'Dr. Lim', 'Veterinary Assistant'] },
@@ -376,12 +284,19 @@
       'security': { name: 'Gate House Security', users: ['Shahrinizam', 'Security Staff'] }
     };
 
+    let mortalityDocuments = [
+      { id: 'LMC-2025-001', lmcNumber: 'LMC-2025-001', date: '2025-01-20', time: '14:30', tagNo: 'SK 24 2549', category: 'BC', location: 'SG FALDA', herd: 'Herd A', causeOfDeath: 'Respiratory Disorder', preliminaryCOD: 'Respiratory', clinicalSigns: 'Labored breathing, nasal discharge, coughing observed for 2 days', treatment: 'Antibiotics administered (Penicillin G) for 3 days', additionalInfo: 'Animal showed symptoms for 2 days before death', reportedBy: 'Nur Aziza', currentStep: 1, steps: [{ stepId: 'issued', completed: true, user: 'Nur Aziza', date: '2025-01-20 14:30', file: { name: 'LMC-2025-001_Issued.pdf', size: '180 KB' } }], audit: [{ action: 'Mortality case issued', user: 'Nur Aziza (Estate Personal)', time: '2025-01-20 14:30' }, { action: 'Case awaiting verification', user: 'System', time: '2025-01-20 14:30' }], attachments: [] },
+      { id: 'LMC-2025-002', lmcNumber: 'LMC-2025-002', date: '2025-01-18', time: '08:15', tagNo: 'SK 24 2550', category: 'WB', location: 'SKLIC Breedlot', herd: 'Herd B', causeOfDeath: 'Digestive Disorder', preliminaryCOD: 'Digestive', clinicalSigns: 'Bloating, reduced appetite, abdominal discomfort', treatment: 'Anti-bloat medication administered', additionalInfo: 'History of digestive issues in the herd', reportedBy: 'Kamran', currentStep: 2, steps: [{ stepId: 'issued', completed: true, user: 'Kamran', date: '2025-01-18 08:15', file: { name: 'LMC-2025-002_Issued.pdf', size: '175 KB' } }, { stepId: 'verified', completed: true, user: 'Dr. Ahmad', date: '2025-01-18 10:00', file: { name: 'LMC-2025-002_Verified.pdf', size: '450 KB' } }], audit: [{ action: 'Mortality case issued', user: 'Kamran (Estate Personal)', time: '2025-01-18 08:15' }, { action: 'Case verified by veterinary', user: 'Dr. Ahmad (Veterinary)', time: '2025-01-18 10:00' }], attachments: [] },
+      { id: 'LMC-2025-003', lmcNumber: 'LMC-2025-003', date: '2025-01-15', time: '16:45', tagNo: 'SK 24 2545', category: 'Bull', location: 'SG AA', herd: 'Herd A', causeOfDeath: 'Trauma', preliminaryCOD: 'Trauma', clinicalSigns: 'Found collapsed, unable to stand, visible injuries', treatment: 'None - animal expired before treatment', additionalInfo: 'Injuries consistent with fighting', reportedBy: 'Mazahari', currentStep: 4, steps: [{ stepId: 'issued', completed: true, user: 'Mazahari', date: '2025-01-15 16:45', file: { name: 'LMC-2025-003_Issued.pdf', size: '170 KB' } }, { stepId: 'verified', completed: true, user: 'Dr. Lim', date: '2025-01-15 18:00', file: { name: 'LMC-2025-003_Verified.pdf', size: '520 KB' } }, { stepId: 'checked', completed: true, user: 'Basir Bin Yusof', date: '2025-01-16 09:00', file: { name: 'LMC-2025-003_Checked.pdf', size: '200 KB' } }, { stepId: 'witness', completed: true, user: 'M Badrul', date: '2025-01-16 10:30', file: { name: 'LMC-2025-003_Witness.pdf', size: '195 KB' } }], audit: [{ action: 'Mortality case issued', user: 'Mazahari (Estate Personal)', time: '2025-01-15 16:45' }, { action: 'Case verified by veterinary', user: 'Dr. Lim (Veterinary)', time: '2025-01-15 18:00' }, { action: 'Case checked by supervisor', user: 'Basir Bin Yusof (Supervisor)', time: '2025-01-16 09:00' }, { action: 'Case witnessed by manager', user: 'M Badrul (Manager)', time: '2025-01-16 10:30' }], attachments: [] },
+      { id: 'LMC-2024-1712', lmcNumber: 'LMC-2024-1712', date: '2024-09-21', time: '10:00', tagNo: 'SK 24 2549', category: 'BC', location: 'SG AA', herd: 'Herd C', causeOfDeath: 'Respiratory Disorder', preliminaryCOD: 'Respiratory', clinicalSigns: 'Difficulty breathing, coughing, nasal discharge', treatment: 'Antibiotics and anti-inflammatory drugs', additionalInfo: 'Seasonal respiratory issue', reportedBy: 'Estate Worker', currentStep: 5, steps: [{ stepId: 'issued', completed: true, user: 'Estate Worker', date: '21/09/2024', file: { name: 'LMC-2024-1712_Issued.pdf', size: '185 KB' } }], audit: [{ action: 'Mortality case issued', user: 'Estate Worker', time: '21/09/2024' }], attachments: [] }
+    ];
+
     let currentUser = { role: '', name: '', roleLabel: '' };
+    let currentDoc = null;
 
     document.addEventListener('DOMContentLoaded', () => {
       initRoleSwitcher();
-      initForms();
-      initDatePickers();
+      renderPendingTable();
     });
 
     function navigateTo(page) { window.location.href = page; }
@@ -420,37 +335,200 @@
       }
     }
 
-    function initForms() {
-      document.getElementById('pm-form').addEventListener('submit', (e) => {
-        e.preventDefault();
-        completePMExam();
+    function renderPendingTable() {
+      const pending = mortalityDocuments.filter(d => d.currentStep < MORTALITY_WORKFLOW.length);
+      document.getElementById('mortality-pending-table').innerHTML = pending.length ? pending.map(d => {
+        const wf = MORTALITY_WORKFLOW;
+        const currentStepLabel = d.currentStep < wf.length ? wf[d.currentStep].label : 'Completed';
+        return `<tr class="hover:bg-gray-50 transition-colors">
+          <td class="p-4"><code class="bg-primary/10 text-primary px-2 py-1 rounded font-bold text-xs">${d.id}</code></td>
+          <td class="p-4">${d.date}</td>
+          <td class="p-4 font-medium">${d.tagNo}</td>
+          <td class="p-4"><span class="px-2.5 py-0.5 bg-gray-100 rounded text-xs font-medium">${d.category}</span></td>
+          <td class="p-4 text-gray-600">${d.preliminaryCOD}</td>
+          <td class="p-4"><span class="px-2.5 py-0.5 bg-gray-100 text-gray-800 rounded-full text-xs font-medium border border-gray-200">${currentStepLabel}</span></td>
+          <td class="p-4 text-right flex justify-end gap-2">
+            <button onclick="viewMortalityDetail('${d.id}')" class="w-7 h-7 text-gray-400 hover:text-primary hover:bg-primary/10 rounded flex items-center justify-center transition-colors">
+              <i class="fas fa-eye text-sm"></i>
+            </button>
+            ${d.currentStep === 1 ? `<button onclick="navigateTo('pm-examination.html')" class="w-7 h-7 text-gray-400 hover:text-primary hover:bg-primary/10 rounded flex items-center justify-center transition-colors">
+              <i class="fas fa-microscope text-sm"></i>
+            </button>` : ''}
+          </td>
+        </tr>`;
+      }).join('') : '<tr><td colspan="7" class="p-8 text-center text-gray-400 italic">No pending cases</td></tr>';
+    }
+
+    function filterPendingByDate() {
+      const fromDate = document.getElementById('pending-date-from')?.value;
+      const toDate = document.getElementById('pending-date-to')?.value;
+      if (!fromDate && !toDate) return;
+      const pending = mortalityDocuments.filter(d => {
+        if (d.currentStep >= MORTALITY_WORKFLOW.length) return false;
+        const docDate = new Date(d.date);
+        if (fromDate && docDate < new Date(fromDate)) return false;
+        if (toDate && docDate > new Date(toDate)) return false;
+        return true;
       });
+      renderFilteredPendingTable(pending);
     }
 
-    function initDatePickers() {
-      const today = new Date().toISOString().split('T')[0];
-      const pmDateInput = document.getElementById('pm-date');
-      if (pmDateInput) {
-        pmDateInput.value = today;
+    function clearPendingDateFilter() {
+      document.getElementById('pending-date-from').value = '';
+      document.getElementById('pending-date-to').value = '';
+      renderPendingTable();
+    }
+
+    function renderFilteredPendingTable(filteredDocs) {
+      document.getElementById('mortality-pending-table').innerHTML = filteredDocs.length ? filteredDocs.map(d => {
+        const wf = MORTALITY_WORKFLOW;
+        const currentStepLabel = d.currentStep < wf.length ? wf[d.currentStep].label : 'Completed';
+        return `<tr class="hover:bg-gray-50 transition-colors">
+          <td class="p-4"><code class="bg-primary/10 text-primary px-2 py-1 rounded font-bold text-xs">${d.id}</code></td>
+          <td class="p-4">${d.date}</td>
+          <td class="p-4 font-medium">${d.tagNo}</td>
+          <td class="p-4"><span class="px-2.5 py-0.5 bg-gray-100 rounded text-xs font-medium">${d.category}</span></td>
+          <td class="p-4 text-gray-600">${d.preliminaryCOD}</td>
+          <td class="p-4"><span class="px-2.5 py-0.5 bg-gray-100 text-gray-800 rounded-full text-xs font-medium border border-gray-200">${currentStepLabel}</span></td>
+          <td class="p-4 text-right flex justify-end gap-2">
+            <button onclick="viewMortalityDetail('${d.id}')" class="w-7 h-7 text-gray-400 hover:text-primary hover:bg-primary/10 rounded flex items-center justify-center transition-colors">
+              <i class="fas fa-eye text-sm"></i>
+            </button>
+          </td>
+        </tr>`;
+      }).join('') : '<tr><td colspan="7" class="p-8 text-center text-gray-400 italic">No pending cases match the date filter</td></tr>';
+    }
+
+    function viewMortalityDetail(id) {
+      const doc = mortalityDocuments.find(d => d.id === id);
+      if (!doc) return;
+      currentDoc = doc;
+      const wf = MORTALITY_WORKFLOW;
+      const isCompleted = doc.currentStep >= wf.length;
+
+      document.getElementById('modal-doc-id').textContent = doc.id;
+      document.getElementById('modal-lmc-id').textContent = doc.id;
+      document.getElementById('modal-date').textContent = doc.date;
+      document.getElementById('modal-tag').textContent = doc.tagNo;
+      document.getElementById('modal-category').textContent = doc.category;
+      document.getElementById('modal-location').textContent = doc.location;
+      document.getElementById('modal-herd').textContent = doc.herd || '-';
+      document.getElementById('modal-reported-by').textContent = doc.reportedBy;
+      document.getElementById('modal-cause-of-death').textContent = doc.causeOfDeath || doc.preliminaryCOD || '-';
+      document.getElementById('modal-clinical-signs').textContent = doc.clinicalSigns || '-';
+      document.getElementById('modal-treatment').textContent = doc.treatment || '-';
+      document.getElementById('modal-additional-info').textContent = doc.additionalInfo || '-';
+      document.getElementById('modal-final-cod').textContent = doc.pmFindings?.finalDiagnosis || 'Pending Final Diagnosis';
+
+      let stepperHtml = '';
+      wf.forEach((step, idx) => {
+        const stepData = doc.steps.find(s => s.stepId === step.id);
+        const isStepCompleted = stepData?.completed;
+        const isActive = idx === doc.currentStep;
+        let iconClass = 'bg-gray-200 text-gray-400';
+        if (isStepCompleted) iconClass = 'bg-primary text-white';
+        else if (isActive) iconClass = 'bg-white border-2 border-primary text-primary';
+        stepperHtml += `<div class="flex flex-col items-center min-w-[70px]">
+          <div class="w-10 h-10 rounded-full ${iconClass} flex items-center justify-center text-sm mb-1">
+            <i class="fas ${isStepCompleted ? 'fa-check' : step.icon}"></i>
+          </div>
+          <span class="text-[10px] ${isStepCompleted || isActive ? 'text-gray-800 font-semibold' : 'text-gray-400'} text-center">${step.label}</span>
+        </div>`;
+        if (idx < wf.length - 1) stepperHtml += `<div class="text-gray-300 pb-5"><i class="fas fa-chevron-right text-xs"></i></div>`;
+      });
+      document.getElementById('workflow-stepper').innerHTML = stepperHtml;
+
+      let timelineHtml = '';
+      doc.steps.filter(s => s.completed).forEach(step => {
+        const stepDef = wf.find(w => w.id === step.stepId);
+        timelineHtml += `<div class="flex gap-3">
+          <div class="w-3 h-3 bg-primary rounded-full mt-1 flex-shrink-0"></div>
+          <div class="flex-1 pb-4">
+            <div class="flex justify-between items-center">
+              <span class="font-semibold text-gray-800 text-sm">${stepDef?.label || step.stepId}</span>
+              <span class="text-xs text-gray-400">${step.date}</span>
+            </div>
+            <div class="text-xs text-gray-500 mb-2">By ${step.user}</div>
+          </div>
+        </div>`;
+      });
+      document.getElementById('modal-timeline').innerHTML = timelineHtml || '<p class="text-gray-400 italic text-sm">No steps completed yet</p>';
+
+      let statusHtml = '';
+      let downloadHtml = '';
+      if (isCompleted) {
+        statusHtml = '<p class="text-green-600 font-semibold text-sm"><i class="fas fa-check-circle mr-2"></i>Case Completed</p>';
+        downloadHtml = `<button onclick="downloadReport('${doc.id}')" class="mt-3 px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary-dark transition-colors"><i class="fas fa-download mr-2"></i>Download LMC Report</button>`;
+      } else {
+        const currentStepDef = wf[doc.currentStep];
+        statusHtml = `<p class="text-sm">Current step: <strong>${currentStepDef?.label || 'Unknown'}</strong></p>`;
       }
+      document.getElementById('modal-status-info').innerHTML = statusHtml;
+      document.getElementById('modal-download-section').innerHTML = downloadHtml;
+
+      let actionsHtml = '';
+      if (!isCompleted) {
+        const canAuthorize = currentUser.role === wf[doc.currentStep]?.role;
+        actionsHtml = `<button onclick="authorizeStep()" ${!canAuthorize ? 'disabled class="opacity-50 cursor-not-allowed px-4 py-2 bg-gray-300 text-gray-500 rounded-lg text-sm font-bold"' : 'class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary-dark transition-colors"'} >
+          <i class="fas fa-check mr-2"></i>Authorize Step
+        </button>
+        <button onclick="returnStep()" class="px-4 py-2 border border-gray-200 text-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+          <i class="fas fa-undo mr-2"></i>Return
+        </button>`;
+      }
+      document.getElementById('modal-actions').innerHTML = actionsHtml;
+
+      document.getElementById('modal-audit').innerHTML = doc.audit.map(a => `<div class="flex gap-2 py-2 border-b border-gray-100 last:border-0">
+        <div class="w-2 h-2 bg-primary rounded-full mt-1.5 flex-shrink-0"></div>
+        <div class="flex-1">
+          <div class="text-sm text-gray-800"><strong>${a.user}</strong> - ${a.action}</div>
+          <div class="text-xs text-gray-400">${a.time}</div>
+        </div>
+      </div>`).join('');
+
+      const modal = document.getElementById('detail-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
     }
 
-    function loadPMCase() {
-      const lmcSelect = document.getElementById('pm-lmc-select');
-      const selectedLMC = lmcSelect.value;
-      if (!selectedLMC) {
-        alert('Please select an LMC number first');
+    function closeModal() {
+      const modal = document.getElementById('detail-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      currentDoc = null;
+    }
+
+    function authorizeStep() {
+      if (!currentDoc) return;
+      const wf = MORTALITY_WORKFLOW;
+      if (currentDoc.currentStep >= wf.length) return;
+      const stepDef = wf[currentDoc.currentStep];
+      if (currentUser.role !== stepDef.role && currentUser.role !== 'manager') {
+        alert(`This step requires: ${mortalityRoles[stepDef.role]?.name || stepDef.role}\nYour role: ${mortalityRoles[currentUser.role]?.name || currentUser.role || 'Not selected'}`);
         return;
       }
-      document.getElementById('pm-form').classList.remove('hidden');
-      document.getElementById('pm-form').scrollIntoView({ behavior: 'smooth' });
-      alert(`Case ${selectedLMC} loaded. Please conduct the post-mortem examination.`);
+      currentDoc.steps.push({ stepId: stepDef.id, completed: true, user: currentUser.name || 'System', date: new Date().toLocaleString(), file: { name: `${currentDoc.id}_${stepDef.id}.pdf`, size: '200 KB' } });
+      currentDoc.audit.push({ action: `Authorized ${stepDef.label}`, user: currentUser.name || 'System', time: new Date().toLocaleString() });
+      currentDoc.currentStep++;
+      alert(`Step "${stepDef.label}" authorized successfully!`);
+      closeModal();
+      renderPendingTable();
     }
 
-    function completePMExam() {
-      alert('Post-mortem examination completed successfully!');
-      window.location.href = 'pending-approvals.html';
+    function returnStep() {
+      if (!currentDoc) return;
+      currentDoc.audit.push({ action: 'Case returned for revision', user: currentUser.name || 'System', time: new Date().toLocaleString() });
+      alert('Case returned for revision.');
+      closeModal();
     }
+
+    function downloadReport(id) {
+      alert(`Report download initiated for: ${id}`);
+    }
+
+    document.getElementById('detail-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'detail-modal') closeModal();
+    });
   </script>
 </body>
 </html>
