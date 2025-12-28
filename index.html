@@ -3,18 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Feeding Management Console</title>
+  <title>Feeding Schedule - Feeding Management Console</title>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <style>
-    /* Custom scrollbar for table */
     .overflow-x-auto::-webkit-scrollbar { height: 8px; }
     .overflow-x-auto::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
     .overflow-x-auto::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
     .overflow-x-auto::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-    /* Smooth transitions */
     .transition { transition: all 0.2s ease; }
-    /* Table input focus */
-    input:focus { outline: none; ring: 2px; }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -54,7 +50,7 @@
               <label class="text-[11px] font-semibold text-gray-500">Search Lot / Remark</label>
               <div class="relative">
                 <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="16.65" y1="16.65" x2="21" y2="21"></line></svg>
-                <input id="searchInput" type="search" placeholder="Search pharmacy..." class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 bg-white text-sm text-gray-700 shadow-sm outline-none focus:ring-2 focus:ring-[#34554a] focus:border-[#34554a] transition" />
+                <input id="searchInput" type="search" placeholder="Search lots..." class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 bg-white text-sm text-gray-700 shadow-sm outline-none focus:ring-2 focus:ring-[#34554a] focus:border-[#34554a] transition" />
               </div>
             </div>
             <div class="md:col-span-3">
@@ -82,18 +78,32 @@
     <main class="max-w-6xl mx-auto px-4 pb-16">
       <!-- KPI Cards -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-        <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex items-center gap-4" id="card-lots"></div>
-        <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex items-center gap-4" id="card-heads"></div>
-        <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex items-center gap-4" id="card-tonnage"></div>
+        <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex items-center gap-4">
+          <div class="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-lg font-bold shadow-inner">📋</div>
+          <div>
+            <p class="text-xs text-gray-500 font-bold uppercase">Visible Lots</p>
+            <p id="lotCount" class="text-3xl font-black text-gray-900">0</p>
+          </div>
+        </div>
+        <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex items-center gap-4">
+          <div class="w-12 h-12 rounded-full bg-green-50 text-green-700 flex items-center justify-center text-lg font-bold shadow-inner">🐮</div>
+          <div>
+            <p class="text-xs text-gray-500 font-bold uppercase">Total Headcount</p>
+            <p id="headCount" class="text-3xl font-black text-gray-900">0</p>
+          </div>
+        </div>
+        <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex items-center gap-4">
+          <div class="w-12 h-12 rounded-full bg-amber-50 text-amber-700 flex items-center justify-center text-lg font-bold shadow-inner">⚖️</div>
+          <div>
+            <p class="text-xs text-gray-500 font-bold uppercase">Total Plan (kg)</p>
+            <p id="tonnage" class="text-3xl font-black text-gray-900">0</p>
+          </div>
+        </div>
       </div>
 
-      <!-- Tab Navigation -->
-      <div class="mt-8 bg-white border border-gray-200 rounded-xl shadow-sm p-3 flex flex-wrap gap-2" id="tabBar"></div>
-
-      <!-- Tab Panels Container -->
-      <div class="mt-6 space-y-6">
-        <!-- Schedule Panel -->
-        <div id="panel-schedule" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <!-- Schedule Table -->
+      <div class="mt-8">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           <div class="flex items-center justify-between px-6 py-4 bg-gray-50 border-b">
             <div>
               <h3 class="text-lg font-bold text-gray-900">Feeding Schedule (Editable)</h3>
@@ -124,72 +134,13 @@
             </table>
           </div>
         </div>
-
-        <!-- Analysis Panel -->
-        <div id="panel-analysis" class="hidden bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div class="px-6 py-4 bg-gray-50 border-b flex items-center justify-between">
-            <h3 class="text-lg font-bold text-gray-900">Daily Analysis (Auto)</h3>
-            <p class="text-xs text-gray-500">Calculated from schedule values</p>
-          </div>
-          <div class="overflow-x-auto">
-            <table class="w-full text-xs text-left whitespace-nowrap">
-              <thead>
-                <tr class="bg-[#34554a] text-white text-center">
-                  <th class="p-3 border-r border-[#2a443b]">LOT</th>
-                  <th class="p-3 border-r border-[#2a443b]">HEAD COUNT</th>
-                  <th colspan="2" class="p-3 border-r border-[#2a443b] bg-[#3f6b5c]">TOTAL NAPIER</th>
-                  <th colspan="2" class="p-3 border-r border-[#2a443b] bg-[#3f6b5c]">TOTAL OPF</th>
-                  <th colspan="2" class="p-3 border-r border-[#2a443b] bg-[#3f6b5c]">CONCENTRATE</th>
-                  <th class="p-3 border-r border-[#2a443b]">PLANNING</th>
-                  <th class="p-3 border-r border-[#2a443b]">ACTUAL</th>
-                  <th class="p-3">NOTES</th>
-                </tr>
-                <tr class="bg-[#2f4d42] text-white text-center text-[11px]">
-                  <th class="p-2 border-r border-[#2a443b]">ID</th>
-                  <th class="p-2 border-r border-[#2a443b]">Editable</th>
-                  <th class="p-2">TOTAL</th><th class="p-2 border-r border-[#2a443b]">KG/HEAD</th>
-                  <th class="p-2">TOTAL</th><th class="p-2 border-r border-[#2a443b]">KG/HEAD</th>
-                  <th class="p-2">TOTAL</th><th class="p-2 border-r border-[#2a443b]">KG/HEAD</th>
-                  <th class="p-2">(TOTAL)</th><th class="p-2 border-r border-[#2a443b]">(TOTAL)</th>
-                  <th class="p-2">REMARKS</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-gray-200" id="analysis-body"></tbody>
-              <tfoot class="bg-gray-100 text-[11px] font-bold border-t border-gray-200 text-center">
-                <tr id="analysis-totals"></tr>
-              </tfoot>
-            </table>
-          </div>
-        </div>
-
-        <!-- Inventory Panel -->
-        <div id="panel-inventory" class="hidden bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div class="px-6 py-4 bg-gray-50 border-b flex items-center justify-between">
-            <h3 class="text-lg font-bold text-gray-900">Feed Inventory (Editable)</h3>
-            <span class="text-xs text-gray-500">Carry Forward · Receive · Usage · Balance</span>
-          </div>
-          <div class="overflow-x-auto">
-            <table class="w-full text-sm text-left">
-              <thead>
-                <tr class="bg-[#34554a] text-white text-xs uppercase">
-                  <th class="p-3 border-r border-[#2a443b]">Feed Item</th>
-                  <th class="p-3 border-r border-[#2a443b] text-right">Carry Forward</th>
-                  <th class="p-3 border-r border-[#2a443b] text-right">Receive</th>
-                  <th class="p-3 border-r border-[#2a443b] text-right">Usage</th>
-                  <th class="p-3 text-right">Balance</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-gray-200" id="inventory-body"></tbody>
-            </table>
-          </div>
-        </div>
       </div>
 
-      <!-- Navigation to other screens -->
+      <!-- Navigation -->
       <div class="mt-8 pt-6 border-t border-gray-200">
         <h4 class="text-sm font-bold text-gray-500 mb-4">Quick Navigation</h4>
         <div class="flex flex-wrap gap-3">
-          <a href="index-schedule.html" class="px-4 py-2 bg-[#34554a] text-white rounded-lg text-sm font-semibold shadow-sm hover:bg-opacity-90">Feeding Schedule</a>
+          <a href="index-main.html" class="px-4 py-2 bg-[#34554a] text-white rounded-lg text-sm font-semibold shadow-sm hover:bg-opacity-90">Main Console</a>
           <a href="index-analysis.html" class="px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-semibold shadow-sm hover:border-[#34554a]">Daily Analysis</a>
           <a href="index-inventory.html" class="px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-semibold shadow-sm hover:border-[#34554a]">Inventory</a>
         </div>
@@ -242,7 +193,6 @@
     let searchTerm = '';
     let dateFilterStart = '2025-02-17';
     let dateFilterEnd = '';
-    let activeTab = 'schedule';
 
     const scheduleData = [
       { id: 'r1', date: '2025-02-17', lotId: 'BL2B', headCount: 128, t1Napier: 1000, t1Opf: '', t1Conc: 250, t1Bags: 10, t1TotalPlan: 1250, t1TotalActual: 1250, t2Napier: 1490, t2Opf: '', t2Conc: 400, t2Bags: 16, t2TotalPlan: 1875, t2TotalActual: 1890, remarks: 'EPKC/FL1' },
@@ -256,13 +206,6 @@
       { id: 'r9', date: '2025-02-18', lotId: 'BL2B', headCount: 130, t1Napier: 1010, t1Opf: '', t1Conc: 255, t1Bags: 10, t1TotalPlan: 1265, t1TotalActual: 1260, t2Napier: 1500, t2Opf: '', t2Conc: 405, t2Bags: 16, t2TotalPlan: 1885, t2TotalActual: 1895, remarks: 'EPKC/FL1 (D2)' },
       { id: 'r10', date: '2025-02-18', lotId: 'FL1F', headCount: 94, t1Napier: 685, t1Opf: '', t1Conc: 205, t1Bags: 8, t1TotalPlan: 873, t1TotalActual: 885, t2Napier: 1030, t2Opf: '', t2Conc: 280, t2Bags: 11, t2TotalPlan: 1310, t2TotalActual: 1315, remarks: 'EPKC WEAN (D2)' },
       { id: 'r11', date: '2025-02-19', lotId: 'FL2D', headCount: 200, t1Napier: 320, t1Opf: '', t1Conc: 150, t1Bags: 6, t1TotalPlan: 470, t1TotalActual: 472, t2Napier: 480, t2Opf: '', t2Conc: 225, t2Bags: 9, t2TotalPlan: 700, t2TotalActual: 702, remarks: 'WEANERS (D3)' }
-    ];
-
-    const inventoryData = [
-      { id: 'napier', name: 'NAPIER', carryForward: 4305, received: 26030, usage: 29045, balance: 1290, unit: 'kg' },
-      { id: 'opf', name: 'OPF', carryForward: 4520, received: 4500, usage: 9020, balance: 0, unit: 'kg' },
-      { id: 'tmr', name: 'TMR 30.1', carryForward: 3690, received: 3525, usage: 7050, balance: 165, unit: 'kg' },
-      { id: 'weaners', name: 'Weaners', carryForward: 165, received: 65, usage: 65, balance: 165, unit: 'kg' }
     ];
 
     // --- Helper Functions ---
@@ -298,14 +241,9 @@
     function renderCards() {
       const filtered = getFilteredSchedule();
       const t = totals(filtered);
-      const cards = [
-        { el: document.getElementById('card-lots'), title: 'Visible Lots', value: filtered.length, accent: 'bg-blue-50 text-blue-600', icon: '📋' },
-        { el: document.getElementById('card-heads'), title: 'Total Headcount', value: t.heads, accent: 'bg-green-50 text-green-700', icon: '🐮' },
-        { el: document.getElementById('card-tonnage'), title: 'Total Plan (kg)', value: t.t1Plan + t.t2Plan, accent: 'bg-amber-50 text-amber-700', icon: '⚖️' }
-      ];
-      cards.forEach(c => {
-        c.el.innerHTML = `<div class="w-12 h-12 rounded-full ${c.accent} flex items-center justify-center text-lg font-bold shadow-inner">${c.icon}</div><div><p class="text-xs text-gray-500 font-bold uppercase">${c.title}</p><p class="text-3xl font-black text-gray-900">${formatNumber(c.value)}</p></div>`;
-      });
+      document.getElementById('lotCount').textContent = filtered.length;
+      document.getElementById('headCount').textContent = formatNumber(t.heads);
+      document.getElementById('tonnage').textContent = formatNumber(t.t1Plan + t.t2Plan);
     }
 
     function renderSchedule() {
@@ -341,93 +279,6 @@
       });
     }
 
-    function renderAnalysis() {
-      const data = getFilteredSchedule();
-      const t = totals(data);
-      const tbody = document.getElementById('analysis-body');
-      tbody.innerHTML = data.map(r => {
-        const totalNapier = (Number(r.t1Napier)||0)+(Number(r.t2Napier)||0);
-        const totalOpf = (Number(r.t1Opf)||0)+(Number(r.t2Opf)||0);
-        const totalConc = (Number(r.t1Conc)||0)+(Number(r.t2Conc)||0);
-        const totalPlan = (Number(r.t1TotalPlan)||0)+(Number(r.t2TotalPlan)||0);
-        const totalActual = (Number(r.t1TotalActual)||0)+(Number(r.t2TotalActual)||0);
-        return `<tr class="hover:bg-gray-50">
-          <td class="p-3 border-r font-bold text-gray-900">${r.lotId} <span class="text-[10px] text-gray-500 font-medium block">${r.date}</span></td>
-          <td class="p-0 border-r bg-amber-50"><input type="number" data-id="${r.id}" data-field="headCount" value="${r.headCount}" class="w-full text-center bg-transparent border-none focus:ring-2 focus:ring-[#34554a] p-2" /></td>
-          <td class="p-2 text-center bg-green-50 font-semibold">${totalNapier||'-'}</td><td class="p-2 text-center border-r text-gray-600">${totalNapier ? (totalNapier/r.headCount).toFixed(1) : '-'}</td>
-          <td class="p-2 text-center bg-green-50 font-semibold">${totalOpf||'-'}</td><td class="p-2 text-center border-r text-gray-600">${totalOpf ? (totalOpf/r.headCount).toFixed(1) : '-'}</td>
-          <td class="p-2 text-center bg-blue-50 font-bold text-blue-700">${totalConc||'-'}</td><td class="p-2 text-center border-r text-blue-700">${totalConc ? (totalConc/r.headCount).toFixed(1) : '-'}</td>
-          <td class="p-2 text-center font-bold text-gray-800">${totalPlan}</td><td class="p-2 text-center font-bold text-green-700 border-r">${totalActual}</td>
-          <td class="p-2 text-xs text-gray-500">${r.remarks}</td>
-        </tr>`;
-      }).join('');
-
-      const tf = document.getElementById('analysis-totals');
-      tf.innerHTML = `<td class="p-2 border-r" colspan="2">GRAND TOTALS</td>
-        <td class="p-2">${t.t1Napier + t.t2Napier}</td><td class="p-2 border-r">-</td>
-        <td class="p-2">${t.t1Opf + t.t2Opf}</td><td class="p-2 border-r">-</td>
-        <td class="p-2">${t.t1Conc + t.t2Conc}</td><td class="p-2 border-r">-</td>
-        <td class="p-2">${t.t1Plan + t.t2Plan}</td><td class="p-2 border-r">${t.t1Actual + t.t2Actual}</td><td class="p-2"></td>`;
-
-      tbody.querySelectorAll('input[data-field="headCount"]').forEach(input => {
-        input.addEventListener('input', e => {
-          const id = e.target.dataset.id;
-          const record = scheduleData.find(r => r.id === id);
-          if (!record) return;
-          record.headCount = Number(e.target.value) || 0;
-          renderAll();
-        });
-      });
-    }
-
-    function renderInventory() {
-      const tbody = document.getElementById('inventory-body');
-      tbody.innerHTML = inventoryData.map(item => `
-        <tr class="hover:bg-gray-50">
-          <td class="p-3 font-bold text-gray-900">${item.name}</td>
-          <td class="p-0"><input type="number" data-id="${item.id}" data-field="carryForward" value="${item.carryForward}" class="w-full text-right bg-transparent border-none p-3 focus:ring-2 focus:ring-[#34554a] text-sm" /></td>
-          <td class="p-0"><input type="number" data-id="${item.id}" data-field="received" value="${item.received}" class="w-full text-right bg-transparent border-none p-3 focus:ring-2 focus:ring-[#34554a] text-sm text-blue-700" /></td>
-          <td class="p-0"><input type="number" data-id="${item.id}" data-field="usage" value="${item.usage}" class="w-full text-right bg-transparent border-none p-3 focus:ring-2 focus:ring-[#34554a] text-sm text-red-600" /></td>
-          <td class="p-3 font-mono font-bold text-right bg-gray-50">${formatNumber(item.balance)}</td>
-        </tr>`).join('');
-
-      tbody.querySelectorAll('input').forEach(input => {
-        input.addEventListener('input', e => {
-          const id = e.target.dataset.id;
-          const field = e.target.dataset.field;
-          const item = inventoryData.find(i => i.id === id);
-          if (!item) return;
-          item[field] = Number(e.target.value) || 0;
-          item.balance = (Number(item.carryForward)||0) + (Number(item.received)||0) - (Number(item.usage)||0);
-          renderAll();
-        });
-      });
-    }
-
-    function renderTabs() {
-      const tabBar = document.getElementById('tabBar');
-      const tabs = [
-        { id: 'schedule', label: 'Feeding Schedule (Page 1)', hint: 'Edit mode' },
-        { id: 'analysis', label: 'Daily Analysis (Page 6)', hint: 'Auto-calculated' },
-        { id: 'inventory', label: 'Inventory (Page 2-3)', hint: 'Edit stock' }
-      ];
-      tabBar.innerHTML = '';
-      tabs.forEach(tab => {
-        const btn = document.createElement('button');
-        btn.dataset.tab = tab.id;
-        btn.className = `px-4 py-2 border border-gray-200 rounded-lg text-sm font-semibold text-gray-700 hover:border-[#34554a] hover:text-[#34554a] transition flex items-center gap-2 shadow-sm ${activeTab === tab.id ? 'bg-[#34554a] text-white border-[#34554a]' : ''}`;
-        btn.innerHTML = `<span>${tab.label}</span><span class="text-[11px] text-gray-400">${tab.hint}</span>`;
-        btn.addEventListener('click', () => { activeTab = tab.id; renderAll(); });
-        tabBar.appendChild(btn);
-      });
-    }
-
-    function setActivePanel() {
-      document.getElementById('panel-schedule').classList.toggle('hidden', activeTab !== 'schedule');
-      document.getElementById('panel-analysis').classList.toggle('hidden', activeTab !== 'analysis');
-      document.getElementById('panel-inventory').classList.toggle('hidden', activeTab !== 'inventory');
-    }
-
     function updateFilterSummary() {
       const filtered = getFilteredSchedule();
       const total = scheduleData.length;
@@ -454,10 +305,6 @@
     function renderAll() {
       renderCards();
       renderSchedule();
-      renderAnalysis();
-      renderInventory();
-      renderTabs();
-      setActivePanel();
       updateFilterSummary();
     }
 
