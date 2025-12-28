@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Supplier Profile - Sawit Kinabalu</title>
+        <title>Register Cattle - Sawit Kinabalu</title>
         
         <!-- Fonts: Exact matching Figtree weight range (300-900) -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -32,116 +32,351 @@
             }
         </script>
         <style>
-            /* Custom weight and spacing overrides to match Vue logic exactly */
-            .font-black { font-weight: 900; }
-            .tracking-widest { letter-spacing: 0.1em; }
-            .tracking-tight { letter-spacing: -0.025em; }
-            .text-\[10px\] { font-size: 10px; }
-
-            /* Modal Backdrop simulation */
+            .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+            .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+            .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+            
             .modal-backdrop {
                 background-color: rgba(0, 0, 0, 0.5);
                 backdrop-filter: blur(4px);
-                transition: all 0.2s ease;
             }
+            .hidden { display: none !important; }
         </style>
     </head>
     <body class="font-sans text-gray-900 antialiased bg-gray-200 min-h-screen flex items-center justify-center p-4">
 
-        <!-- Supplier Details Modal (Exactly matching the Vue structure for openSupplierDetails) -->
-        <div id="supplierModal" class="relative z-50 w-full max-w-md mx-4 border border-gray-100 bg-white rounded-xl shadow-2xl overflow-hidden transition-all transform scale-100">
+        <!-- Main Registration Modal -->
+        <div class="relative z-10 w-full max-w-4xl bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col border border-gray-100">
             
             <!-- Modal Header -->
-            <div class="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50">
-                <h3 class="text-lg font-bold text-gray-900 tracking-tight">Supplier Profile</h3>
+            <div class="flex justify-between items-center p-6 border-b bg-gray-50">
+                <h3 class="text-lg font-bold text-gray-900">Register New Cattle</h3>
                 <button class="text-gray-400 hover:text-gray-600 transition-colors">
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
 
-            <!-- Modal Body -->
-            <div class="p-6 space-y-4">
-                
-                <!-- Supplier Summary Header -->
-                <div class="flex items-center gap-4 mb-4">
-                    <!-- Icon Container: bg-[#34554a]/10 text-[#34554a] -->
-                    <div class="w-16 h-16 bg-[#34554a]/10 text-[#34554a] rounded-full flex items-center justify-center shadow-inner">
-                        <i data-lucide="truck" class="w-8 h-8"></i>
+            <!-- Scrollable Form Container -->
+            <form id="cattleForm" class="space-y-6 p-6 max-h-[80vh] overflow-y-auto custom-scrollbar" onsubmit="event.preventDefault();">
+
+                <!-- PROFILE PICTURE UPLOAD -->
+                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <h3 class="text-sm font-semibold text-gray-900 mb-3">Cattle Profile Picture</h3>
+                    <div class="flex items-start gap-4">
+                        <div id="imagePreviewBox" class="w-32 h-32 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center bg-white overflow-hidden">
+                            <i data-lucide="image" id="placeholderIcon" class="w-12 h-12 text-gray-300"></i>
+                            <img id="profilePreview" class="hidden w-full h-full object-cover" />
+                        </div>
+
+                        <div class="flex-1">
+                            <input type="file" id="profile-upload" accept="image/*" class="hidden" onchange="previewImage(event)" />
+                            <label for="profile-upload" class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer transition-all">
+                                <i data-lucide="upload" class="w-4 h-4"></i>
+                                Upload Picture
+                            </label>
+                            <button type="button" id="removeImageBtn" onclick="removeImage()" class="hidden ml-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 transition-all">
+                                Remove
+                            </button>
+                            <p class="text-xs text-gray-500 mt-2 font-medium uppercase tracking-tighter">JPG, PNG (MAX 2MB)</p>
+                        </div>
                     </div>
+                </div>
+
+                <!-- BASIC INFORMATION -->
+                <div>
+                    <h3 class="text-sm font-bold text-gray-900 mb-4 pb-2 border-b uppercase tracking-tight">Basic Information</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="flex flex-col space-y-1">
+                            <label class="text-sm font-medium text-gray-700">Tag No <span class="text-red-500">*</span></label>
+                            <input type="text" required class="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-brand focus:border-brand text-sm outline-none" placeholder="Enter tag number">
+                        </div>
+
+                        <!-- Category -->
+                        <div class="flex flex-col space-y-1">
+                            <label class="text-sm font-medium text-gray-700">Category <span class="text-red-500">*</span></label>
+                            <div class="flex gap-2">
+                                <select required class="flex-1 px-3 py-2 border border-gray-300 rounded-md bg-white text-sm focus:ring-brand focus:border-brand outline-none">
+                                    <option value="" disabled selected>Select...</option>
+                                    <option>Cow</option>
+                                    <option>Bull</option>
+                                    <option>Calf</option>
+                                </select>
+                                <button type="button" onclick="openManageModal('Category')" class="px-3 py-2 bg-green-50 text-green-600 rounded-md hover:bg-green-100 transition-colors" title="Manage Categories">
+                                    <i data-lucide="settings" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Breed -->
+                        <div class="flex flex-col space-y-1">
+                            <label class="text-sm font-medium text-gray-700">Breed <span class="text-red-500">*</span></label>
+                            <div class="flex gap-2">
+                                <select required class="flex-1 px-3 py-2 border border-gray-300 rounded-md bg-white text-sm focus:ring-brand focus:border-brand outline-none">
+                                    <option value="" disabled selected>Select...</option>
+                                    <option>Brahman</option>
+                                    <option>Angus</option>
+                                </select>
+                                <button type="button" onclick="openManageModal('Breed')" class="px-3 py-2 bg-green-50 text-green-600 rounded-md hover:bg-green-100 transition-colors">
+                                    <i data-lucide="settings" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col space-y-1">
+                            <label class="text-sm font-medium text-gray-700">Coat Colour</label>
+                            <div class="flex gap-2">
+                                <select class="flex-1 px-3 py-2 border border-gray-300 rounded-md bg-white text-sm focus:ring-brand focus:border-brand outline-none">
+                                    <option value="">Select...</option>
+                                    <option>Black</option>
+                                    <option>Red</option>
+                                </select>
+                                <button type="button" onclick="openManageModal('Coat Colour')" class="px-3 py-2 bg-green-50 text-green-600 rounded-md hover:bg-green-100 transition-colors">
+                                    <i data-lucide="settings" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col space-y-1">
+                            <label class="text-sm font-medium text-gray-700">Birth Date</label>
+                            <input type="date" class="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-brand focus:border-brand text-sm outline-none">
+                        </div>
+
+                        <div class="flex flex-col space-y-1">
+                            <label class="text-sm font-medium text-gray-700">Gender <span class="text-red-500">*</span></label>
+                            <select required class="px-3 py-2 border border-gray-300 rounded-md bg-white text-sm focus:ring-brand focus:border-brand outline-none">
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RECEIVAL & CONDITION -->
+                <div>
+                    <h3 class="text-sm font-bold text-gray-900 mb-4 pb-2 border-b uppercase tracking-tight">Receival & Condition</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="flex flex-col space-y-1">
+                            <label class="text-sm font-medium text-gray-700">Receival Weight (kg)</label>
+                            <input type="number" step="0.01" class="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-brand focus:border-brand text-sm outline-none" placeholder="0.00">
+                        </div>
+
+                        <div class="flex flex-col space-y-1">
+                            <label class="text-sm font-medium text-gray-700">General Condition</label>
+                            <div class="flex gap-2">
+                                <select class="flex-1 px-3 py-2 border border-gray-300 rounded-md bg-white text-sm focus:ring-brand focus:border-brand outline-none">
+                                    <option value="">Select...</option>
+                                </select>
+                                <button type="button" onclick="openManageModal('Condition')" class="px-3 py-2 bg-green-50 text-green-600 rounded-md hover:bg-green-100 transition-colors">
+                                    <i data-lucide="settings" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col space-y-1">
+                            <label class="text-sm font-medium text-gray-700">Ownership</label>
+                            <div class="flex gap-2">
+                                <select class="flex-1 px-3 py-2 border border-gray-300 rounded-md bg-white text-sm focus:ring-brand focus:border-brand outline-none">
+                                    <option value="">Select...</option>
+                                </select>
+                                <button type="button" onclick="openManageModal('Ownership')" class="px-3 py-2 bg-green-50 text-green-600 rounded-md hover:bg-green-100 transition-colors">
+                                    <i data-lucide="settings" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GENEALOGY -->
+                <div>
+                    <h3 class="text-sm font-bold text-gray-900 mb-4 pb-2 border-b uppercase tracking-tight">Genealogy</h3>
+
+                    <!-- Dam (Mother) -->
+                    <div class="mb-6">
+                        <h4 class="text-sm font-black text-pink-600 mb-3 flex items-center gap-2">
+                            <i data-lucide="female" class="w-4 h-4"></i> Dam (Mother)
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-pink-50/30 p-4 rounded-xl border border-pink-100">
+                            <div class="flex flex-col space-y-1">
+                                <label class="text-xs font-bold text-pink-700 uppercase tracking-widest">Dam Tag</label>
+                                <input type="text" class="px-3 py-2 border border-pink-200 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500 text-sm outline-none" placeholder="Mother's tag">
+                            </div>
+                            <div class="flex flex-col space-y-1">
+                                <label class="text-xs font-bold text-pink-700 uppercase tracking-widest">Dam Breed</label>
+                                <select class="px-3 py-2 border border-pink-200 rounded-md bg-white text-sm focus:ring-pink-500 outline-none">
+                                    <option value="">Select...</option>
+                                </select>
+                            </div>
+                            <div class="flex flex-col space-y-1">
+                                <label class="text-xs font-bold text-pink-700 uppercase tracking-widest">Dam Colour</label>
+                                <select class="px-3 py-2 border border-pink-200 rounded-md bg-white text-sm focus:ring-pink-500 outline-none">
+                                    <option value="">Select...</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sire (Father) -->
                     <div>
-                        <h4 class="text-xl font-bold text-gray-900 tracking-tight">AgroSupply Co.</h4>
-                        <!-- Type Badge: text-[10px] font-bold tracking-widest uppercase -->
-                        <span class="text-[10px] font-bold tracking-widest uppercase text-[#34554a] bg-[#34554a]/10 px-2 py-1 rounded">
-                            Distributor
-                        </span>
+                        <h4 class="text-sm font-black text-blue-600 mb-3 flex items-center gap-2">
+                            <i data-lucide="male" class="w-4 h-4"></i> Sire (Father)
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-blue-50/30 p-4 rounded-xl border border-blue-100">
+                            <div class="flex flex-col space-y-1">
+                                <label class="text-xs font-bold text-blue-700 uppercase tracking-widest">Sire Tag</label>
+                                <input type="text" class="px-3 py-2 border border-blue-200 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm outline-none" placeholder="Father's tag">
+                            </div>
+                            <div class="flex flex-col space-y-1">
+                                <label class="text-xs font-bold text-blue-700 uppercase tracking-widest">Sire Breed</label>
+                                <select class="px-3 py-2 border border-blue-200 rounded-md bg-white text-sm focus:ring-blue-500 outline-none">
+                                    <option value="">Select...</option>
+                                </select>
+                            </div>
+                            <div class="flex flex-col space-y-1">
+                                <label class="text-xs font-bold text-blue-700 uppercase tracking-widest">Sire Coat Colour</label>
+                                <select class="px-3 py-2 border border-blue-200 rounded-md bg-white text-sm focus:ring-blue-500 outline-none">
+                                    <option value="">Select...</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Detailed Information Grid (Matching Vue Layout) -->
-                <div class="space-y-3">
-                    
-                    <!-- Row: Contact -->
-                    <div class="flex justify-between border-b pb-2 border-gray-100">
-                        <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Contact</span>
-                        <span class="text-sm font-semibold text-gray-900">Mr. Ahmad Kamal</span>
-                    </div>
-
-                    <!-- Row: Phone -->
-                    <div class="flex justify-between border-b pb-2 border-gray-100">
-                        <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Phone</span>
-                        <span class="text-sm font-semibold text-gray-900">+60 12-345 6789</span>
-                    </div>
-
-                    <!-- Row: Email -->
-                    <div class="flex justify-between border-b pb-2 border-gray-100">
-                        <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Email</span>
-                        <span class="text-sm font-semibold text-gray-900">kamal@agrosupply.com</span>
-                    </div>
-
-                    <!-- Row: Address (Matching text-right max-w-[200px]) -->
-                    <div class="flex justify-between">
-                        <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Address</span>
-                        <span class="text-sm font-semibold text-gray-900 text-right max-w-[200px]">
-                            No. 24, Kawasan Perindustrian Tawau, 91000 Sabah, Malaysia
-                        </span>
+                <!-- MILESTONES -->
+                <div>
+                    <h3 class="text-sm font-bold text-gray-900 mb-4 pb-2 border-b uppercase tracking-tight">Milestones (Optional)</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="flex flex-col space-y-1">
+                            <label class="text-sm font-medium text-gray-700">Weaning Date</label>
+                            <input type="date" class="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-brand focus:border-brand text-sm outline-none">
+                        </div>
+                        <div class="flex flex-col space-y-1">
+                            <label class="text-sm font-medium text-gray-700">Weaning Weight (kg)</label>
+                            <input type="number" step="0.01" class="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-brand focus:border-brand text-sm outline-none" placeholder="0.00">
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Modal Footer (Matching specific flex justify-between layout) -->
-            <div class="p-4 bg-gray-50 flex justify-between items-center border-t border-gray-100">
-                
-                <!-- Left Actions: Edit & Delete -->
-                <div class="flex gap-2">
-                    <button 
-                        type="button" 
-                        class="flex items-center gap-1.5 px-4 py-2 border bg-white rounded-lg text-sm font-bold shadow-sm hover:bg-gray-50 transition-all text-gray-700"
-                    >
-                        <i data-lucide="pencil" class="w-4 h-4"></i>
-                        Edit
+                <!-- ADDITIONAL INFO -->
+                <div>
+                    <h3 class="text-sm font-bold text-gray-900 mb-4 pb-2 border-b uppercase tracking-tight">Additional Information</h3>
+                    <div class="space-y-4">
+                        <div class="flex flex-col space-y-1">
+                            <label class="text-sm font-medium text-gray-700">Status</label>
+                            <select class="px-3 py-2 border border-gray-300 rounded-md bg-white text-sm focus:ring-brand focus:border-brand outline-none">
+                                <option value="Active">Active</option>
+                                <option value="Sold">Sold</option>
+                                <option value="Deceased">Deceased</option>
+                                <option value="Sick">Sick</option>
+                            </select>
+                        </div>
+                        <div class="flex flex-col space-y-1">
+                            <label class="text-sm font-medium text-gray-700">Remarks</label>
+                            <textarea rows="3" class="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-brand focus:border-brand text-sm outline-none resize-none" placeholder="Additional notes..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STICKY FOOTER -->
+                <div class="sticky bottom-0 bg-white border-t pt-4 flex justify-end gap-3">
+                    <button type="button" class="px-5 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 font-bold text-sm flex items-center gap-2 transition-all">
+                        <i data-lucide="x" class="w-4 h-4"></i> Cancel
                     </button>
-                    <button 
-                        type="button" 
-                        class="flex items-center gap-1.5 px-4 py-2 border border-red-200 bg-white rounded-lg text-sm font-bold shadow-sm hover:bg-red-50 transition-all text-red-600"
-                    >
-                        <i data-lucide="trash-2" class="w-4 h-4"></i>
-                        Delete
+                    <button type="submit" class="px-5 py-2.5 bg-brand text-white rounded-lg hover:bg-opacity-90 font-black text-sm flex items-center gap-2 shadow-md transition-all">
+                        <i data-lucide="save" class="w-4 h-4"></i> Register Cattle
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Manage Field Options Modal (Secondary Modal) -->
+        <div id="manageModal" class="fixed inset-0 z-50 flex items-center justify-center modal-backdrop hidden p-4">
+            <div class="bg-white rounded-xl p-6 w-full max-w-md shadow-2xl max-h-[80vh] flex flex-col transform transition-all">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-black text-gray-900 tracking-tight">
+                        Manage <span id="manageLabel">Category</span> Options
+                    </h3>
+                    <button onclick="closeManageModal()" class="text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+                </div>
+
+                <!-- Add New Option -->
+                <div class="flex gap-2 mb-4">
+                    <input type="text" id="newOptionInput" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand focus:border-transparent text-sm font-medium outline-none" placeholder="Add new option...">
+                    <button type="button" onclick="addOption()" class="px-4 py-2 bg-brand text-white rounded-lg hover:bg-opacity-90 font-black text-sm flex items-center gap-2 shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4"></i> Add
                     </button>
                 </div>
 
-                <!-- Right Action: Close -->
-                <button 
-                    type="button" 
-                    class="px-6 py-2 border bg-white rounded-lg text-sm font-bold shadow-sm hover:bg-gray-50 transition-all text-gray-700"
-                >
-                    Close
-                </button>
+                <!-- Existing Options List -->
+                <div id="optionsList" class="flex-1 overflow-y-auto border border-gray-200 rounded-lg custom-scrollbar divide-y divide-gray-100">
+                    <!-- Dynamic Rows Here -->
+                    <div class="p-4 text-center text-gray-500 text-sm italic">No options found.</div>
+                </div>
+
+                <div class="flex justify-end mt-4">
+                    <button type="button" onclick="closeManageModal()" class="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 font-black uppercase text-[10px] tracking-widest transition-all">
+                        Done
+                    </button>
+                </div>
             </div>
         </div>
 
         <script>
-            // Initialize Icons
             lucide.createIcons();
+
+            // Image Preview Logic
+            function previewImage(event) {
+                const reader = new FileReader();
+                reader.onload = function() {
+                    const output = document.getElementById('profilePreview');
+                    output.src = reader.result;
+                    output.classList.remove('hidden');
+                    document.getElementById('placeholderIcon').classList.add('hidden');
+                    document.getElementById('imagePreviewBox').classList.add('border-brand', 'border-opacity-50');
+                    document.getElementById('removeImageBtn').classList.remove('hidden');
+                }
+                reader.readAsDataURL(event.target.files[0]);
+            }
+
+            function removeImage() {
+                const output = document.getElementById('profilePreview');
+                output.src = '';
+                output.classList.add('hidden');
+                document.getElementById('placeholderIcon').classList.remove('hidden');
+                document.getElementById('imagePreviewBox').classList.remove('border-brand', 'border-opacity-50');
+                document.getElementById('removeImageBtn').classList.add('hidden');
+                document.getElementById('profile-upload').value = '';
+            }
+
+            // Manage Options Modal Logic
+            function openManageModal(label) {
+                document.getElementById('manageLabel').innerText = label;
+                document.getElementById('newOptionInput').placeholder = `Add new ${label.toLowerCase()}...`;
+                document.getElementById('manageModal').classList.remove('hidden');
+            }
+
+            function closeManageModal() {
+                document.getElementById('manageModal').classList.add('hidden');
+            }
+
+            function addOption() {
+                const input = document.getElementById('newOptionInput');
+                if (!input.value.trim()) return;
+                
+                const list = document.getElementById('optionsList');
+                if (list.querySelector('.italic')) list.innerHTML = ''; // Clear empty state
+                
+                const div = document.createElement('div');
+                div.className = 'flex items-center gap-2 p-3 hover:bg-gray-50 group';
+                div.innerHTML = `
+                    <span class="flex-1 text-sm font-bold text-gray-700">${input.value}</span>
+                    <button class="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-all"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+                    <button onclick="this.parentElement.remove()" class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-all"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                `;
+                list.appendChild(div);
+                input.value = '';
+                lucide.createIcons();
+            }
         </script>
     </body>
 </html>
