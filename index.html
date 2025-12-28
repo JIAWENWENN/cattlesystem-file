@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Feeding Schedule - Feeding Management Console</title>
+  <title>Daily Analysis - Feeding Management Console</title>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <style>
     .overflow-x-auto::-webkit-scrollbar { height: 8px; }
@@ -101,37 +101,87 @@
         </div>
       </div>
 
-      <!-- Schedule Table -->
+      <!-- Analysis Table -->
       <div class="mt-8">
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div class="flex items-center justify-between px-6 py-4 bg-gray-50 border-b">
-            <div>
-              <h3 class="text-lg font-bold text-gray-900">Feeding Schedule (Editable)</h3>
-              <p class="text-sm text-gray-500">Tap any number to adjust — layout styled like the medication table.</p>
-            </div>
-            <span class="px-3 py-1 text-xs bg-[#34554a]/10 text-[#34554a] rounded-full border border-[#34554a]/20 font-bold">Live</span>
+          <div class="px-6 py-4 bg-gray-50 border-b flex items-center justify-between">
+            <h3 class="text-lg font-bold text-gray-900">Daily Analysis (Auto)</h3>
+            <p class="text-xs text-gray-500">Calculated from schedule values</p>
           </div>
           <div class="overflow-x-auto">
             <table class="w-full text-xs text-left whitespace-nowrap">
               <thead>
                 <tr class="bg-[#34554a] text-white text-center">
-                  <th class="p-3 border-r border-[#2a443b]">TOTAL CATTLE</th>
-                  <th colspan="6" class="p-3 border-r border-[#2a443b] bg-[#3f6b5c]">TRIP 1 (AM FEED) - INPUTS</th>
-                  <th colspan="6" class="p-3 border-r border-[#2a443b] bg-[#3f6b5c]">TRIP 2 (PM FEED) - INPUTS</th>
-                  <th class="p-3">REMARKS</th>
+                  <th class="p-3 border-r border-[#2a443b]">LOT</th>
+                  <th class="p-3 border-r border-[#2a443b]">HEAD COUNT</th>
+                  <th colspan="2" class="p-3 border-r border-[#2a443b] bg-[#3f6b5c]">TOTAL NAPIER</th>
+                  <th colspan="2" class="p-3 border-r border-[#2a443b] bg-[#3f6b5c]">TOTAL OPF</th>
+                  <th colspan="2" class="p-3 border-r border-[#2a443b] bg-[#3f6b5c]">CONCENTRATE</th>
+                  <th class="p-3 border-r border-[#2a443b]">PLANNING</th>
+                  <th class="p-3 border-r border-[#2a443b]">ACTUAL</th>
+                  <th class="p-3">NOTES</th>
                 </tr>
                 <tr class="bg-[#2f4d42] text-white text-center text-[11px]">
-                  <th class="p-2 border-r border-[#2a443b]">DATE / LOT / HEAD</th>
-                  <th class="p-1">NAPIER</th><th class="p-1">OPF</th><th class="p-1">CONC.</th><th class="p-1">BAGS</th><th class="p-1">(TOTAL) PLAN</th><th class="p-1 border-r border-[#2a443b]">ACTUAL</th>
-                  <th class="p-1">NAPIER</th><th class="p-1">OPF</th><th class="p-1">CONC.</th><th class="p-1">BAGS</th><th class="p-1">(TOTAL) PLAN</th><th class="p-1 border-r border-[#2a443b]">ACTUAL</th>
+                  <th class="p-2 border-r border-[#2a443b]">ID</th>
+                  <th class="p-2 border-r border-[#2a443b]">Editable</th>
+                  <th class="p-2">TOTAL</th><th class="p-2 border-r border-[#2a443b]">KG/HEAD</th>
+                  <th class="p-2">TOTAL</th><th class="p-2 border-r border-[#2a443b]">KG/HEAD</th>
+                  <th class="p-2">TOTAL</th><th class="p-2 border-r border-[#2a443b]">KG/HEAD</th>
+                  <th class="p-2">(TOTAL)</th><th class="p-2 border-r border-[#2a443b]">(TOTAL)</th>
                   <th class="p-2">REMARKS</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-gray-200" id="schedule-body"></tbody>
-              <tfoot class="bg-gray-100 text-[11px] font-bold border-t border-gray-200">
-                <tr id="schedule-totals"></tr>
+              <tbody class="divide-y divide-gray-200" id="analysis-body"></tbody>
+              <tfoot class="bg-gray-100 text-[11px] font-bold border-t border-gray-200 text-center">
+                <tr id="analysis-totals"></tr>
               </tfoot>
             </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Statistics -->
+      <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h4 class="font-bold text-gray-900 mb-4">Feeding Efficiency</h4>
+          <div class="space-y-3">
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-600">Avg Napier per Head</span>
+              <span id="avgNapier" class="font-semibold text-gray-900">-</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-600">Avg OPF per Head</span>
+              <span id="avgOpf" class="font-semibold text-gray-900">-</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-600">Avg Concentrate per Head</span>
+              <span id="avgConc" class="font-semibold text-gray-900">-</span>
+            </div>
+            <div class="flex justify-between items-center pt-2 border-t">
+              <span class="text-sm text-gray-600">Plan vs Actual Variance</span>
+              <span id="variance" class="font-semibold text-green-700">-</span>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h4 class="font-bold text-gray-900 mb-4">Trip Summary</h4>
+          <div class="space-y-3">
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-600">Trip 1 Total Plan</span>
+              <span id="trip1Plan" class="font-semibold text-gray-900">-</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-600">Trip 1 Total Actual</span>
+              <span id="trip1Actual" class="font-semibold text-green-700">-</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-600">Trip 2 Total Plan</span>
+              <span id="trip2Plan" class="font-semibold text-gray-900">-</span>
+            </div>
+            <div class="flex justify-between items-center pt-2 border-t">
+              <span class="text-sm text-gray-600">Trip 2 Total Actual</span>
+              <span id="trip2Actual" class="font-semibold text-green-700">-</span>
+            </div>
           </div>
         </div>
       </div>
@@ -141,7 +191,7 @@
         <h4 class="text-sm font-bold text-gray-500 mb-4">Quick Navigation</h4>
         <div class="flex flex-wrap gap-3">
           <a href="index-main.html" class="px-4 py-2 bg-[#34554a] text-white rounded-lg text-sm font-semibold shadow-sm hover:bg-opacity-90">Main Console</a>
-          <a href="index-analysis.html" class="px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-semibold shadow-sm hover:border-[#34554a]">Daily Analysis</a>
+          <a href="index-schedule.html" class="px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-semibold shadow-sm hover:border-[#34554a]">Feeding Schedule</a>
           <a href="index-inventory.html" class="px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-semibold shadow-sm hover:border-[#34554a]">Inventory</a>
         </div>
       </div>
@@ -152,17 +202,17 @@
   <div id="exportModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
     <div class="bg-white rounded-xl shadow-xl max-w-md w-full mx-4 overflow-hidden">
       <div class="px-6 py-4 bg-[#34554a] text-white">
-        <h3 class="font-bold text-lg">Export CSV</h3>
+        <h3 class="font-bold text-lg">Export Analysis CSV</h3>
       </div>
       <div class="p-6">
-        <p class="text-sm text-gray-600 mb-4">Your feeding schedule data will be exported as a CSV file. The file will include all visible records based on current filters.</p>
+        <p class="text-sm text-gray-600 mb-4">Your daily analysis data will be exported as a CSV file with calculated metrics per lot.</p>
         <div class="bg-gray-50 rounded-lg p-3 mb-4">
           <p class="text-xs text-gray-500 font-semibold mb-2">Export includes:</p>
           <ul class="text-xs text-gray-600 space-y-1">
-            <li>• Date and Lot information</li>
-            <li>• Head count and feeding data</li>
-            <li>• Trip 1 and Trip 2 details</li>
-            <li>• Remarks and notes</li>
+            <li>• Lot and Head Count data</li>
+            <li>• Total feeding amounts (Napier, OPF, Concentrate)</li>
+            <li>• KG per Head calculations</li>
+            <li>• Planning vs Actual comparison</li>
           </ul>
         </div>
         <div class="flex gap-3">
@@ -246,34 +296,61 @@
       document.getElementById('tonnage').textContent = formatNumber(t.t1Plan + t.t2Plan);
     }
 
-    function renderSchedule() {
+    function renderAnalysis() {
       const data = getFilteredSchedule();
       const t = totals(data);
-      const tbody = document.getElementById('schedule-body');
-      tbody.innerHTML = data.map(r => `
-        <tr class="hover:bg-gray-50">
-          <td class="p-3 border-r font-bold text-gray-900"><div class="flex flex-col"><span>${r.lotId}</span><span class="text-[10px] text-gray-500 font-medium">${r.headCount} Head · ${r.date}</span></div></td>
-          ${['t1Napier','t1Opf','t1Conc','t1Bags','t1TotalPlan','t1TotalActual','t2Napier','t2Opf','t2Conc','t2Bags','t2TotalPlan','t2TotalActual'].map(key => `
-            <td class="p-0 ${key.includes('TotalActual') ? 'bg-green-50 border-r border-gray-200' : ''} ${key.includes('TotalPlan') ? 'bg-amber-50/40' : ''}">
-              <input type="number" data-id="${r.id}" data-field="${key}" value="${r[key] ?? ''}" class="w-full text-center bg-transparent border-none focus:ring-2 focus:ring-[#34554a] p-2 text-xs" placeholder="-" />
-            </td>`).join('')}
+      const tbody = document.getElementById('analysis-body');
+      
+      tbody.innerHTML = data.map(r => {
+        const totalNapier = (Number(r.t1Napier)||0)+(Number(r.t2Napier)||0);
+        const totalOpf = (Number(r.t1Opf)||0)+(Number(r.t2Opf)||0);
+        const totalConc = (Number(r.t1Conc)||0)+(Number(r.t2Conc)||0);
+        const totalPlan = (Number(r.t1TotalPlan)||0)+(Number(r.t2TotalPlan)||0);
+        const totalActual = (Number(r.t1TotalActual)||0)+(Number(r.t2TotalActual)||0);
+        return `<tr class="hover:bg-gray-50">
+          <td class="p-3 border-r font-bold text-gray-900">${r.lotId} <span class="text-[10px] text-gray-500 font-medium block">${r.date}</span></td>
+          <td class="p-0 border-r bg-amber-50"><input type="number" data-id="${r.id}" data-field="headCount" value="${r.headCount}" class="w-full text-center bg-transparent border-none focus:ring-2 focus:ring-[#34554a] p-2" /></td>
+          <td class="p-2 text-center bg-green-50 font-semibold">${totalNapier||'-'}</td><td class="p-2 text-center border-r text-gray-600">${totalNapier ? (totalNapier/r.headCount).toFixed(1) : '-'}</td>
+          <td class="p-2 text-center bg-green-50 font-semibold">${totalOpf||'-'}</td><td class="p-2 text-center border-r text-gray-600">${totalOpf ? (totalOpf/r.headCount).toFixed(1) : '-'}</td>
+          <td class="p-2 text-center bg-blue-50 font-bold text-blue-700">${totalConc||'-'}</td><td class="p-2 text-center border-r text-blue-700">${totalConc ? (totalConc/r.headCount).toFixed(1) : '-'}</td>
+          <td class="p-2 text-center font-bold text-gray-800">${totalPlan}</td><td class="p-2 text-center font-bold text-green-700 border-r">${totalActual}</td>
           <td class="p-2 text-xs text-gray-500">${r.remarks}</td>
-        </tr>`).join('');
+        </tr>`;
+      }).join('');
 
-      const tf = document.getElementById('schedule-totals');
-      tf.innerHTML = `<td class="p-3 border-r">TOTALS</td>
-        <td class="p-2 text-center">${t.t1Napier}</td><td class="p-2 text-center">${t.t1Opf}</td><td class="p-2 text-center">${t.t1Conc}</td><td class="p-2 text-center">${t.t1Bags}</td>
-        <td class="p-2 text-center bg-amber-50/60">${t.t1Plan}</td><td class="p-2 text-center bg-green-50 border-r">${t.t1Actual}</td>
-        <td class="p-2 text-center">${t.t2Napier}</td><td class="p-2 text-center">${t.t2Opf}</td><td class="p-2 text-center">${t.t2Conc}</td><td class="p-2 text-center">${t.t2Bags}</td>
-        <td class="p-2 text-center bg-amber-50/60">${t.t2Plan}</td><td class="p-2 text-center bg-green-50 border-r">${t.t2Actual}</td><td class="p-2"></td>`;
+      const tf = document.getElementById('analysis-totals');
+      tf.innerHTML = `<td class="p-2 border-r" colspan="2">GRAND TOTALS</td>
+        <td class="p-2">${t.t1Napier + t.t2Napier}</td><td class="p-2 border-r">-</td>
+        <td class="p-2">${t.t1Opf + t.t2Opf}</td><td class="p-2 border-r">-</td>
+        <td class="p-2">${t.t1Conc + t.t2Conc}</td><td class="p-2 border-r">-</td>
+        <td class="p-2">${t.t1Plan + t.t2Plan}</td><td class="p-2 border-r">${t.t1Actual + t.t2Actual}</td><td class="p-2"></td>`;
 
-      tbody.querySelectorAll('input').forEach(input => {
+      // Update summary cards
+      const totalNapierAll = t.t1Napier + t.t2Napier;
+      const totalOpfAll = t.t1Opf + t.t2Opf;
+      const totalConcAll = t.t1Conc + t.t2Conc;
+      const totalHeads = t.heads || 1;
+      
+      document.getElementById('avgNapier').textContent = (totalNapierAll / totalHeads).toFixed(1) + ' kg';
+      document.getElementById('avgOpf').textContent = (totalOpfAll / totalHeads).toFixed(1) + ' kg';
+      document.getElementById('avgConc').textContent = (totalConcAll / totalHeads).toFixed(1) + ' kg';
+      
+      const totalPlan = t.t1Plan + t.t2Plan;
+      const totalActual = t.t1Actual + t.t2Actual;
+      const variance = totalActual - totalPlan;
+      document.getElementById('variance').textContent = (variance >= 0 ? '+' : '') + formatNumber(variance) + ' kg';
+      
+      document.getElementById('trip1Plan').textContent = formatNumber(t.t1Plan);
+      document.getElementById('trip1Actual').textContent = formatNumber(t.t1Actual);
+      document.getElementById('trip2Plan').textContent = formatNumber(t.t2Plan);
+      document.getElementById('trip2Actual').textContent = formatNumber(t.t2Actual);
+
+      tbody.querySelectorAll('input[data-field="headCount"]').forEach(input => {
         input.addEventListener('input', e => {
           const id = e.target.dataset.id;
-          const field = e.target.dataset.field;
           const record = scheduleData.find(r => r.id === id);
           if (!record) return;
-          record[field] = e.target.value === '' ? '' : Number(e.target.value);
+          record.headCount = Number(e.target.value) || 0;
           renderAll();
         });
       });
@@ -291,20 +368,27 @@
 
     function exportCSV() {
       const rows = getFilteredSchedule();
-      const headers = ['Date','Lot','Head','t1Napier','t1Opf','t1Conc','t1Bags','t1Plan','t1Actual','t2Napier','t2Opf','t2Conc','t2Bags','t2Plan','t2Actual','Remarks'];
-      const csv = [headers.join(',')].concat(rows.map(r => [r.date,r.lotId,r.headCount,r.t1Napier,r.t1Opf,r.t1Conc,r.t1Bags,r.t1TotalPlan,r.t1TotalActual,r.t2Napier,r.t2Opf,r.t2Conc,r.t2Bags,r.t2TotalPlan,r.t2TotalActual,`"${(r.remarks||'').replace(/"/g,'""')}"`].join(','))).join('\n');
+      const headers = ['Date','Lot','Head','Total Napier','Napier/Head','Total OPF','OPF/Head','Total Conc','Conc/Head','Plan','Actual','Remarks'];
+      const csv = [headers.join(',')].concat(rows.map(r => {
+        const totalNapier = (Number(r.t1Napier)||0)+(Number(r.t2Napier)||0);
+        const totalOpf = (Number(r.t1Opf)||0)+(Number(r.t2Opf)||0);
+        const totalConc = (Number(r.t1Conc)||0)+(Number(r.t2Conc)||0);
+        const totalPlan = (Number(r.t1TotalPlan)||0)+(Number(r.t2TotalPlan)||0);
+        const totalActual = (Number(r.t1TotalActual)||0)+(Number(r.t2TotalActual)||0);
+        return [r.date,r.lotId,r.headCount,totalNapier,totalNapier ? (totalNapier/r.headCount).toFixed(1) : 0,totalOpf,totalOpf ? (totalOpf/r.headCount).toFixed(1) : 0,totalConc,totalConc ? (totalConc/r.headCount).toFixed(1) : 0,totalPlan,totalActual,`"${(r.remarks||'').replace(/"/g,'""')}"`].join(',');
+      })).join('\n');
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `feeding_export_${Date.now()}.csv`;
+      link.download = `feeding_analysis_${Date.now()}.csv`;
       link.click();
       URL.revokeObjectURL(url);
     }
 
     function renderAll() {
       renderCards();
-      renderSchedule();
+      renderAnalysis();
       updateFilterSummary();
     }
 
