@@ -11,6 +11,9 @@
 
         <!-- Tailwind CSS -->
         <script src="https://cdn.tailwindcss.com"></script>
+        <!-- Lucide Icons -->
+        <script src="https://unpkg.com/lucide@latest"></script>
+        
         <script>
             tailwind.config = {
                 theme: {
@@ -23,18 +26,299 @@
                                 DEFAULT: '#34554a',
                                 hover: '#2c463d',
                                 light: '#E8F5F1',
+                            },
+                            sidebar: {
+                                bg: '#22262a',
+                                item: '#2a2e33',
+                                border: '#3a3f44',
+                                text: '#9ca3af'
                             }
                         }
                     },
                 },
             }
         </script>
+        <style>
+            .sidebar-scroll::-webkit-scrollbar {
+                width: 5px;
+            }
+            .sidebar-scroll::-webkit-scrollbar-track {
+                background: #22262a;
+            }
+            .sidebar-scroll::-webkit-scrollbar-thumb {
+                background-color: #4b5563;
+                border-radius: 10px;
+            }
+            .nav-submenu {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease-out;
+            }
+            .nav-submenu.open {
+                max-height: 800px;
+            }
+            .rotate-180 {
+                transform: rotate(180deg);
+            }
+        </style>
     </head>
-    <body class="font-sans text-gray-900 antialiased bg-gray-50 min-h-screen">
-        <!-- Main Content Wrapper (Simulating AppLayout) -->
-        <div class="max-w-[1440px] mx-auto p-4 md:p-8">
+    <body class="font-sans text-gray-900 antialiased bg-gray-50 flex">
+
+        <!-- Full Sidebar -->
+        <aside class="fixed inset-y-0 left-0 w-64 bg-sidebar-bg text-gray-400 flex flex-col font-medium z-30 shadow-xl h-screen overflow-hidden text-sm">
+            <!-- Logo Header -->
+            <div class="h-24 flex items-center justify-center py-2 bg-sidebar-bg flex-shrink-0 border-b border-gray-800">
+                <div class="flex flex-col items-center">
+                    <div class="bg-white/10 p-2 rounded-lg mb-1">
+                        <img src="https://placehold.co/150x60?text=LOGO" alt="Sawit Kinabalu Logo" class="h-10 w-auto" />
+                    </div>
+                    <span class="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Cattle System</span>
+                </div>
+            </div>
+
+            <!-- Sidebar Search -->
+            <div class="px-4 py-4 flex-shrink-0">
+                <div class="relative">
+                    <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-4 h-4"></i>
+                    <input
+                        type="text"
+                        placeholder="Search menu..."
+                        class="w-full pl-9 pr-4 py-2 rounded-md bg-sidebar-item border border-sidebar-border text-sm focus:outline-none text-gray-300 placeholder-gray-500 focus:border-gray-500 transition-colors"
+                    />
+                </div>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="flex-1 overflow-y-auto px-2 space-y-1 pb-8 sidebar-scroll">
+                
+                <!-- 1. Dashboard -->
+                <a href="#" class="flex items-center px-4 py-2.5 text-gray-300 hover:bg-sidebar-item hover:text-white rounded-md transition-colors">
+                    <i data-lucide="layout-dashboard" class="w-4 h-4 mr-3"></i>
+                    Dashboard
+                </a>
+
+                <!-- 2. Cattle -->
+                <div class="nav-item">
+                    <div class="flex items-center">
+                        <a href="#" class="flex-1 flex items-center px-4 py-2.5 text-gray-300 hover:bg-sidebar-item hover:text-white rounded-l-md">
+                            <i data-lucide="beef" class="w-4 h-4 mr-3"></i>Cattle
+                        </a>
+                        <button onclick="toggleMenu('cattle')" class="px-2 py-2.5 text-gray-300 hover:bg-sidebar-item hover:text-white rounded-r-md border-l border-gray-700/50">
+                            <i data-lucide="chevron-down" id="icon-cattle" class="w-3.5 h-3.5 transition-transform duration-200"></i>
+                        </button>
+                    </div>
+                    <div id="menu-cattle" class="nav-submenu pl-11 space-y-1 mt-1">
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Cattle Receival</a>
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Add New Cattle</a>
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Cattle List</a>
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Tag Management</a>
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Cattle Inventory</a>
+                    </div>
+                </div>
+
+                <!-- 3. Feeding -->
+                <div class="nav-item">
+                    <button onclick="toggleMenu('feeding')" class="w-full flex items-center justify-between px-4 py-2.5 text-gray-300 hover:bg-sidebar-item hover:text-white rounded-md transition-colors">
+                        <div class="flex items-center"><i data-lucide="utensils" class="w-4 h-4 mr-3"></i>Feeding</div>
+                        <i data-lucide="chevron-down" id="icon-feeding" class="w-3.5 h-3.5 transition-transform duration-200"></i>
+                    </button>
+                    <div id="menu-feeding" class="nav-submenu pl-11 space-y-1 mt-1">
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Feeding Records</a>
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Feeding Schedule</a>
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Daily Master List</a>
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Feed Inventory</a>
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Feed Formulation</a>
+                    </div>
+                </div>
+
+                <!-- 4. Health -->
+                <div class="nav-item">
+                    <button onclick="toggleMenu('health')" class="w-full flex items-center justify-between px-4 py-2.5 text-gray-300 hover:bg-sidebar-item hover:text-white rounded-md transition-colors">
+                        <div class="flex items-center"><i data-lucide="heart-pulse" class="w-4 h-4 mr-3"></i>Health</div>
+                        <i data-lucide="chevron-down" id="icon-health" class="w-3.5 h-3.5 transition-transform duration-200"></i>
+                    </button>
+                    <div id="menu-health" class="nav-submenu pl-11 space-y-1 mt-1">
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Treatment Records</a>
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Record Treatment</a>
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Health Alerts</a>
+                    </div>
+                </div>
+
+                <!-- 5. Breeding -->
+                <div class="nav-item">
+                    <button onclick="toggleMenu('breeding')" class="w-full flex items-center justify-between px-4 py-2.5 text-gray-300 hover:bg-sidebar-item hover:text-white rounded-md transition-colors">
+                        <div class="flex items-center"><i data-lucide="dna" class="w-4 h-4 mr-3"></i>Breeding</div>
+                        <i data-lucide="chevron-down" id="icon-breeding" class="w-3.5 h-3.5 transition-transform duration-200"></i>
+                    </button>
+                    <div id="menu-breeding" class="nav-submenu pl-11 space-y-1 mt-1">
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Pregnancy Tracking</a>
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Bull Performance</a>
+                    </div>
+                </div>
+
+                <!-- 6. Calving -->
+                <div class="nav-item">
+                    <button onclick="toggleMenu('calving')" class="w-full flex items-center justify-between px-4 py-2.5 text-gray-300 hover:bg-sidebar-item hover:text-white rounded-md transition-colors">
+                        <div class="flex items-center"><i data-lucide="baby" class="w-4 h-4 mr-3"></i>Calving</div>
+                        <i data-lucide="chevron-down" id="icon-calving" class="w-3.5 h-3.5 transition-transform duration-200"></i>
+                    </button>
+                    <div id="menu-calving" class="nav-submenu pl-11 space-y-1 mt-1">
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">LCC Certificate</a>
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Monthly Checklist</a>
+                    </div>
+                </div>
+
+                <!-- 7. Mortality -->
+                <div class="nav-item">
+                    <button onclick="toggleMenu('mortality')" class="w-full flex items-center justify-between px-4 py-2.5 text-gray-300 hover:bg-sidebar-item hover:text-white rounded-md transition-colors">
+                        <div class="flex items-center"><i data-lucide="skull" class="w-4 h-4 mr-3"></i>Mortality</div>
+                        <i data-lucide="chevron-down" id="icon-mortality" class="w-3.5 h-3.5 transition-transform duration-200"></i>
+                    </button>
+                    <div id="menu-mortality" class="nav-submenu pl-11 space-y-1 mt-1">
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Record Mortality</a>
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">LMC Certificate</a>
+                    </div>
+                </div>
+
+                <!-- 8. Groups -->
+                <div class="nav-item">
+                    <button onclick="toggleMenu('groups')" class="w-full flex items-center justify-between px-4 py-2.5 text-gray-300 hover:bg-sidebar-item hover:text-white rounded-md transition-colors">
+                        <div class="flex items-center"><i data-lucide="users" class="w-4 h-4 mr-3"></i>Groups</div>
+                        <i data-lucide="chevron-down" id="icon-groups" class="w-3.5 h-3.5 transition-transform duration-200"></i>
+                    </button>
+                    <div id="menu-groups" class="nav-submenu pl-11 space-y-1 mt-1">
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Create Group</a>
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Group Movement</a>
+                    </div>
+                </div>
+
+                <!-- 9. Pasture -->
+                <div class="nav-item">
+                    <button onclick="toggleMenu('pasture')" class="w-full flex items-center justify-between px-4 py-2.5 text-gray-300 hover:bg-sidebar-item hover:text-white rounded-md transition-colors">
+                        <div class="flex items-center"><i data-lucide="trees" class="w-4 h-4 mr-3"></i>Pasture</div>
+                        <i data-lucide="chevron-down" id="icon-pasture" class="w-3.5 h-3.5 transition-transform duration-200"></i>
+                    </button>
+                    <div id="menu-pasture" class="nav-submenu pl-11 space-y-1 mt-1">
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Grazing Rotation</a>
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Capacity Overview</a>
+                    </div>
+                </div>
+
+                <!-- 10. Sales -->
+                <div class="nav-item">
+                    <button onclick="toggleMenu('sales')" class="w-full flex items-center justify-between px-4 py-2.5 text-gray-300 hover:bg-sidebar-item hover:text-white rounded-md transition-colors">
+                        <div class="flex items-center"><i data-lucide="shopping-cart" class="w-4 h-4 mr-3"></i>Sales</div>
+                        <i data-lucide="chevron-down" id="icon-sales" class="w-3.5 h-3.5 transition-transform duration-200"></i>
+                    </button>
+                    <div id="menu-sales" class="nav-submenu pl-11 space-y-1 mt-1">
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Order</a>
+                    </div>
+                </div>
+
+                <!-- 11. Transfer -->
+                <div class="nav-item">
+                    <button onclick="toggleMenu('transfer')" class="w-full flex items-center justify-between px-4 py-2.5 text-gray-300 hover:bg-sidebar-item hover:text-white rounded-md transition-colors">
+                        <div class="flex items-center"><i data-lucide="arrow-left-right" class="w-4 h-4 mr-3"></i>Transfer</div>
+                        <i data-lucide="chevron-down" id="icon-transfer" class="w-3.5 h-3.5 transition-transform duration-200"></i>
+                    </button>
+                    <div id="menu-transfer" class="nav-submenu pl-11 space-y-1 mt-1">
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Create Voucher</a>
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">History</a>
+                    </div>
+                </div>
+
+                <!-- 12. Customer -->
+                <div class="nav-item">
+                    <button onclick="toggleMenu('customer')" class="w-full flex items-center justify-between px-4 py-2.5 text-gray-300 hover:bg-sidebar-item hover:text-white rounded-md transition-colors">
+                        <div class="flex items-center"><i data-lucide="smile" class="w-4 h-4 mr-3"></i>Customer</div>
+                        <i data-lucide="chevron-down" id="icon-customer" class="w-3.5 h-3.5 transition-transform duration-200"></i>
+                    </button>
+                    <div id="menu-customer" class="nav-submenu pl-11 space-y-1 mt-1">
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Order History</a>
+                    </div>
+                </div>
+
+                <!-- 13. Driver -->
+                <div class="nav-item">
+                    <button onclick="toggleMenu('driver')" class="w-full flex items-center justify-between px-4 py-2.5 text-gray-300 hover:bg-sidebar-item hover:text-white rounded-md transition-colors">
+                        <div class="flex items-center"><i data-lucide="truck" class="w-4 h-4 mr-3"></i>Driver</div>
+                        <i data-lucide="chevron-down" id="icon-driver" class="w-3.5 h-3.5 transition-transform duration-200"></i>
+                    </button>
+                    <div id="menu-driver" class="nav-submenu pl-11 space-y-1 mt-1">
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">All Drivers</a>
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Delivery History</a>
+                    </div>
+                </div>
+
+                <!-- 14. Inventory -->
+                <div class="nav-item">
+                    <button onclick="toggleMenu('inventory')" class="w-full flex items-center justify-between px-4 py-2.5 text-gray-300 hover:bg-sidebar-item hover:text-white rounded-md transition-colors">
+                        <div class="flex items-center"><i data-lucide="package" class="w-4 h-4 mr-3"></i>Inventory</div>
+                        <i data-lucide="chevron-down" id="icon-inventory" class="w-3.5 h-3.5 transition-transform duration-200"></i>
+                    </button>
+                    <div id="menu-inventory" class="nav-submenu pl-11 space-y-1 mt-1">
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Feed Stock</a>
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Medication Stock</a>
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs font-bold text-white">Reorder Alerts</a>
+                    </div>
+                </div>
+
+                <!-- 15. Analytics -->
+                <div class="nav-item">
+                    <button onclick="toggleMenu('analytics')" class="w-full flex items-center justify-between px-4 py-2.5 text-gray-300 hover:bg-sidebar-item hover:text-white rounded-md transition-colors">
+                        <div class="flex items-center"><i data-lucide="pie-chart" class="w-4 h-4 mr-3"></i>Analytics</div>
+                        <i data-lucide="chevron-down" id="icon-analytics" class="w-3.5 h-3.5 transition-transform duration-200"></i>
+                    </button>
+                    <div id="menu-analytics" class="nav-submenu pl-11 space-y-1 mt-1">
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Herd Statistics</a>
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Weight Reports</a>
+                    </div>
+                </div>
+
+                <!-- 16. Workers -->
+                <div class="nav-item">
+                    <button onclick="toggleMenu('workers')" class="w-full flex items-center justify-between px-4 py-2.5 text-gray-300 hover:bg-sidebar-item hover:text-white rounded-md transition-colors">
+                        <div class="flex items-center"><i data-lucide="hard-hat" class="w-4 h-4 mr-3"></i>Workers</div>
+                        <i data-lucide="chevron-down" id="icon-workers" class="w-3.5 h-3.5 transition-transform duration-200"></i>
+                    </button>
+                    <div id="menu-workers" class="nav-submenu pl-11 space-y-1 mt-1">
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">All Workers</a>
+                    </div>
+                </div>
+
+                <!-- 17. Task -->
+                <div class="nav-item">
+                    <button onclick="toggleMenu('task')" class="w-full flex items-center justify-between px-4 py-2.5 text-gray-300 hover:bg-sidebar-item hover:text-white rounded-md transition-colors">
+                        <div class="flex items-center"><i data-lucide="clipboard-check" class="w-4 h-4 mr-3"></i>Task</div>
+                        <i data-lucide="chevron-down" id="icon-task" class="w-3.5 h-3.5 transition-transform duration-200"></i>
+                    </button>
+                    <div id="menu-task" class="nav-submenu pl-11 space-y-1 mt-1">
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Calendar View</a>
+                    </div>
+                </div>
+
+                <!-- 18. Settings (Auto-opened) -->
+                <div class="nav-item">
+                    <button onclick="toggleMenu('settings')" class="w-full flex items-center justify-between px-4 py-2.5 text-white bg-sidebar-item rounded-md shadow-sm">
+                        <div class="flex items-center"><i data-lucide="settings" class="w-4 h-4 mr-3 text-white"></i>Settings</div>
+                        <i data-lucide="chevron-down" id="icon-settings" class="w-3.5 h-3.5 transition-transform duration-200 rotate-180"></i>
+                    </button>
+                    <div id="menu-settings" class="nav-submenu open pl-11 space-y-1 mt-1">
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Farm Profile</a>
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Operational Units</a>
+                        <a href="#" class="block py-2 text-white font-bold text-xs">User Account</a>
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Roles & Permission</a>
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Access Control Matrix</a>
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Audit Logs</a>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="ml-64 flex-1 p-8 min-h-screen">
             
-            <!-- Breadcrumb Path (Parent Info) -->
+            <!-- Breadcrumb -->
             <nav class="flex text-sm text-gray-500 mb-2" aria-label="Breadcrumb">
                 <span class="hover:text-brand cursor-pointer">Settings</span>
                 <span class="mx-2">/</span>
@@ -49,10 +333,9 @@
 
             <!-- Stats Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <!-- Total Users -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center gap-5 hover:shadow-md transition-shadow">
                     <div class="w-14 h-14 rounded-full flex items-center justify-center bg-blue-50 text-blue-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        <i data-lucide="users" class="w-7 h-7"></i>
                     </div>
                     <div>
                         <p class="text-sm text-gray-500 font-medium mb-1">Total Users</p>
@@ -60,10 +343,9 @@
                     </div>
                 </div>
 
-                <!-- Active Users -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center gap-5 hover:shadow-md transition-shadow">
                     <div class="w-14 h-14 rounded-full flex items-center justify-center bg-green-50 text-green-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg>
+                        <i data-lucide="user-check" class="w-7 h-7"></i>
                     </div>
                     <div>
                         <p class="text-sm text-gray-500 font-medium mb-1">Active Users</p>
@@ -71,10 +353,9 @@
                     </div>
                 </div>
 
-                <!-- Inactive Users -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center gap-5 hover:shadow-md transition-shadow">
                     <div class="w-14 h-14 rounded-full flex items-center justify-center bg-red-50 text-red-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="17" y1="8" x2="22" y2="13"/><line x1="22" y1="8" x2="17" y2="13"/></svg>
+                        <i data-lucide="user-x" class="w-7 h-7"></i>
                     </div>
                     <div>
                         <p class="text-sm text-gray-500 font-medium mb-1">Inactive Users</p>
@@ -82,10 +363,9 @@
                     </div>
                 </div>
 
-                <!-- Roles -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center gap-5 hover:shadow-md transition-shadow">
                     <div class="w-14 h-14 rounded-full flex items-center justify-center bg-amber-50 text-amber-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        <i data-lucide="shield" class="w-7 h-7"></i>
                     </div>
                     <div>
                         <p class="text-sm text-gray-500 font-medium mb-1">Roles</p>
@@ -94,11 +374,10 @@
                 </div>
             </div>
 
-            <!-- Controls -->
+            <!-- Table Controls -->
             <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-                <!-- Search -->
                 <div class="relative w-full md:w-96 text-gray-400">
-                    <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4"></i>
                     <input
                         type="text"
                         placeholder="Search users..."
@@ -106,128 +385,77 @@
                     />
                 </div>
 
-                <!-- Filters & Action -->
                 <div class="flex flex-wrap md:flex-nowrap gap-2 w-full md:w-auto">
                     <select class="px-3 py-2 rounded-lg border border-gray-200 bg-gray-50 text-gray-600 text-sm focus:outline-none focus:ring-2 focus:ring-gray-200">
                         <option value="">All Roles</option>
                         <option>Admin</option>
                         <option>Manager</option>
-                        <option>Field Staff</option>
                     </select>
 
-                    <select class="px-3 py-2 rounded-lg border border-gray-200 bg-gray-50 text-gray-600 text-sm focus:outline-none focus:ring-2 focus:ring-gray-200">
-                        <option value="">All Status</option>
-                        <option>Active</option>
-                        <option>Inactive</option>
-                    </select>
-
-                    <button class="flex items-center gap-2 bg-[#34554a] text-white px-4 py-2 rounded-lg font-medium hover:bg-opacity-90 transition-colors shadow-sm text-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    <button class="flex items-center gap-2 bg-brand text-white px-4 py-2 rounded-lg font-medium hover:bg-brand-hover transition-colors shadow-sm text-sm">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
                         Add User
                     </button>
                 </div>
             </div>
 
-            <!-- Table Container -->
+            <!-- Table -->
             <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left">
                         <thead>
-                            <tr class="bg-[#34554a] text-white">
+                            <tr class="bg-[#34554a] text-white border-b border-brand-hover">
                                 <th class="py-4 px-6 font-semibold text-sm">Name</th>
                                 <th class="py-4 px-6 font-semibold text-sm">Email</th>
                                 <th class="py-4 px-6 font-semibold text-sm">Role</th>
                                 <th class="py-4 px-6 font-semibold text-sm">Status</th>
-                                <th class="py-4 px-6 font-semibold text-sm">Last Login</th>
                                 <th class="py-4 px-6 font-semibold text-sm text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="text-gray-700 text-sm">
-                            <!-- User Row 1 -->
                             <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors group">
                                 <td class="py-4 px-6 font-medium text-gray-900">John Doe</td>
                                 <td class="py-4 px-6 text-gray-500">john@sawitkinabalu.com</td>
-                                <td class="py-4 px-6">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 uppercase tracking-wider">
-                                        Admin
-                                    </span>
-                                </td>
-                                <td class="py-4 px-6">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-green-100 text-green-800 border-green-200">
-                                        Active
-                                    </span>
-                                </td>
-                                <td class="py-4 px-6 text-gray-500">12/28/2023, 10:45 AM</td>
-                                <td class="py-4 px-6 text-right">
-                                    <div class="flex items-center justify-end gap-3 opacity-60 group-hover:opacity-100 transition-opacity">
-                                        <button class="text-gray-400 hover:text-brand transition-colors">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                                        </button>
-                                        <button class="text-gray-400 hover:text-red-600 transition-colors">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
-                                        </button>
-                                    </div>
+                                <td class="py-4 px-6"><span class="px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 uppercase">Admin</span></td>
+                                <td class="py-4 px-6"><span class="px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">Active</span></td>
+                                <td class="py-4 px-6 text-right flex justify-end gap-3 opacity-60 group-hover:opacity-100 transition-opacity">
+                                    <i data-lucide="edit-3" class="w-4 h-4 cursor-pointer hover:text-brand"></i>
+                                    <i data-lucide="trash-2" class="w-4 h-4 cursor-pointer hover:text-red-600"></i>
                                 </td>
                             </tr>
-                            <!-- User Row 2 -->
                             <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors group">
                                 <td class="py-4 px-6 font-medium text-gray-900">Sarah Connor</td>
                                 <td class="py-4 px-6 text-gray-500">sarah@sawitkinabalu.com</td>
-                                <td class="py-4 px-6">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 uppercase tracking-wider">
-                                        Manager
-                                    </span>
-                                </td>
-                                <td class="py-4 px-6">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-red-100 text-red-800 border-red-200">
-                                        Inactive
-                                    </span>
-                                </td>
-                                <td class="py-4 px-6 text-gray-500">Never</td>
-                                <td class="py-4 px-6 text-right">
-                                    <div class="flex items-center justify-end gap-3 opacity-60 group-hover:opacity-100 transition-opacity">
-                                        <button class="text-gray-400 hover:text-brand transition-colors">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                                        </button>
-                                        <button class="text-gray-400 hover:text-red-600 transition-colors">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
-                                        </button>
-                                    </div>
+                                <td class="py-4 px-6"><span class="px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 uppercase">Manager</span></td>
+                                <td class="py-4 px-6"><span class="px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-200">Inactive</span></td>
+                                <td class="py-4 px-6 text-right flex justify-end gap-3 opacity-60 group-hover:opacity-100 transition-opacity">
+                                    <i data-lucide="edit-3" class="w-4 h-4 cursor-pointer hover:text-brand"></i>
+                                    <i data-lucide="trash-2" class="w-4 h-4 cursor-pointer hover:text-red-600"></i>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-
-                <!-- Table Footer (Pagination) -->
-                <div class="flex flex-col md:flex-row justify-between items-center p-4 border-t border-gray-100 bg-gray-50">
-                    <!-- Pagination Buttons -->
-                    <div class="flex items-center gap-2 mb-4 md:mb-0">
-                        <button class="w-8 h-8 flex items-center justify-center border border-gray-200 rounded-lg text-gray-400 cursor-not-allowed bg-white">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-                        </button>
-                        
-                        <button class="w-8 h-8 flex items-center justify-center rounded-lg text-sm font-bold bg-[#34554a] text-white">1</button>
-                        <button class="w-8 h-8 flex items-center justify-center rounded-lg text-sm font-bold text-gray-600 hover:bg-white border border-transparent hover:border-gray-200 transition-colors">2</button>
-                        <button class="w-8 h-8 flex items-center justify-center rounded-lg text-sm font-bold text-gray-600 hover:bg-white border border-transparent hover:border-gray-200 transition-colors">3</button>
-                        
-                        <button class="w-8 h-8 flex items-center justify-center border border-gray-200 rounded-lg text-gray-500 hover:bg-white transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-                        </button>
-                    </div>
-
-                    <!-- Record Info -->
-                    <div class="text-sm text-gray-500 font-medium">
-                        Showing <span class="font-semibold text-gray-800">1-10</span> of <span class="font-semibold text-gray-800">24</span> users
-                    </div>
-
-                    <!-- Export Action -->
-                    <button class="flex items-center gap-2 bg-white border border-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-50 text-sm transition-colors shadow-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                        Export CSV
-                    </button>
-                </div>
             </div>
-        </div>
+        </main>
+
+        <!-- Script for Interactive Features -->
+        <script>
+            // Initialize Lucide Icons
+            lucide.createIcons();
+
+            function toggleMenu(menuId) {
+                const submenu = document.getElementById('menu-' + menuId);
+                const icon = document.getElementById('icon-' + menuId);
+                
+                if (submenu.classList.contains('open')) {
+                    submenu.classList.remove('open');
+                    icon.classList.remove('rotate-180');
+                } else {
+                    submenu.classList.add('open');
+                    icon.classList.add('rotate-180');
+                }
+            }
+        </script>
     </body>
 </html>
