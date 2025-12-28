@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BovineFlow - Pending Approvals</title>
+  <title>BovineFlow - Post-Mortem Examination</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -12,31 +11,37 @@
     tailwind.config = {
       theme: {
         extend: {
-          colors: { primary: '#34554a', 'primary-dark': '#2a443b' },
-          fontFamily: { sans: ['Inter', 'sans-serif'] }
+          colors: {
+            primary: '#34554a',
+            'primary-dark': '#2a443b',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          }
         }
       }
     }
   </script>
   <style>
-    :root { --primary: #2E7D32; --primary-dark: #1B5E20; --grey-50: #FAFAFA; --grey-100: #F5F5F5; --grey-200: #EEEEEE; --grey-300: #E0E0E0; --grey-500: #9E9E9E; --grey-600: #757575; --grey-700: #616161; --grey-800: #424242; --grey-900: #212121; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: var(--grey-100); min-height: 100vh; }
-    .sidebar { position: fixed; left: 0; top: 0; width: 280px; height: 100vh; background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary) 100%); color: white; z-index: 1000; box-shadow: 0 8px 24px rgba(0,0,0,0.12); overflow-y: auto; }
-    .nav-item { display: flex; align-items: center; gap: 14px; padding: 14px 20px; color: rgba(255,255,255,0.85); cursor: pointer; transition: all 0.3s ease; border-left: 3px solid transparent; font-weight: 500; }
-    .nav-item:hover { background: rgba(255,255,255,0.1); color: white; }
-    .nav-item.active { background: rgba(255,255,255,0.15); color: white; border-left-color: white; }
-    .nav-item i { width: 22px; font-size: 18px; }
-    .main-content { margin-left: 280px; min-height: 100vh; }
-    @media (max-width: 1200px) { .sidebar { width: 80px; } .sidebar-title, .sidebar-subtitle, .nav-section-title, .nav-item span { display: none; } .nav-item { justify-content: center; padding: 16px; } .main-content { margin-left: 80px; } }
+    body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+    .sidebar { width: 280px; }
+    @media (max-width: 1024px) {
+      .sidebar { width: 80px; }
+      .sidebar .nav-text, .sidebar .sidebar-title, .sidebar .sidebar-subtitle, .sidebar .nav-section-title { display: none; }
+      .sidebar .nav-item { justify-content: center; padding: 16px; }
+      .main-content { margin-left: 80px; }
+    }
   </style>
 </head>
-
 <body class="bg-gray-100 min-h-screen">
-  <!-- Sidebar -->
   <nav class="sidebar fixed left-0 top-0 h-screen bg-gradient-to-b from-primary-dark to-primary text-white z-50 shadow-xl overflow-y-auto">
     <div class="p-6 border-b border-white/10 flex items-center gap-3">
-      <div class="w-12 h-12 bg-white/15 rounded-xl flex items-center justify-center text-2xl"><i class="fas fa-cow"></i></div>
+      <div class="w-12 h-12 bg-white/15 rounded-xl flex items-center justify-center text-2xl"><i class="fas fa-skull-crossbones"></i></div>
       <div>
         <div class="text-xl font-bold tracking-tight">BovineFlow</div>
         <div class="text-xs opacity-70 uppercase tracking-widest">Cattle Management</div>
@@ -44,141 +49,408 @@
     </div>
     <div class="py-5">
       <div class="px-5 pb-2 text-xs uppercase tracking-widest opacity-50 font-semibold">Main Menu</div>
-      <div class="nav-item flex items-center gap-3 px-5 py-3.5 cursor-pointer border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium" onclick="window.location.href='dashboard.html'">
-        <i class="fas fa-th-large w-5 text-lg"></i><span>Dashboard</span>
-      </div>
-      <div class="nav-item flex items-center gap-3 px-5 py-3.5 cursor-pointer border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium" onclick="window.location.href='create-ctv.html'">
-        <i class="fas fa-plus-circle w-5 text-lg"></i><span>Create CTV</span>
-      </div>
-      <div class="nav-item flex items-center gap-3 px-5 py-3.5 cursor-pointer border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium" onclick="window.location.href='create-receival.html'">
-        <i class="fas fa-truck-loading w-5 text-lg"></i><span>Create Receival Form</span>
-      </div>
-      <div class="nav-item flex items-center gap-3 px-5 py-3.5 cursor-pointer border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium" onclick="window.location.href='create-siv.html'">
-        <i class="fas fa-file-invoice w-5 text-lg"></i><span>Create SIV</span>
+      <a href="dashboard.html" class="flex items-center gap-3 px-5 py-3.5 border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium">
+        <i class="fas fa-th-large w-5 text-lg"></i><span class="nav-text">Dashboard</span>
+      </a>
+      <a href="create-mortality.html" class="flex items-center gap-3 px-5 py-3.5 border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium">
+        <i class="fas fa-plus-circle w-5 text-lg"></i><span class="nav-text">Create Mortality</span>
+      </a>
+      <div class="flex items-center gap-3 px-5 py-3.5 border-l-[3px] border-l-white bg-white/15 text-white font-medium">
+        <i class="fas fa-procedures w-5 text-lg"></i><span class="nav-text">Post-Mortem Exam</span>
       </div>
     </div>
     <div class="py-2">
       <div class="px-5 pb-2 text-xs uppercase tracking-widest opacity-50 font-semibold">Approvals</div>
-      <div class="nav-item active flex items-center gap-3 px-5 py-3.5 cursor-pointer border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium" onclick="window.location.href='pending.html'">
-        <i class="fas fa-clock w-5 text-lg"></i><span>Pending</span><span class="ml-auto bg-orange-500 text-white px-2.5 py-0.5 rounded-full text-xs font-bold">3</span>
-      </div>
-      <div class="nav-item flex items-center gap-3 px-5 py-3.5 cursor-pointer border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium" onclick="window.location.href='completed.html'">
-        <i class="fas fa-check-circle w-5 text-lg"></i><span>Completed</span>
-      </div>
-      <div class="nav-item flex items-center gap-3 px-5 py-3.5 cursor-pointer border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium" onclick="window.location.href='history.html'">
-        <i class="fas fa-history w-5 text-lg"></i><span>Transfer History</span>
-      </div>
+      <a href="pending-approvals.html" class="flex items-center gap-3 px-5 py-3.5 border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium">
+        <i class="fas fa-clock w-5 text-lg"></i><span class="nav-text">Pending</span>
+        <span class="ml-auto bg-orange-500 text-white px-2.5 py-0.5 rounded-full text-xs font-bold">2</span>
+      </a>
+      <a href="completed-cases.html" class="flex items-center gap-3 px-5 py-3.5 border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium">
+        <i class="fas fa-check-circle w-5 text-lg"></i><span class="nav-text">Completed</span>
+      </a>
+      <a href="history.html" class="flex items-center gap-3 px-5 py-3.5 border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium">
+        <i class="fas fa-history w-5 text-lg"></i><span class="nav-text">History</span>
+      </a>
+    </div>
+    <div class="py-2">
+      <div class="px-5 pb-2 text-xs uppercase tracking-widest opacity-50 font-semibold">Reports</div>
+      <a href="analytics.html" class="flex items-center gap-3 px-5 py-3.5 border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium">
+        <i class="fas fa-chart-bar w-5 text-lg"></i><span class="nav-text">Analytics</span>
+      </a>
     </div>
   </nav>
 
-  <!-- Main Content -->
   <main class="main-content ml-[280px] min-h-screen">
     <header class="bg-white px-8 py-4 flex justify-between items-center shadow-sm sticky top-0 z-40 border-b border-gray-100">
       <div>
-        <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Pending Approvals</h1>
-        <p class="text-sm text-gray-500 mt-0.5">Documents awaiting your action.</p>
+        <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Post-Mortem Examination</h1>
+        <p class="text-sm text-gray-500 mt-0.5">Conduct detailed post-mortem examination for mortality cases.</p>
       </div>
       <div class="flex items-center gap-4">
         <div class="flex items-center gap-3 bg-gray-100 px-4 py-2 rounded-lg">
           <label class="text-xs font-bold text-gray-500 uppercase tracking-wide"><i class="fas fa-user-tag mr-1"></i>Role:</label>
-          <select class="px-3 py-1.5 border border-gray-200 rounded-lg bg-white text-sm font-medium text-gray-700">
-            <option>Livestock Manager</option>
-            <option>Security</option>
-            <option>Driver</option>
+          <select id="role-selector" class="px-3 py-1.5 border border-gray-200 rounded-lg bg-white text-sm font-medium text-gray-700 outline-none focus:ring-2 focus:ring-primary min-w-[140px]">
+            <option value="">Select Role</option>
+            <option value="estate">Estate Personal</option>
+            <option value="veterinary">Veterinary Staff</option>
+            <option value="supervisor">Livestock Supervisor</option>
+            <option value="manager">Livestock Manager/OIC</option>
+            <option value="security">Security</option>
+          </select>
+          <select id="user-selector" class="px-3 py-1.5 border border-gray-200 rounded-lg bg-white text-sm font-medium text-gray-700 outline-none focus:ring-2 focus:ring-primary min-w-[160px]">
+            <option value="">Select Name</option>
           </select>
         </div>
-        <div class="flex items-center gap-3 bg-primary text-white px-4 py-2 rounded-lg">
-          <div class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center font-bold">M</div>
+        <div id="user-info" class="hidden items-center gap-3 bg-primary text-white px-4 py-2 rounded-lg">
+          <div id="user-avatar" class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center font-bold">-</div>
           <div>
-            <div class="font-semibold text-sm">M Badrul</div>
-            <div class="text-xs opacity-85">Livestock Manager</div>
+            <div id="current-user-name" class="font-semibold text-sm">-</div>
+            <div id="current-user-role" class="text-xs opacity-85">-</div>
           </div>
         </div>
+        <button class="relative w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center text-gray-500 hover:bg-gray-200 transition-colors">
+          <i class="fas fa-bell text-lg"></i>
+          <span class="absolute -top-0.5 -right-0.5 w-5 h-5 bg-red-500 text-white rounded-full text-[10px] font-bold flex items-center justify-center">2</span>
+        </button>
       </div>
     </header>
 
     <div class="p-8">
-      <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-        <div class="flex flex-1 gap-2 w-full md:w-auto">
-          <div class="relative flex-1">
-            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-            <input type="text" placeholder="Search documents..." class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 outline-none text-sm focus:ring-2 focus:ring-primary">
+      <div class="mb-8">
+        <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Post-Mortem Examination</h1>
+        <p class="text-sm text-gray-500 mt-1">Conduct detailed post-mortem examination for mortality cases.</p>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+        <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+          <i class="fas fa-search text-primary"></i> Select Case for PM Examination
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">LMC Number</label>
+            <select id="pm-lmc-select" class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
+              <option value="">Select LMC Number</option>
+              <option value="LMC-2025-001">LMC-2025-001 - SK 24 2549 (Respiratory)</option>
+              <option value="LMC-2025-002">LMC-2025-002 - SK 24 2550 (Digestive)</option>
+              <option value="LMC-2025-003">LMC-2025-003 - SK 24 2545 (Trauma)</option>
+            </select>
           </div>
-          <select class="px-3 py-2 rounded-lg border border-gray-200 bg-gray-50 text-gray-600 text-sm outline-none focus:ring-2 focus:ring-primary">
-            <option>All Types</option>
-            <option>CTV</option>
-            <option>Receival</option>
-            <option>SIV</option>
-          </select>
+          <div>
+            <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">Examination Date</label>
+            <input type="date" class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none" id="pm-date">
+          </div>
+          <div class="flex items-end">
+            <button type="button" onclick="loadPMCase()" class="w-full px-6 py-2.5 bg-primary text-white rounded-lg font-bold hover:bg-primary-dark transition-all text-sm">
+              <i class="fas fa-play mr-2"></i>Load Case
+            </button>
+          </div>
         </div>
       </div>
 
-      <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
-        <div class="overflow-x-auto">
-          <table class="w-full text-left whitespace-nowrap">
-            <thead>
-              <tr class="bg-primary text-white text-sm">
-                <th class="p-4 font-semibold">Document</th>
-                <th class="p-4 font-semibold">Type</th>
-                <th class="p-4 font-semibold">Date</th>
-                <th class="p-4 font-semibold">From</th>
-                <th class="p-4 font-semibold">To</th>
-                <th class="p-4 font-semibold">Cattle</th>
-                <th class="p-4 font-semibold">Current Step</th>
-                <th class="p-4 font-semibold text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y text-sm text-gray-700">
-              <tr class="hover:bg-gray-50">
-                <td class="p-4"><code class="bg-green-50 text-primary px-2 py-1 rounded font-bold text-xs">CTV-2025-001</code></td>
-                <td class="p-4"><span class="px-2.5 py-0.5 bg-gray-100 rounded text-xs font-medium">CTV</span></td>
-                <td class="p-4">2025-01-22</td>
-                <td class="p-4">SG AA</td>
-                <td class="p-4">SELIC</td>
-                <td class="p-4">1</td>
-                <td class="p-4"><span class="px-2.5 py-0.5 bg-blue-100 text-blue-800 rounded-full text-xs font-medium border border-blue-200">Transported</span></td>
-                <td class="p-4 text-right flex justify-end gap-2">
-                  <button onclick="window.open('detail-modal.html?id=CTV-2025-001','_blank')" class="w-7 h-7 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded flex items-center justify-center"><i class="fas fa-eye text-sm"></i></button>
-                  <button class="w-7 h-7 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded flex items-center justify-center"><i class="fas fa-edit text-sm"></i></button>
-                </td>
-              </tr>
-              <tr class="hover:bg-gray-50">
-                <td class="p-4"><code class="bg-green-50 text-primary px-2 py-1 rounded font-bold text-xs">CR-2025-001</code></td>
-                <td class="p-4"><span class="px-2.5 py-0.5 bg-gray-100 rounded text-xs font-medium">Receival</span></td>
-                <td class="p-4">2025-01-22</td>
-                <td class="p-4">SKLIC Breedlot</td>
-                <td class="p-4">SKFP-Butchery</td>
-                <td class="p-4">5</td>
-                <td class="p-4"><span class="px-2.5 py-0.5 bg-blue-100 text-blue-800 rounded-full text-xs font-medium border border-blue-200">Witness</span></td>
-                <td class="p-4 text-right flex justify-end gap-2">
-                  <button onclick="window.open('detail-modal.html?id=CR-2025-001','_blank')" class="w-7 h-7 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded flex items-center justify-center"><i class="fas fa-eye text-sm"></i></button>
-                  <button class="w-7 h-7 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded flex items-center justify-center"><i class="fas fa-edit text-sm"></i></button>
-                </td>
-              </tr>
-              <tr class="hover:bg-gray-50">
-                <td class="p-4"><code class="bg-green-50 text-primary px-2 py-1 rounded font-bold text-xs">SIV-2025-1969</code></td>
-                <td class="p-4"><span class="px-2.5 py-0.5 bg-gray-100 rounded text-xs font-medium">SIV</span></td>
-                <td class="p-4">2025-01-22</td>
-                <td class="p-4">SKFP-Butchery</td>
-                <td class="p-4">SKFP-Internal</td>
-                <td class="p-4">5</td>
-                <td class="p-4"><span class="px-2.5 py-0.5 bg-green-100 text-green-800 rounded-full text-xs font-medium border border-green-200">Completed</span></td>
-                <td class="p-4 text-right flex justify-end gap-2">
-                  <button onclick="window.open('detail-modal.html?id=SIV-2025-1969','_blank')" class="w-7 h-7 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded flex items-center justify-center"><i class="fas fa-eye text-sm"></i></button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="p-4 border-t bg-gray-50 flex items-center justify-between">
-          <p class="text-sm text-gray-500 font-medium">Showing 3 documents</p>
-          <div class="flex gap-2">
-            <button class="w-8 h-8 flex items-center justify-center border rounded-lg bg-white disabled:opacity-50"><i class="fas fa-chevron-left text-xs"></i></button>
-            <button class="w-8 h-8 flex items-center justify-center border rounded-lg bg-white disabled:opacity-50"><i class="fas fa-chevron-right text-xs"></i></button>
+      <form id="pm-form" class="hidden">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <div class="p-5 border-b border-gray-100 bg-gray-50">
+            <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+              <i class="fas fa-microscope text-primary"></i> POST-MORTEM EXAMINATION FINDINGS
+            </h3>
+            <p class="text-sm text-gray-500 mt-1">Detailed examination of internal and external organs</p>
+          </div>
+          <div class="p-6">
+            <h4 class="text-sm font-bold text-gray-800 mb-3 pb-2 border-b-2 border-primary flex items-center gap-2">
+              <i class="fas fa-eye text-primary"></i> External Findings
+            </h4>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+              <div>
+                <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">Skin</label>
+                <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
+                  <option value="Normal">Normal</option>
+                  <option value="Abnormal">Abnormal</option>
+                  <option value="NE">Not Examined</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">Eyes</label>
+                <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
+                  <option value="Normal">Normal</option>
+                  <option value="Abnormal">Abnormal</option>
+                  <option value="NE">Not Examined</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">Mouth</label>
+                <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
+                  <option value="Normal">Normal</option>
+                  <option value="Abnormal">Abnormal</option>
+                  <option value="NE">Not Examined</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">Nostrils</label>
+                <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
+                  <option value="Normal">Normal</option>
+                  <option value="Abnormal">Abnormal</option>
+                  <option value="NE">Not Examined</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">Ear</label>
+                <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
+                  <option value="Normal">Normal</option>
+                  <option value="Abnormal">Abnormal</option>
+                  <option value="NE">Not Examined</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">Limbs</label>
+                <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
+                  <option value="Normal">Normal</option>
+                  <option value="Abnormal">Abnormal</option>
+                  <option value="NE">Not Examined</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">Anus</label>
+                <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
+                  <option value="Normal">Normal</option>
+                  <option value="Abnormal">Abnormal</option>
+                  <option value="NE">Not Examined</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">Genital</label>
+                <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
+                  <option value="Normal">Normal</option>
+                  <option value="Abnormal">Abnormal</option>
+                  <option value="NE">Not Examined</option>
+                </select>
+              </div>
+            </div>
+            <div class="mb-6">
+              <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">External Findings Notes</label>
+              <textarea class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none" rows="3" placeholder="Describe any abnormal external findings such as wounds, lesions, discharges, or other observations..."></textarea>
+            </div>
+
+            <h4 class="text-sm font-bold text-gray-800 mb-3 pb-2 border-b-2 border-primary flex items-center gap-2">
+              <i class="fas fa-heart text-primary"></i> Internal Organ Examination
+            </h4>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <div class="bg-white border border-gray-200 rounded-lg p-4">
+                <h5 class="font-bold text-gray-800 mb-3 flex items-center gap-2"><i class="fas fa-heartbeat text-primary"></i> Heart</h5>
+                <div class="space-y-2">
+                  <div class="flex items-center gap-2"><input type="radio" name="heart" value="Normal" class="accent-primary" checked><span class="text-sm">Normal</span></div>
+                  <div class="flex items-center gap-2"><input type="radio" name="heart" value="Abnormal" class="accent-primary"><span class="text-sm">Abnormal</span></div>
+                </div>
+                <input type="text" placeholder="Details if abnormal..." class="w-full mt-2 p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
+              </div>
+              <div class="bg-white border border-gray-200 rounded-lg p-4">
+                <h5 class="font-bold text-gray-800 mb-3 flex items-center gap-2"><i class="fas fa-wind text-primary"></i> Trachea</h5>
+                <div class="space-y-2">
+                  <div class="flex items-center gap-2"><input type="radio" name="trachea" value="Normal" class="accent-primary" checked><span class="text-sm">Normal</span></div>
+                  <div class="flex items-center gap-2"><input type="radio" name="trachea" value="Abnormal" class="accent-primary"><span class="text-sm">Abnormal</span></div>
+                </div>
+                <input type="text" placeholder="Details if abnormal..." class="w-full mt-2 p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
+              </div>
+              <div class="bg-white border border-gray-200 rounded-lg p-4">
+                <h5 class="font-bold text-gray-800 mb-3 flex items-center gap-2"><i class="fas fa-lungs text-primary"></i> Lung Floating Test</h5>
+                <div class="space-y-2">
+                  <div class="flex items-center gap-2"><input type="radio" name="lung-float" value="Positive" class="accent-primary"><span class="text-sm">Positive (Float)</span></div>
+                  <div class="flex items-center gap-2"><input type="radio" name="lung-float" value="Negative" class="accent-primary"><span class="text-sm">Negative (Sink)</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <div class="bg-white border border-gray-200 rounded-lg p-4">
+                <h5 class="font-bold text-gray-800 mb-3 flex items-center gap-2"><i class="fas fa-dna text-primary"></i> Diaphragma Test</h5>
+                <div class="flex gap-4">
+                  <label class="flex items-center gap-2"><input type="radio" name="diaphragma" value="Positive" class="accent-primary"><span class="text-sm">Positive (+)</span></label>
+                  <label class="flex items-center gap-2"><input type="radio" name="diaphragma" value="Negative" class="accent-primary"><span class="text-sm">Negative (-)</span></label>
+                </div>
+              </div>
+              <div class="bg-white border border-gray-200 rounded-lg p-4">
+                <h5 class="font-bold text-gray-800 mb-3 flex items-center gap-2"><i class="fas fa-filter text-primary"></i> Kidney</h5>
+                <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
+                  <option value="Normal">Normal</option>
+                  <option value="Abnormal">Abnormal</option>
+                  <option value="NE">Not Examined</option>
+                </select>
+                <input type="text" placeholder="Details if abnormal..." class="w-full mt-2 p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
+              </div>
+              <div class="bg-white border border-gray-200 rounded-lg p-4">
+                <h5 class="font-bold text-gray-800 mb-3 flex items-center gap-2"><i class="fas fa-prescription-bottle text-primary"></i> Urinary Bladder</h5>
+                <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
+                  <option value="Normal">Normal</option>
+                  <option value="Abnormal">Abnormal</option>
+                  <option value="NE">Not Examined</option>
+                </select>
+              </div>
+            </div>
+
+            <h4 class="text-sm font-bold text-gray-800 mb-3 pb-2 border-b-2 border-primary flex items-center gap-2">
+              <i class="fas fa-stomach text-primary"></i> Digestive System (Ruminant Stomach)
+            </h4>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
+              <div>
+                <label class="block text-xs font-bold text-gray-600 uppercase mb-1 text-center">Rumen</label>
+                <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
+                  <option value="Normal">Normal</option>
+                  <option value="Abnormal">Abnormal</option>
+                  <option value="NE">Not Examined</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-600 uppercase mb-1 text-center">Reticulum</label>
+                <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
+                  <option value="Normal">Normal</option>
+                  <option value="Abnormal">Abnormal</option>
+                  <option value="NE">Not Examined</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-600 uppercase mb-1 text-center">Omasum</label>
+                <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
+                  <option value="Normal">Normal</option>
+                  <option value="Abnormal">Abnormal</option>
+                  <option value="NE">Not Examined</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-600 uppercase mb-1 text-center">Abomasum</label>
+                <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
+                  <option value="Normal">Normal</option>
+                  <option value="Abnormal">Abnormal</option>
+                  <option value="NE">Not Examined</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-600 uppercase mb-1 text-center">Small Intestine</label>
+                <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
+                  <option value="Normal">Normal</option>
+                  <option value="Abnormal">Abnormal</option>
+                  <option value="NE">Not Examined</option>
+                </select>
+              </div>
+            </div>
+
+            <h4 class="text-sm font-bold text-gray-800 mb-3 pb-2 border-b-2 border-primary flex items-center gap-2">
+              <i class="fas fa-diagnoses text-primary"></i> Final Diagnosis
+            </h4>
+            <div class="mb-6">
+              <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1">Confirmed Cause of Death *</label>
+              <select class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none mb-2">
+                <option value="">Select Final Cause</option>
+                <option value="Respiratory Disorder">Respiratory Disorder</option>
+                <option value="Digestive Disorder">Digestive Disorder</option>
+                <option value="Bloat">Bloat (Tympany)</option>
+                <option value="Acidosis">Acidosis</option>
+                <option value="Trauma">Trauma</option>
+                <option value="Metabolic Disease">Metabolic Disease</option>
+                <option value="Infectious Disease">Infectious Disease</option>
+                <option value="Parasitic Infestation">Parasitic Infestation</option>
+                <option value="Toxicity">Toxicity</option>
+                <option value="Unknown">Unknown - Further Tests Required</option>
+              </select>
+              <textarea class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none" rows="3" placeholder="Provide detailed diagnostic findings and final diagnosis..."></textarea>
+            </div>
+
+            <div class="flex gap-3 mt-6">
+              <button type="submit" class="px-6 py-2.5 bg-primary text-white rounded-lg font-bold hover:bg-primary-dark shadow-md transition-all text-sm">
+                <i class="fas fa-check-double mr-2"></i>Complete PM Examination
+              </button>
+              <button type="button" class="px-4 py-2.5 border border-gray-200 rounded-lg text-gray-600 font-medium hover:bg-gray-50 text-sm">
+                Save Draft
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   </main>
+
+  <script>
+    const mortalityRoles = {
+      'estate': { name: 'Estate Personal', users: ['Nur Aziza', 'Kamran', 'Mazahari', 'Farm Worker 1', 'Farm Worker 2'] },
+      'veterinary': { name: 'Veterinary Staff', users: ['Dr. Ahmad', 'Dr. Lim', 'Veterinary Assistant'] },
+      'supervisor': { name: 'Livestock Supervisor', users: ['Basir Bin Yusof', 'Mohd Noor', 'Razri', 'Mustakim'] },
+      'manager': { name: 'Livestock Manager/OIC', users: ['M Badrul', 'Alexius Ahat', 'Hasbude'] },
+      'security': { name: 'Gate House Security', users: ['Shahrinizam', 'Security Staff'] }
+    };
+
+    let currentUser = { role: '', name: '', roleLabel: '' };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initRoleSwitcher();
+      initForms();
+      initDatePickers();
+    });
+
+    function navigateTo(page) { window.location.href = page; }
+
+    function initRoleSwitcher() {
+      const roleSelector = document.getElementById('role-selector');
+      const userSelector = document.getElementById('user-selector');
+      roleSelector.addEventListener('change', () => {
+        const role = roleSelector.value;
+        userSelector.innerHTML = '<option value="">Select Name</option>';
+        if (role && mortalityRoles[role]) {
+          mortalityRoles[role].users.forEach(user => {
+            userSelector.innerHTML += `<option value="${user}">${user}</option>`;
+          });
+        }
+        updateUserInfo();
+      });
+      userSelector.addEventListener('change', updateUserInfo);
+    }
+
+    function updateUserInfo() {
+      const role = document.getElementById('role-selector').value;
+      const name = document.getElementById('user-selector').value;
+      const userInfo = document.getElementById('user-info');
+      if (role && name && mortalityRoles[role]) {
+        currentUser = { role, name, roleLabel: mortalityRoles[role].name };
+        userInfo.classList.remove('hidden');
+        userInfo.classList.add('flex');
+        document.getElementById('user-avatar').textContent = name.charAt(0);
+        document.getElementById('current-user-name').textContent = name;
+        document.getElementById('current-user-role').textContent = mortalityRoles[role].name;
+      } else {
+        userInfo.classList.add('hidden');
+        userInfo.classList.remove('flex');
+        currentUser = { role: '', name: '', roleLabel: '' };
+      }
+    }
+
+    function initForms() {
+      document.getElementById('pm-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        completePMExam();
+      });
+    }
+
+    function initDatePickers() {
+      const today = new Date().toISOString().split('T')[0];
+      const pmDateInput = document.getElementById('pm-date');
+      if (pmDateInput) {
+        pmDateInput.value = today;
+      }
+    }
+
+    function loadPMCase() {
+      const lmcSelect = document.getElementById('pm-lmc-select');
+      const selectedLMC = lmcSelect.value;
+      if (!selectedLMC) {
+        alert('Please select an LMC number first');
+        return;
+      }
+      document.getElementById('pm-form').classList.remove('hidden');
+      document.getElementById('pm-form').scrollIntoView({ behavior: 'smooth' });
+      alert(`Case ${selectedLMC} loaded. Please conduct the post-mortem examination.`);
+    }
+
+    function completePMExam() {
+      alert('Post-mortem examination completed successfully!');
+      window.location.href = 'pending-approvals.html';
+    }
+  </script>
 </body>
 </html>
