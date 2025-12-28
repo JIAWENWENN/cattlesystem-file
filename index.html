@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Delete Medication - Sawit Kinabalu</title>
+        <title>Manage Dynamic Fields - Sawit Kinabalu</title>
         
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -20,70 +20,218 @@
                     extend: {
                         fontFamily: {
                             sans: ['Figtree', 'sans-serif'],
+                        },
+                        colors: {
+                            brand: {
+                                DEFAULT: '#34554a',
+                                hover: '#2c463d',
+                            }
                         }
                     },
                 },
             }
         </script>
         <style>
+            .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+            .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+            .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+            
+            .cursor-grab { cursor: grab; }
+            .cursor-grabbing { cursor: grabbing; }
+            
             .modal-backdrop {
                 background-color: rgba(0, 0, 0, 0.5);
                 backdrop-filter: blur(4px);
             }
         </style>
     </head>
-    <body class="font-sans text-gray-900 antialiased bg-gray-200 min-h-screen flex items-center justify-center p-4">
+    <body class="font-sans text-gray-900 antialiased bg-gray-200 min-h-screen flex items-center justify-center p-4 text-sm">
 
-        <!-- Delete Confirmation Modal -->
-        <!-- Replicating the exact structure of the DeleteConfirmationModal component -->
-        <div id="deleteModal" class="relative z-50 w-full max-w-md mx-4 overflow-hidden bg-white rounded-xl shadow-2xl flex flex-col border border-gray-100 transition-all transform">
+        <!-- Column Management Modal (Exactly from Vue showColumnModal) -->
+        <div id="columnModal" class="relative z-50 w-full max-w-2xl mx-4 overflow-hidden bg-white rounded-xl shadow-2xl flex flex-col max-h-[90vh] border border-gray-100">
             
-            <!-- Close Button Top Right -->
-            <button class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
-
-            <!-- Modal Content -->
-            <div class="p-8 text-center">
-                
-                <!-- Warning Icon: matching bg-red-50 text-red-600 from medications dashboard -->
-                <div class="mx-auto w-20 h-20 bg-red-50 text-red-600 rounded-full flex items-center justify-center mb-6 shadow-inner">
-                    <i data-lucide="alert-triangle" class="w-10 h-10"></i>
-                </div>
-
-                <!-- Content Header: font-black and uppercase tracking-tight as per branding -->
-                <h3 class="text-xl font-black text-gray-900 uppercase tracking-tight mb-2">Delete Medication</h3>
-                <p class="text-sm text-gray-500 font-medium leading-relaxed px-2">
-                    Are you sure you want to delete <span class="font-bold text-gray-900">Penicillin G</span>? 
-                    <br>This action is permanent and cannot be undone.
-                </p>
+            <!-- Header -->
+            <div class="flex justify-between items-center p-6 border-b bg-gray-50">
+                <h3 class="text-lg font-bold text-gray-900">Manage Dynamic Fields</h3>
+                <button class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
             </div>
 
-            <!-- Modal Footer: Matching the gray-50 background and border-t from other system modals -->
-            <div class="grid grid-cols-2 gap-3 p-6 bg-gray-50 border-t border-gray-100 rounded-b-xl">
-                <!-- Cancel Button -->
-                <button 
-                    type="button" 
-                    class="px-6 py-3 border border-gray-300 bg-white rounded-lg text-sm font-bold text-gray-700 hover:bg-gray-100 transition-all shadow-sm active:scale-95"
-                >
-                    Cancel
-                </button>
+            <!-- Body -->
+            <div class="p-6 overflow-y-auto custom-scrollbar">
+                
+                <!-- Active Columns List -->
+                <h4 class="text-xs font-bold text-gray-500 uppercase mb-3 tracking-wider">Active Columns (Drag to Reorder)</h4>
+                <div id="columnsList" class="grid grid-cols-1 gap-2 mb-6">
+                    <!-- Standard Field Example -->
+                    <div class="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50 cursor-grab bg-white shadow-sm transition-colors group">
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="grip-vertical" class="w-4 h-4 text-gray-300 group-hover:text-gray-500"></i>
+                            <input type="checkbox" checked class="w-4 h-4 text-[#34554a] rounded focus:ring-[#34554a]">
+                            <span class="text-sm font-medium text-gray-700">Medication</span>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="enterEditMode('Medication', 'text')" class="text-blue-400 hover:text-blue-600 transition-colors">
+                                <i data-lucide="pencil" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
 
-                <!-- Delete Button: bg-red-600 with uppercase tracking-wider -->
-                <button 
-                    type="button" 
-                    class="px-6 py-3 bg-red-600 text-white rounded-lg text-sm font-black uppercase tracking-wider hover:bg-red-700 shadow-md transition-all transform active:scale-95 flex items-center justify-center gap-2"
-                    onclick="alert('Medication record has been successfully removed.')"
-                >
-                    <i data-lucide="trash-2" class="w-4 h-4"></i>
-                    Confirm Delete
+                    <!-- Custom Field Example -->
+                    <div class="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50 cursor-grab bg-white shadow-sm transition-colors group">
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="grip-vertical" class="w-4 h-4 text-gray-300 group-hover:text-gray-500"></i>
+                            <input type="checkbox" checked class="w-4 h-4 text-[#34554a] rounded focus:ring-[#34554a]">
+                            <span class="text-sm font-medium text-gray-700">Storage Location</span>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="enterEditMode('Storage Location', 'select', ['Warehouse A', 'Cold Room 1'])" class="text-blue-400 hover:text-blue-600 transition-colors">
+                                <i data-lucide="pencil" class="w-4 h-4"></i>
+                            </button>
+                            <button class="text-red-400 hover:text-red-600 transition-colors">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add/Edit Config Area (Matches Vue classes exactly) -->
+                <div id="configArea" class="bg-gray-50 p-5 rounded-xl border border-gray-200 transition-all">
+                    <div class="flex justify-between items-center mb-4">
+                        <h4 id="configTitle" class="text-xs font-bold uppercase tracking-wide text-gray-800">Add New Column</h4>
+                        <button id="cancelEdit" class="text-xs text-gray-500 underline hidden" onclick="exitEditMode()">Cancel</button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+                        <!-- Field Name -->
+                        <div class="md:col-span-4 space-y-1">
+                            <label class="text-xs font-semibold text-gray-600">Field Name</label>
+                            <input id="fieldName" type="text" class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-1 focus:ring-[#34554a] outline-none shadow-sm">
+                        </div>
+
+                        <!-- Type -->
+                        <div class="md:col-span-3 space-y-1">
+                            <label class="text-xs font-semibold text-gray-600">Type</label>
+                            <select id="fieldType" onchange="toggleOptionsArea()" class="w-full px-3 py-2 border rounded-lg text-sm bg-white outline-none shadow-sm">
+                                <option value="text">Text</option>
+                                <option value="number">Number</option>
+                                <option value="select">Dropdown</option>
+                                <option value="date">Date</option>
+                            </select>
+                        </div>
+
+                        <!-- Options (Conditional Area) -->
+                        <div id="optionsArea" class="md:col-span-5 space-y-1 hidden">
+                            <label class="text-xs font-semibold text-gray-600">Options</label>
+                            <div class="flex gap-2 mb-2">
+                                <input id="optionInput" type="text" placeholder="Add Option" class="w-full px-2 py-1 border rounded text-sm outline-none shadow-sm">
+                                <button onclick="addOption()" class="px-3 py-1 bg-gray-200 rounded text-xs hover:bg-gray-300 transition-colors font-bold">Add</button>
+                            </div>
+                            <div id="optionsList" class="flex flex-wrap gap-2">
+                                <!-- Options will appear here as badges -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Configuration Button (Matches Vue classes exactly) -->
+                    <button id="submitBtn" class="mt-5 w-full bg-[#34554a] text-white py-2 rounded-lg text-sm font-bold hover:bg-opacity-90 shadow-md transition-all">
+                        Add Dynamic Field
+                    </button>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="p-6 border-t bg-gray-50 flex justify-end">
+                <button class="px-6 py-2 bg-[#34554a] text-white rounded-lg font-bold shadow-md hover:bg-brand-hover transition-all">
+                    Save Changes
                 </button>
             </div>
         </div>
 
         <script>
-            // Initialize Icons
             lucide.createIcons();
+
+            let currentOptions = [];
+
+            function toggleOptionsArea() {
+                const type = document.getElementById('fieldType').value;
+                const area = document.getElementById('optionsArea');
+                if (type === 'select') {
+                    area.classList.remove('hidden');
+                } else {
+                    area.classList.add('hidden');
+                    currentOptions = [];
+                    renderOptions();
+                }
+            }
+
+            function addOption() {
+                const input = document.getElementById('optionInput');
+                if (input.value.trim()) {
+                    currentOptions.push(input.value.trim());
+                    input.value = '';
+                    renderOptions();
+                }
+            }
+
+            function removeOption(index) {
+                currentOptions.splice(index, 1);
+                renderOptions();
+            }
+
+            function renderOptions() {
+                const list = document.getElementById('optionsList');
+                list.innerHTML = '';
+                currentOptions.forEach((opt, idx) => {
+                    const span = document.createElement('span');
+                    span.className = 'px-2 py-1 bg-white border rounded text-xs flex items-center gap-1 shadow-sm font-medium';
+                    span.innerHTML = `${opt} <button onclick="removeOption(${idx})" class="text-red-500 font-bold ml-1 hover:bg-red-50 rounded px-1">×</button>`;
+                    list.appendChild(span);
+                });
+            }
+
+            function enterEditMode(name, type, options = []) {
+                const area = document.getElementById('configArea');
+                const title = document.getElementById('configTitle');
+                const cancelBtn = document.getElementById('cancelEdit');
+                const submitBtn = document.getElementById('submitBtn');
+                
+                area.classList.add('border-[#34554a]', 'ring-1', 'ring-[#34554a]');
+                title.innerText = 'Editing: ' + name;
+                title.classList.add('text-[#34554a]');
+                title.classList.remove('text-gray-800');
+                cancelBtn.classList.remove('hidden');
+                submitBtn.innerText = 'Update Configuration';
+
+                document.getElementById('fieldName').value = name;
+                document.getElementById('fieldType').value = type;
+                currentOptions = options;
+                
+                toggleOptionsArea();
+                renderOptions();
+            }
+
+            function exitEditMode() {
+                const area = document.getElementById('configArea');
+                const title = document.getElementById('configTitle');
+                const cancelBtn = document.getElementById('cancelEdit');
+                const submitBtn = document.getElementById('submitBtn');
+
+                area.classList.remove('border-[#34554a]', 'ring-1', 'ring-[#34554a]');
+                title.innerText = 'Add New Column';
+                title.classList.remove('text-[#34554a]');
+                title.classList.add('text-gray-800');
+                cancelBtn.classList.add('hidden');
+                submitBtn.innerText = 'Add Dynamic Field';
+
+                document.getElementById('fieldName').value = '';
+                document.getElementById('fieldType').value = 'text';
+                currentOptions = [];
+                toggleOptionsArea();
+                renderOptions();
+            }
         </script>
     </body>
 </html>
