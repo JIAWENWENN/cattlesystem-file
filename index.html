@@ -3,11 +3,11 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Access Control Matrix - Sawit Kinabalu</title>
+        <title>User Modal - Sawit Kinabalu</title>
         
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
 
         <!-- Tailwind CSS -->
         <script src="https://cdn.tailwindcss.com"></script>
@@ -23,15 +23,8 @@
                         },
                         colors: {
                             brand: {
-                                DEFAULT: '#34554a',
-                                hover: '#2c463d',
-                                light: '#E8F5F1',
-                            },
-                            sidebar: {
-                                bg: '#22262a',
-                                item: '#2a2e33',
-                                border: '#3a3f44',
-                                text: '#9ca3af'
+                                DEFAULT: '#2F4F4F',
+                                hover: '#1e3636',
                             }
                         }
                     },
@@ -39,253 +32,242 @@
             }
         </script>
         <style>
-            .sidebar-scroll::-webkit-scrollbar {
-                width: 5px;
+            /* Modal Transitions mimicking Vue's <Transition> */
+            .modal-backdrop {
+                background-color: rgba(0, 0, 0, 0.5);
+                backdrop-filter: blur(4px);
+                transition: opacity 0.2s ease;
             }
-            .sidebar-scroll::-webkit-scrollbar-track {
-                background: #22262a;
+            .modal-content {
+                transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             }
-            .sidebar-scroll::-webkit-scrollbar-thumb {
-                background-color: #4b5563;
-                border-radius: 10px;
-            }
-            .nav-submenu {
-                max-height: 0;
-                overflow: hidden;
-                transition: max-height 0.3s ease-out;
-            }
-            .nav-submenu.open {
-                max-height: 800px;
-            }
-            .rotate-180 {
-                transform: rotate(180deg);
-            }
-            .permission-select {
-                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-                background-repeat: no-repeat;
-                background-position: right 8px center;
-                appearance: none;
+            .hidden {
+                display: none !important;
             }
         </style>
     </head>
-    <body class="font-sans text-gray-900 antialiased bg-gray-50 flex">
+    <body class="font-sans text-gray-900 antialiased bg-gray-200 min-h-screen flex items-center justify-center">
 
-        <!-- Full Sidebar -->
-        <aside class="fixed inset-y-0 left-0 w-64 bg-sidebar-bg text-gray-400 flex flex-col font-medium z-30 shadow-xl h-screen overflow-hidden text-sm">
-            <div class="h-24 flex items-center justify-center py-2 bg-sidebar-bg flex-shrink-0 border-b border-gray-800">
-                <div class="flex flex-col items-center">
-                    <div class="bg-white/10 p-2 rounded-lg mb-1">
-                        <img src="https://placehold.co/150x60?text=LOGO" alt="Sawit Kinabalu Logo" class="h-10 w-auto" />
-                    </div>
-                    <span class="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Cattle System</span>
-                </div>
-            </div>
-
-            <div class="px-4 py-4 flex-shrink-0">
-                <div class="relative">
-                    <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-4 h-4"></i>
-                    <input type="text" placeholder="Search menu..." class="w-full pl-9 pr-4 py-2 rounded-md bg-sidebar-item border border-sidebar-border text-sm focus:outline-none text-gray-300 placeholder-gray-500 focus:border-gray-500 transition-colors" />
-                </div>
-            </div>
-
-            <nav class="flex-1 overflow-y-auto px-2 space-y-1 pb-8 sidebar-scroll">
-                <a href="#" class="flex items-center px-4 py-2.5 text-gray-300 hover:bg-sidebar-item hover:text-white rounded-md transition-colors">
-                    <i data-lucide="layout-dashboard" class="w-4 h-4 mr-3"></i> Dashboard
-                </a>
-                <div class="nav-item">
-                    <button onclick="toggleMenu('cattle')" class="w-full flex items-center justify-between px-4 py-2.5 text-gray-300 hover:bg-sidebar-item hover:text-white rounded-md transition-colors">
-                        <div class="flex items-center"><i data-lucide="beef" class="w-4 h-4 mr-3"></i>Cattle</div>
-                        <i data-lucide="chevron-down" id="icon-cattle" class="w-3.5 h-3.5 transition-transform duration-200"></i>
-                    </button>
-                    <div id="menu-cattle" class="nav-submenu pl-11 space-y-1 mt-1">
-                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Cattle List</a>
-                    </div>
-                </div>
-                <!-- Inventory -->
-                <div class="nav-item">
-                    <button onclick="toggleMenu('inventory')" class="w-full flex items-center justify-between px-4 py-2.5 text-gray-300 hover:bg-sidebar-item hover:text-white rounded-md transition-colors">
-                        <div class="flex items-center"><i data-lucide="package" class="w-4 h-4 mr-3"></i>Inventory</div>
-                        <i data-lucide="chevron-down" id="icon-inventory" class="w-3.5 h-3.5 transition-transform duration-200"></i>
-                    </button>
-                    <div id="menu-inventory" class="nav-submenu pl-11 space-y-1 mt-1">
-                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Feed Stock</a>
-                    </div>
-                </div>
-                <!-- Settings -->
-                <div class="nav-item">
-                    <button onclick="toggleMenu('settings')" class="w-full flex items-center justify-between px-4 py-2.5 text-white bg-sidebar-item rounded-md shadow-sm">
-                        <div class="flex items-center"><i data-lucide="settings" class="w-4 h-4 mr-3 text-white"></i>Settings</div>
-                        <i data-lucide="chevron-down" id="icon-settings" cAlass="w-3.5 h-3.5 transition-transform duration-200 rotate-180"></i>
-                    </button>
-                    <div id="menu-settings" class="nav-submenu open pl-11 space-y-1 mt-1">
-                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">User Account</a>
-                        <a href="#" class="block py-2 text-white font-bold text-xs">Access Control Matrix</a>
-                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs">Audit Logs</a>
-                    </div>
-                </div>
-            </nav>
-        </aside>
-
-        <!-- Main Content Area -->
-        <main class="ml-64 flex-1 p-8 min-h-screen">
+        <!-- Modal Backdrop -->
+        <div id="userModal" class="fixed inset-0 modal-backdrop flex items-center justify-center z-50 p-4">
             
-            <!-- Breadcrumb -->
-            <nav class="flex text-sm text-gray-500 mb-2" aria-label="Breadcrumb">
-                <span>Settings</span> <span class="mx-2">/</span> <span class="text-gray-900 font-medium">Access Control Matrix</span>
-            </nav>
+            <!-- Modal Container -->
+            <div class="bg-white rounded-xl shadow-2xl w-full max-w-md modal-content overflow-hidden">
 
-            <!-- Page Header -->
-            <div class="mb-8">
-                <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Access Control Matrix</h1>
-                <p class="text-sm text-gray-500 mt-1">Manage access levels for all 18 system modules and user roles.</p>
-            </div>
+                <!-- Header -->
+                <div class="flex justify-between items-center p-6 border-b border-gray-200">
+                    <h3 id="modalTitle" class="text-lg font-semibold text-gray-900">Add New User</h3>
+                    <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-1 rounded transition-colors">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
 
-            <!-- Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center gap-5 hover:shadow-md transition-shadow">
-                    <div class="w-14 h-14 rounded-full flex items-center justify-center bg-blue-50 text-blue-600">
-                        <i data-lucide="layers" class="w-7 h-7"></i>
-                    </div>
-                    <div>
-                        <p class="text-sm text-gray-500 font-medium mb-1">Total Modules</p>
-                        <p class="text-3xl font-extrabold text-gray-900">18</p>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center gap-5 hover:shadow-md transition-shadow">
-                    <div class="w-14 h-14 rounded-full flex items-center justify-center bg-green-50 text-green-600">
-                        <i data-lucide="users" class="w-7 h-7"></i>
-                    </div>
-                    <div>
-                        <p class="text-sm text-gray-500 font-medium mb-1">Total Users</p>
-                        <p class="text-3xl font-extrabold text-gray-900">3</p>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center gap-5 hover:shadow-md transition-shadow">
-                    <div class="w-14 h-14 rounded-full flex items-center justify-center bg-purple-50 text-purple-600">
-                        <i data-lucide="shield" class="w-7 h-7"></i>
-                    </div>
-                    <div>
-                        <p class="text-sm text-gray-500 font-medium mb-1">Matrix Entries</p>
-                        <p class="text-3xl font-extrabold text-gray-900">54</p>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center gap-5 hover:shadow-md transition-shadow">
-                    <div class="w-14 h-14 rounded-full flex items-center justify-center bg-amber-50 text-amber-600">
-                        <i data-lucide="lock" class="w-7 h-7"></i>
-                    </div>
-                    <div>
-                        <p class="text-sm text-gray-500 font-medium mb-1">Access Levels</p>
-                        <p class="text-3xl font-extrabold text-gray-900">6</p>
-                    </div>
-                </div>
-            </div>
+                <!-- Form Body -->
+                <form onsubmit="handleSubmit(event)">
+                    <div class="p-6 space-y-5">
 
-            <!-- Legend -->
-            <div class="flex gap-3 flex-wrap mb-6 bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold border bg-red-50 text-red-800 border-red-200">No Access</span>
-                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold border bg-gray-100 text-gray-800 border-gray-300">View Only</span>
-                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold border bg-teal-50 text-teal-800 border-teal-200">View & Create</span>
-                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold border bg-blue-50 text-blue-800 border-blue-200">View & Edit</span>
-                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold border bg-green-50 text-green-800 border-green-200">Full Access</span>
-                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold border bg-orange-50 text-orange-800 border-orange-200">Approve</span>
-            </div>
+                        <!-- Full Name -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-900 mb-2">Full Name</label>
+                            <input
+                                type="text"
+                                placeholder="Enter full name"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand focus:border-transparent text-sm outline-none transition-all"
+                                required
+                            />
+                        </div>
 
-            <!-- Matrix Table -->
-            <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left">
-                        <thead>
-                            <tr class="bg-brand text-white">
-                                <th class="py-4 px-6 font-semibold text-sm sticky left-0 bg-brand z-10">Module</th>
-                                <th class="py-4 px-6 font-semibold text-sm min-w-[180px] text-center border-l border-brand-hover">John Admin<br><span class="text-[10px] opacity-70 uppercase">Admin</span></th>
-                                <th class="py-4 px-6 font-semibold text-sm min-w-[180px] text-center border-l border-brand-hover">Sarah Manager<br><span class="text-[10px] opacity-70 uppercase">Manager</span></th>
-                                <th class="py-4 px-6 font-semibold text-sm min-w-[180px] text-center border-l border-brand-hover">Supervisor User<br><span class="text-[10px] opacity-70 uppercase">Supervisor</span></th>
-                            </tr>
-                        </thead>
-                        <tbody id="matrix-body" class="text-gray-700 text-sm">
-                            <!-- JS will populate all 18 modules here for cleaner code -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                        <!-- Email Address -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-900 mb-2">Email Address</label>
+                            <input
+                                type="email"
+                                placeholder="name@company.com"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand focus:border-transparent text-sm outline-none transition-all"
+                                required
+                            />
+                        </div>
 
-            <div class="mt-6 flex justify-end">
-                <button class="px-6 py-2.5 bg-brand text-white rounded-lg hover:bg-brand-hover font-medium text-sm shadow-sm transition-colors">
-                    Save Matrix Permissions
-                </button>
+                        <!-- Password -->
+                        <div>
+                            <label id="passwordLabel" class="block text-sm font-medium text-gray-900 mb-2">Initial Password</label>
+                            <input
+                                type="password"
+                                placeholder="Create a strong password"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand focus:border-transparent text-sm outline-none transition-all"
+                                required
+                                minlength="8"
+                            />
+                            <p id="passwordHint" class="text-xs text-gray-500 mt-1">Must be at least 8 characters long</p>
+                        </div>
+
+                        <!-- Role & Status -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- Role Selection -->
+                            <div>
+                                <div class="flex justify-between items-baseline mb-2">
+                                    <label class="block text-sm font-medium text-gray-900">Role</label>
+
+                                    <!-- Role Controls -->
+                                    <div id="roleControls" class="flex gap-2">
+                                        <button type="button" onclick="toggleCustomRole(true)" class="flex items-center gap-1 text-brand hover:text-brand-hover text-xs font-semibold transition-colors">
+                                            <i data-lucide="plus" class="w-3 h-3"></i>
+                                            New
+                                        </button>
+                                        <button type="button" onclick="toggleCustomRole(true, true)" class="flex items-center gap-1 text-brand hover:text-brand-hover text-xs font-semibold transition-colors">
+                                            <i data-lucide="edit-3" class="w-3 h-3"></i>
+                                            Edit
+                                        </button>
+                                    </div>
+
+                                    <button id="cancelCustomBtn" type="button" onclick="toggleCustomRole(false)" class="text-red-600 hover:text-red-700 text-xs font-semibold transition-colors hidden">
+                                        Cancel
+                                    </button>
+                                </div>
+
+                                <!-- Standard Role Select -->
+                                <select id="roleSelect" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand focus:border-transparent text-sm outline-none">
+                                    <option value="Admin">Admin</option>
+                                    <option value="Manager">Manager</option>
+                                    <option value="Supervisor">Supervisor</option>
+                                    <option value="Staff">Staff</option>
+                                </select>
+
+                                <!-- Custom Role Input Group -->
+                                <div id="customRoleGroup" class="space-y-2 hidden">
+                                    <input
+                                        id="customRoleInput"
+                                        type="text"
+                                        placeholder="Enter role name"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand focus:border-transparent text-sm outline-none"
+                                    />
+                                    <button
+                                        type="button"
+                                        onclick="applyCustomRole()"
+                                        class="w-full px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
+                                    >
+                                        <span id="customRoleBtnText">Add Role</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Status -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-900 mb-2">Status</label>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand focus:border-transparent text-sm outline-none">
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <div class="flex justify-end gap-3 p-6 bg-gray-50 border-t border-gray-200 rounded-b-xl">
+                        <button type="button" onclick="closeModal()" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium">
+                            Cancel
+                        </button>
+                        <button type="submit" id="submitBtn" class="px-4 py-2 bg-brand text-white rounded-lg hover:bg-brand-hover transition-colors text-sm font-medium shadow-sm transform active:scale-95">
+                            Add User
+                        </button>
+                    </div>
+                </form>
             </div>
-        </main>
+        </div>
 
         <script>
+            // Initialize Icons
             lucide.createIcons();
 
-            const modules = [
-                'Dashboard', 'Cattle', 'Feeding', 'Health', 'Breeding', 
-                'Calving', 'Mortality', 'Groups', 'Pasture', 'Sales', 
-                'Transfer', 'Customer', 'Driver', 'Inventory', 'Analytics', 
-                'Workers', 'Task', 'Settings'
-            ];
-
-            const tbody = document.getElementById('matrix-body');
-            
-            modules.forEach(name => {
-                const tr = document.createElement('tr');
-                tr.className = 'border-b border-gray-100 hover:bg-gray-50 transition-colors';
-                
-                // Permission values based on role logic for simulation
-                const adminVal = 'full';
-                const managerVal = (name === 'Settings') ? 'view' : 'edit';
-                const supervisorVal = 'view';
-
-                tr.innerHTML = `
-                    <td class="py-4 px-6 font-medium text-gray-900 sticky left-0 bg-white">${name}</td>
-                    <td class="py-4 px-6">${getSelectHTML(adminVal)}</td>
-                    <td class="py-4 px-6">${getSelectHTML(managerVal)}</td>
-                    <td class="py-4 px-6">${getSelectHTML(supervisorVal)}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-
-            function getSelectHTML(val) {
-                let colorClass = '';
-                if (val === 'full') colorClass = 'bg-green-50 text-green-800 border-green-200';
-                if (val === 'edit') colorClass = 'bg-blue-50 text-blue-800 border-blue-200';
-                if (val === 'view') colorClass = 'bg-gray-100 text-gray-800 border-gray-300';
-                
-                return `
-                    <select class="w-full px-3 py-2 rounded-lg text-xs font-semibold border cursor-pointer focus:ring-2 focus:ring-brand permission-select ${colorClass}">
-                        <option value="no-access">No Access</option>
-                        <option value="view" ${val==='view'?'selected':''}>View Only</option>
-                        <option value="create">View & Create</option>
-                        <option value="edit" ${val==='edit'?'selected':''}>View & Edit</option>
-                        <option value="full" ${val==='full'?'selected':''}>Full Access</option>
-                        <option value="approve">Approve</option>
-                    </select>
-                `;
+            // Modal Logic
+            function closeModal() {
+                const modal = document.getElementById('userModal');
+                modal.style.opacity = '0';
+                setTimeout(() => {
+                    // In a real app, this would remove the element or hide it
+                    alert("Modal closed. Refresh to see it again.");
+                }, 200);
             }
 
-            function toggleMenu(menuId) {
-                const submenu = document.getElementById('menu-' + menuId);
-                const icon = document.getElementById('icon-' + menuId);
-                if (submenu.classList.contains('open')) {
-                    submenu.classList.remove('open');
-                    icon.classList.remove('rotate-180');
+            // Custom Role Logic
+            function toggleCustomRole(show, isEdit = false) {
+                const controls = document.getElementById('roleControls');
+                const cancelBtn = document.getElementById('cancelCustomBtn');
+                const roleSelect = document.getElementById('roleSelect');
+                const customGroup = document.getElementById('customRoleGroup');
+                const customInput = document.getElementById('customRoleInput');
+                const customBtnText = document.getElementById('customRoleBtnText');
+
+                if (show) {
+                    controls.classList.add('hidden');
+                    cancelBtn.classList.remove('hidden');
+                    roleSelect.classList.add('hidden');
+                    customGroup.classList.remove('hidden');
+                    
+                    if (isEdit) {
+                        customInput.value = roleSelect.value;
+                        customBtnText.innerText = "Update Role";
+                    } else {
+                        customInput.value = "";
+                        customBtnText.innerText = "Add Role";
+                    }
+                    customInput.focus();
                 } else {
-                    submenu.classList.add('open');
-                    icon.classList.add('rotate-180');
+                    controls.classList.remove('hidden');
+                    cancelBtn.classList.add('hidden');
+                    roleSelect.classList.remove('hidden');
+                    customGroup.classList.add('hidden');
                 }
             }
 
-            tbody.addEventListener('change', (e) => {
-                if (e.target.classList.contains('permission-select')) {
-                    const value = e.target.value;
-                    e.target.className = 'w-full px-3 py-2 rounded-lg text-xs font-semibold border cursor-pointer focus:ring-2 focus:ring-brand permission-select ';
-                    if (value === 'full') e.target.classList.add('bg-green-50', 'text-green-800', 'border-green-200');
-                    if (value === 'edit') e.target.classList.add('bg-blue-50', 'text-blue-800', 'border-blue-200');
-                    if (value === 'create') e.target.classList.add('bg-teal-50', 'text-teal-800', 'border-teal-200');
-                    if (value === 'view') e.target.classList.add('bg-gray-100', 'text-gray-800', 'border-gray-300');
-                    if (value === 'no-access') e.target.classList.add('bg-red-50', 'text-red-800', 'border-red-200');
-                    if (value === 'approve') e.target.classList.add('bg-orange-50', 'text-orange-800', 'border-orange-200');
+            function applyCustomRole() {
+                const input = document.getElementById('customRoleInput');
+                const roleSelect = document.getElementById('roleSelect');
+                
+                if (input.value.trim() === "") {
+                    alert("Please enter a role name");
+                    return;
+                }
+
+                // Add to select if not exists
+                const val = input.value.trim();
+                let exists = false;
+                for (let i = 0; i < roleSelect.options.length; i++) {
+                    if (roleSelect.options[i].value === val) exists = true;
+                }
+
+                if (!exists) {
+                    const option = document.createElement("option");
+                    option.text = val;
+                    option.value = val;
+                    roleSelect.add(option);
+                }
+
+                roleSelect.value = val;
+                toggleCustomRole(false);
+            }
+
+            function handleSubmit(e) {
+                e.preventDefault();
+                const btn = document.getElementById('submitBtn');
+                btn.disabled = true;
+                btn.innerText = "Processing...";
+                
+                setTimeout(() => {
+                    alert("Form Submitted Successfully!");
+                    btn.disabled = false;
+                    btn.innerText = "Add User";
+                }, 1000);
+            }
+
+            // Demo: Toggle Edit Mode (Press 'e' key to simulate)
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'e') {
+                    document.getElementById('modalTitle').innerText = "Edit User";
+                    document.getElementById('passwordLabel').innerText = "New Password (optional)";
+                    document.getElementById('passwordHint').innerText = "Leave blank to keep current password";
+                    document.getElementById('submitBtn').innerText = "Update User";
                 }
             });
         </script>
