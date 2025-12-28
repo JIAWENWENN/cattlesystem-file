@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BovineFlow - Mortality Analytics</title>
+  <title>BovineFlow - View Case Detail</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -25,318 +25,335 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
-    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
-    .sidebar { width: 280px; }
-    @media (max-width: 1024px) {
-      .sidebar { width: 80px; }
-      .sidebar .nav-text, .sidebar .sidebar-title, .sidebar .sidebar-subtitle, .sidebar .nav-section-title { display: none; }
-      .sidebar .nav-item { justify-content: center; padding: 16px; }
-      .main-content { margin-left: 80px; }
-    }
+    .modal-overlay { background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); }
+    .workflow-step { transition: all 0.3s ease; }
+    .workflow-step.completed { background-color: #34554a; color: white; }
+    .workflow-step.active { background-color: white; border: 2px solid #34554a; color: #34554a; }
+    .workflow-step.pending { background-color: #e5e7eb; color: #9ca3af; }
   </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
-  <nav class="sidebar fixed left-0 top-0 h-screen bg-gradient-to-b from-primary-dark to-primary text-white z-50 shadow-xl overflow-y-auto">
-    <div class="p-6 border-b border-white/10 flex items-center gap-3">
-      <div class="w-12 h-12 bg-white/15 rounded-xl flex items-center justify-center text-2xl"><i class="fas fa-skull-crossbones"></i></div>
-      <div>
-        <div class="text-xl font-bold tracking-tight">BovineFlow</div>
-        <div class="text-xs opacity-70 uppercase tracking-widest">Cattle Management</div>
+  <!-- Modal Overlay -->
+  <div class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4">
+    <!-- Modal Container -->
+    <div class="bg-white rounded-xl shadow-2xl w-full max-w-6xl max-h-[90vh] overflow-hidden border border-gray-200">
+      <!-- Modal Header -->
+      <div class="flex justify-between items-center p-6 border-b border-gray-100 bg-gradient-to-r from-primary to-primary-dark">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+            <i class="fas fa-file-medical-alt text-2xl text-white"></i>
+          </div>
+          <div>
+            <h2 class="text-xl font-bold text-white">Mortality Case Details</h2>
+            <p class="text-white/70 text-sm">LMC-2025-001 - Complete Case Overview</p>
+          </div>
+        </div>
+        <a href="pending-approvals.html" class="text-white/70 hover:text-white transition-colors w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/10">
+          <i class="fas fa-times text-xl"></i>
+        </a>
       </div>
-    </div>
-    <div class="py-5">
-      <div class="px-5 pb-2 text-xs uppercase tracking-widest opacity-50 font-semibold">Main Menu</div>
-      <a href="dashboard.html" class="flex items-center gap-3 px-5 py-3.5 border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium">
-        <i class="fas fa-th-large w-5 text-lg"></i><span class="nav-text">Dashboard</span>
-      </a>
-      <a href="create-mortality.html" class="flex items-center gap-3 px-5 py-3.5 border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium">
-        <i class="fas fa-plus-circle w-5 text-lg"></i><span class="nav-text">Create Mortality</span>
-      </a>
-      <a href="pm-examination.html" class="flex items-center gap-3 px-5 py-3.5 border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium">
-        <i class="fas fa-procedures w-5 text-lg"></i><span class="nav-text">Post-Mortem Exam</span>
-      </a>
-    </div>
-    <div class="py-2">
-      <div class="px-5 pb-2 text-xs uppercase tracking-widest opacity-50 font-semibold">Approvals</div>
-      <a href="pending-approvals.html" class="flex items-center gap-3 px-5 py-3.5 border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium">
-        <i class="fas fa-clock w-5 text-lg"></i><span class="nav-text">Pending</span>
-        <span class="ml-auto bg-orange-500 text-white px-2.5 py-0.5 rounded-full text-xs font-bold">2</span>
-      </a>
-      <a href="completed-cases.html" class="flex items-center gap-3 px-5 py-3.5 border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium">
-        <i class="fas fa-check-circle w-5 text-lg"></i><span class="nav-text">Completed</span>
-      </a>
-      <a href="history.html" class="flex items-center gap-3 px-5 py-3.5 border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium">
-        <i class="fas fa-history w-5 text-lg"></i><span class="nav-text">History</span>
-      </a>
-    </div>
-    <div class="py-2">
-      <div class="px-5 pb-2 text-xs uppercase tracking-widest opacity-50 font-semibold">Reports</div>
-      <div class="flex items-center gap-3 px-5 py-3.5 border-l-[3px] border-l-white bg-white/15 text-white font-medium">
-        <i class="fas fa-chart-bar w-5 text-lg"></i><span class="nav-text">Analytics</span>
-      </div>
-    </div>
-  </nav>
 
-  <main class="main-content ml-[280px] min-h-screen">
-    <header class="bg-white px-8 py-4 flex justify-between items-center shadow-sm sticky top-0 z-40 border-b border-gray-100">
-      <div>
-        <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Mortality Analytics</h1>
-        <p class="text-sm text-gray-500 mt-0.5">Statistical analysis and reports on mortality cases.</p>
-      </div>
-      <div class="flex items-center gap-4">
-        <div class="flex items-center gap-3 bg-gray-100 px-4 py-2 rounded-lg">
-          <label class="text-xs font-bold text-gray-500 uppercase tracking-wide"><i class="fas fa-user-tag mr-1"></i>Role:</label>
-          <select id="role-selector" class="px-3 py-1.5 border border-gray-200 rounded-lg bg-white text-sm font-medium text-gray-700 outline-none focus:ring-2 focus:ring-primary min-w-[140px]">
-            <option value="">Select Role</option>
-            <option value="estate">Estate Personal</option>
-            <option value="veterinary">Veterinary Staff</option>
-            <option value="supervisor">Livestock Supervisor</option>
-            <option value="manager">Livestock Manager/OIC</option>
-            <option value="security">Security</option>
-          </select>
-          <select id="user-selector" class="px-3 py-1.5 border border-gray-200 rounded-lg bg-white text-sm font-medium text-gray-700 outline-none focus:ring-2 focus:ring-primary min-w-[160px]">
-            <option value="">Select Name</option>
-          </select>
-        </div>
-        <div id="user-info" class="hidden items-center gap-3 bg-primary text-white px-4 py-2 rounded-lg">
-          <div id="user-avatar" class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center font-bold">-</div>
-          <div>
-            <div id="current-user-name" class="font-semibold text-sm">-</div>
-            <div id="current-user-role" class="text-xs opacity-85">-</div>
+      <!-- Modal Content -->
+      <div class="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
+        <!-- Workflow Stepper -->
+        <div class="bg-gray-50 rounded-xl p-4 mb-6">
+          <h4 class="text-sm font-semibold text-gray-600 mb-3 flex items-center gap-2">
+            <i class="fas fa-tasks text-primary"></i> Workflow Progress
+          </h4>
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <div class="flex items-center gap-2">
+              <div class="workflow-step completed w-10 h-10 rounded-full flex items-center justify-center text-sm">
+                <i class="fas fa-check"></i>
+              </div>
+              <span class="text-xs font-medium">Issued</span>
+            </div>
+            <div class="flex-1 h-1 bg-primary rounded"></div>
+            <div class="flex items-center gap-2">
+              <div class="workflow-step active w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold">
+                <i class="fas fa-spinner"></i>
+              </div>
+              <span class="text-xs font-medium">Verified</span>
+            </div>
+            <div class="flex-1 h-1 bg-gray-200 rounded"></div>
+            <div class="flex items-center gap-2">
+              <div class="workflow-step pending w-10 h-10 rounded-full flex items-center justify-center text-sm">
+                <i class="fas fa-clipboard-check"></i>
+              </div>
+              <span class="text-xs font-medium">Checked</span>
+            </div>
+            <div class="flex-1 h-1 bg-gray-200 rounded"></div>
+            <div class="flex items-center gap-2">
+              <div class="workflow-step pending w-10 h-10 rounded-full flex items-center justify-center text-sm">
+                <i class="fas fa-user-shield"></i>
+              </div>
+              <span class="text-xs font-medium">Witness</span>
+            </div>
+            <div class="flex-1 h-1 bg-gray-200 rounded"></div>
+            <div class="flex items-center gap-2">
+              <div class="workflow-step pending w-10 h-10 rounded-full flex items-center justify-center text-sm">
+                <i class="fas fa-stamp"></i>
+              </div>
+              <span class="text-xs font-medium">Approved</span>
+            </div>
           </div>
         </div>
-        <button class="relative w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center text-gray-500 hover:bg-gray-200 transition-colors">
-          <i class="fas fa-bell text-lg"></i>
-          <span class="absolute -top-0.5 -right-0.5 w-5 h-5 bg-red-500 text-white rounded-full text-[10px] font-bold flex items-center justify-center">2</span>
-        </button>
-      </div>
-    </header>
 
-    <div class="p-8">
-      <div class="mb-8">
-        <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Mortality Analytics</h1>
-        <p class="text-sm text-gray-500 mt-1">Statistical analysis and reports on mortality cases.</p>
-      </div>
-      
-      <div class="bg-white rounded-xl border border-gray-200 p-4 mb-6">
-        <div class="flex flex-wrap items-end gap-4">
-          <div class="flex items-center gap-2">
-            <i class="fas fa-calendar-alt text-primary"></i>
-            <span class="text-sm font-medium text-gray-700">Analytics Period:</span>
+        <!-- Case Overview Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                <i class="fas fa-tag text-blue-600"></i>
+              </div>
+              <div>
+                <p class="text-xs text-gray-500 uppercase">Tag Number</p>
+                <p class="font-bold text-gray-900">SK 24 2549</p>
+              </div>
+            </div>
           </div>
-          <div>
-            <label class="block text-xs text-gray-500 mb-1">From Date</label>
-            <input type="date" id="analytics-date-from" class="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
+          <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                <i class="fas fa-layer-group text-green-600"></i>
+              </div>
+              <div>
+                <p class="text-xs text-gray-500 uppercase">Category</p>
+                <p class="font-bold text-gray-900">BC</p>
+              </div>
+            </div>
           </div>
-          <div>
-            <label class="block text-xs text-gray-500 mb-1">To Date</label>
-            <input type="date" id="analytics-date-to" class="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
+          <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
+                <i class="fas fa-calendar text-amber-600"></i>
+              </div>
+              <div>
+                <p class="text-xs text-gray-500 uppercase">Date Reported</p>
+                <p class="font-bold text-gray-900">2025-01-20</p>
+              </div>
+            </div>
           </div>
-          <button onclick="filterAnalyticsByDate()" class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary-dark transition-colors">
-            <i class="fas fa-chart-line mr-2"></i>Update Analytics
-          </button>
-          <button onclick="clearAnalyticsDateFilter()" class="px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors">
-            <i class="fas fa-sync-alt mr-2"></i>Reset
-          </button>
-        </div>
-      </div>
-      
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-          <h3 class="text-lg font-bold text-gray-900 mb-4">Total Cases (YTD)</h3>
-          <p class="text-4xl font-black text-primary">47</p>
-          <p class="text-sm text-gray-500 mt-2">vs. 52 same period last year</p>
-        </div>
-        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-          <h3 class="text-lg font-bold text-gray-900 mb-4">Top Cause</h3>
-          <p class="text-4xl font-black text-gray-900">Respiratory</p>
-          <p class="text-sm text-gray-500 mt-2">42% of all cases</p>
-        </div>
-        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-          <h3 class="text-lg font-bold text-gray-900 mb-4">Average PM Turnaround</h3>
-          <p class="text-4xl font-black text-gray-900">2.3 days</p>
-          <p class="text-sm text-gray-500 mt-2">From report to completion</p>
-        </div>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-          <h3 class="text-lg font-bold text-gray-900 mb-4">Monthly Distribution</h3>
-          <div class="space-y-3">
-            <div class="flex items-center gap-4">
-              <span class="w-16 text-sm text-gray-600">Jan 2025</span>
-              <div class="flex-1 h-8 bg-gray-100 rounded overflow-hidden">
-                <div class="h-full bg-primary rounded" style="width: 75%"></div>
+          <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                <i class="fas fa-map-marker-alt text-purple-600"></i>
               </div>
-              <span class="w-8 text-sm font-semibold">8</span>
-            </div>
-            <div class="flex items-center gap-4">
-              <span class="w-16 text-sm text-gray-600">Feb 2025</span>
-              <div class="flex-1 h-8 bg-gray-100 rounded overflow-hidden">
-                <div class="h-full bg-primary rounded" style="width: 50%"></div>
+              <div>
+                <p class="text-xs text-gray-500 uppercase">Location</p>
+                <p class="font-bold text-gray-900">SG FALDA</p>
               </div>
-              <span class="w-8 text-sm font-semibold">5</span>
-            </div>
-            <div class="flex items-center gap-4">
-              <span class="w-16 text-sm text-gray-600">Mar 2025</span>
-              <div class="flex-1 h-8 bg-gray-100 rounded overflow-hidden">
-                <div class="h-full bg-primary rounded" style="width: 60%"></div>
-              </div>
-              <span class="w-8 text-sm font-semibold">6</span>
-            </div>
-            <div class="flex items-center gap-4">
-              <span class="w-16 text-sm text-gray-600">Apr 2025</span>
-              <div class="flex-1 h-8 bg-gray-100 rounded overflow-hidden">
-                <div class="h-full bg-primary rounded" style="width: 90%"></div>
-              </div>
-              <span class="w-8 text-sm font-semibold">9</span>
-            </div>
-            <div class="flex items-center gap-4">
-              <span class="w-16 text-sm text-gray-600">May 2025</span>
-              <div class="flex-1 h-8 bg-gray-100 rounded overflow-hidden">
-                <div class="h-full bg-primary rounded" style="width: 40%"></div>
-              </div>
-              <span class="w-8 text-sm font-semibold">4</span>
-            </div>
-            <div class="flex items-center gap-4">
-              <span class="w-16 text-sm text-gray-600">Jun 2025</span>
-              <div class="flex-1 h-8 bg-gray-100 rounded overflow-hidden">
-                <div class="h-full bg-primary rounded" style="width: 85%"></div>
-              </div>
-              <span class="w-8 text-sm font-semibold">9</span>
             </div>
           </div>
         </div>
-        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-          <h3 class="text-lg font-bold text-gray-900 mb-4">Category Breakdown</h3>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <!-- Left Column -->
           <div class="space-y-4">
-            <div>
-              <div class="flex justify-between text-sm mb-1">
-                <span class="text-gray-600">BC (Breed Cattle)</span>
-                <span class="font-semibold">22 cases (47%)</span>
-              </div>
-              <div class="h-4 bg-gray-100 rounded-full overflow-hidden">
-                <div class="h-full bg-primary rounded-full" style="width: 47%"></div>
+            <!-- Basic Information -->
+            <div class="bg-white rounded-xl border border-gray-200 p-5">
+              <h4 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+                <i class="fas fa-info-circle text-primary"></i> Basic Information
+              </h4>
+              <div class="space-y-3">
+                <div class="flex justify-between py-2 border-b border-gray-100">
+                  <span class="text-sm text-gray-500">LMC Number</span>
+                  <span class="text-sm font-semibold text-gray-900">LMC-2025-001</span>
+                </div>
+                <div class="flex justify-between py-2 border-b border-gray-100">
+                  <span class="text-sm text-gray-500">Date & Time</span>
+                  <span class="text-sm font-semibold text-gray-900">2025-01-20 14:30</span>
+                </div>
+                <div class="flex justify-between py-2 border-b border-gray-100">
+                  <span class="text-sm text-gray-500">Tag Number</span>
+                  <span class="text-sm font-semibold text-gray-900">SK 24 2549</span>
+                </div>
+                <div class="flex justify-between py-2 border-b border-gray-100">
+                  <span class="text-sm text-gray-500">Category</span>
+                  <span class="text-sm font-semibold text-gray-900">BC (Breed Cattle)</span>
+                </div>
+                <div class="flex justify-between py-2 border-b border-gray-100">
+                  <span class="text-sm text-gray-500">Location</span>
+                  <span class="text-sm font-semibold text-gray-900">SG FALDA</span>
+                </div>
+                <div class="flex justify-between py-2 border-b border-gray-100">
+                  <span class="text-sm text-gray-500">Herd</span>
+                  <span class="text-sm font-semibold text-gray-900">Herd A</span>
+                </div>
+                <div class="flex justify-between py-2">
+                  <span class="text-sm text-gray-500">Reported By</span>
+                  <span class="text-sm font-semibold text-gray-900">Nur Aziza</span>
+                </div>
               </div>
             </div>
-            <div>
-              <div class="flex justify-between text-sm mb-1">
-                <span class="text-gray-600">WB (Wagyu Beef)</span>
-                <span class="font-semibold">15 cases (32%)</span>
-              </div>
-              <div class="h-4 bg-gray-100 rounded-full overflow-hidden">
-                <div class="h-full bg-primary/70 rounded-full" style="width: 32%"></div>
+
+            <!-- Clinical Information -->
+            <div class="bg-white rounded-xl border border-gray-200 p-5">
+              <h4 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+                <i class="fas fa-stethoscope text-primary"></i> Clinical Information
+              </h4>
+              <div class="space-y-3">
+                <div>
+                  <span class="text-xs text-gray-500 uppercase tracking-wide">Clinical Signs Observed</span>
+                  <p class="text-sm text-gray-700 mt-1">Labored breathing, nasal discharge, coughing observed for 2 days</p>
+                </div>
+                <div>
+                  <span class="text-xs text-gray-500 uppercase tracking-wide">Cause of Death</span>
+                  <p class="text-sm font-medium text-gray-900 mt-1">Respiratory Disorder</p>
+                </div>
+                <div>
+                  <span class="text-xs text-gray-500 uppercase tracking-wide">Treatment</span>
+                  <p class="text-sm text-gray-700 mt-1">Antibiotics administered (Penicillin G) for 3 days</p>
+                </div>
+                <div>
+                  <span class="text-xs text-gray-500 uppercase tracking-wide">Additional Info</span>
+                  <p class="text-sm text-gray-700 mt-1">Animal showed symptoms for 2 days before death</p>
+                </div>
               </div>
             </div>
-            <div>
-              <div class="flex justify-between text-sm mb-1">
-                <span class="text-gray-600">Bull</span>
-                <span class="font-semibold">6 cases (13%)</span>
+          </div>
+
+          <!-- Right Column -->
+          <div class="space-y-4">
+            <!-- Status & Actions -->
+            <div class="bg-white rounded-xl border border-gray-200 p-5">
+              <h4 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+                <i class="fas fa-flag text-primary"></i> Current Status
+              </h4>
+              <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
+                <div class="flex items-center gap-2">
+                  <i class="fas fa-clock text-amber-500"></i>
+                  <span class="font-semibold text-amber-700">Awaiting Verification</span>
+                </div>
+                <p class="text-sm text-amber-600 mt-1">This case is pending verification by Veterinary Staff</p>
               </div>
-              <div class="h-4 bg-gray-100 rounded-full overflow-hidden">
-                <div class="h-full bg-primary/50 rounded-full" style="width: 13%"></div>
+              <div class="space-y-2">
+                <button class="w-full px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary-dark transition-colors">
+                  <i class="fas fa-check mr-2"></i>Verify Case
+                </button>
+                <button class="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-600 font-medium hover:bg-gray-50 transition-colors">
+                  <i class="fas fa-undo mr-2"></i>Return for Revision
+                </button>
               </div>
             </div>
-            <div>
-              <div class="flex justify-between text-sm mb-1">
-                <span class="text-gray-600">Other</span>
-                <span class="font-semibold">4 cases (8%)</span>
+
+            <!-- Timeline -->
+            <div class="bg-white rounded-xl border border-gray-200 p-5">
+              <h4 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+                <i class="fas fa-history text-primary"></i> Case Timeline
+              </h4>
+              <div class="space-y-4">
+                <div class="flex gap-3">
+                  <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-check text-white text-xs"></i>
+                  </div>
+                  <div class="flex-1">
+                    <p class="text-sm font-medium text-gray-900">Case Issued</p>
+                    <p class="text-xs text-gray-500">By Nur Aziza</p>
+                    <p class="text-xs text-gray-400">2025-01-20 14:30</p>
+                  </div>
+                </div>
+                <div class="flex gap-3">
+                  <div class="w-8 h-8 bg-amber-100 border-2 border-amber-500 rounded-full flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-spinner text-amber-500 text-xs"></i>
+                  </div>
+                  <div class="flex-1">
+                    <p class="text-sm font-medium text-gray-900">Awaiting Verification</p>
+                    <p class="text-xs text-gray-500">Pending Veterinary Staff action</p>
+                    <p class="text-xs text-gray-400">Current Step</p>
+                  </div>
+                </div>
               </div>
-              <div class="h-4 bg-gray-100 rounded-full overflow-hidden">
-                <div class="h-full bg-gray-300 rounded-full" style="width: 8%"></div>
+            </div>
+
+            <!-- Quick Info -->
+            <div class="bg-white rounded-xl border border-gray-200 p-5">
+              <h4 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+                <i class="fas fa-clipboard-check text-primary"></i> Quick Actions
+              </h4>
+              <div class="grid grid-cols-2 gap-2">
+                <a href="pm-examination-detail.html" class="px-3 py-2 bg-amber-50 text-amber-700 rounded-lg text-sm font-medium text-center hover:bg-amber-100 transition-colors">
+                  <i class="fas fa-microscope mr-1"></i>PM Exam
+                </a>
+                <button class="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
+                  <i class="fas fa-download mr-1"></i>Download
+                </button>
+                <button class="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
+                  <i class="fas fa-print mr-1"></i>Print
+                </button>
+                <button class="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
+                  <i class="fas fa-envelope mr-1"></i>Email
+                </button>
               </div>
             </div>
           </div>
         </div>
+
+        <!-- Audit Log -->
+        <div class="bg-white rounded-xl border border-gray-200 p-5">
+          <h4 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+            <i class="fas fa-list-alt text-primary"></i> Audit Log
+          </h4>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left whitespace-nowrap">
+              <thead>
+                <tr class="bg-gray-50 text-gray-600 text-sm">
+                  <th class="p-3 font-semibold">Timestamp</th>
+                  <th class="p-3 font-semibold">Action</th>
+                  <th class="p-3 font-semibold">User</th>
+                  <th class="p-3 font-semibold">Role</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100 text-sm">
+                <tr>
+                  <td class="p-3 text-gray-600">2025-01-20 14:30</td>
+                  <td class="p-3 font-medium text-gray-900">Mortality case created</td>
+                  <td class="p-3 text-gray-700">Nur Aziza</td>
+                  <td class="p-3"><span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">Estate Personal</span></td>
+                </tr>
+                <tr>
+                  <td class="p-3 text-gray-600">2025-01-20 14:31</td>
+                  <td class="p-3 font-medium text-gray-900">Case submitted for verification</td>
+                  <td class="p-3 text-gray-700">System</td>
+                  <td class="p-3"><span class="px-2 py-1 bg-gray-100 text-gray-600 rounded-full text-xs">Automated</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="flex justify-between items-center p-4 border-t border-gray-100 bg-gray-50">
+        <a href="pending-approvals.html" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-600 font-medium hover:bg-gray-100 transition-colors">
+          <i class="fas fa-arrow-left mr-2"></i>Back to List
+        </a>
+        <div class="flex gap-2">
+          <button class="px-4 py-2 border border-gray-300 rounded-lg text-gray-600 font-medium hover:bg-gray-100 transition-colors">
+            <i class="fas fa-history mr-2"></i>View History
+          </button>
+          <button class="px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary-dark transition-colors">
+            <i class="fas fa-check-double mr-2"></i>Authorize Next Step
+          </button>
+        </div>
       </div>
     </div>
-  </main>
+  </div>
 
   <script>
-    const mortalityRoles = {
-      'estate': { name: 'Estate Personal', users: ['Nur Aziza', 'Kamran', 'Mazahari', 'Farm Worker 1', 'Farm Worker 2'] },
-      'veterinary': { name: 'Veterinary Staff', users: ['Dr. Ahmad', 'Dr. Lim', 'Veterinary Assistant'] },
-      'supervisor': { name: 'Livestock Supervisor', users: ['Basir Bin Yusof', 'Mohd Noor', 'Razri', 'Mustakim'] },
-      'manager': { name: 'Livestock Manager/OIC', users: ['M Badrul', 'Alexius Ahat', 'Hasbude'] },
-      'security': { name: 'Gate House Security', users: ['Shahrinizam', 'Security Staff'] }
-    };
-
-    let currentUser = { role: '', name: '', roleLabel: '' };
-    let mortalityDocuments = [
-      { id: 'LMC-2025-001', date: '2025-01-20', category: 'BC', preliminaryCOD: 'Respiratory', currentStep: 1 },
-      { id: 'LMC-2025-002', date: '2025-01-18', category: 'WB', preliminaryCOD: 'Digestive', currentStep: 2 },
-      { id: 'LMC-2025-003', date: '2025-01-15', category: 'Bull', preliminaryCOD: 'Trauma', currentStep: 4 },
-      { id: 'LMC-2024-1712', date: '2024-09-21', category: 'BC', preliminaryCOD: 'Respiratory', currentStep: 5 }
-    ];
-
-    const MORTALITY_WORKFLOW = [
-      { id: 'issued', label: 'Issued', role: 'estate' },
-      { id: 'verified', label: 'Verified', role: 'veterinary' },
-      { id: 'checked', label: 'Checked', role: 'supervisor' },
-      { id: 'witness', label: 'Witness', role: 'manager' },
-      { id: 'approved', label: 'Approved', role: 'security' }
-    ];
-
-    document.addEventListener('DOMContentLoaded', () => {
-      initRoleSwitcher();
+    // Close modal when clicking outside
+    document.querySelector('.modal-overlay').addEventListener('click', function(e) {
+      if (e.target === this) {
+        window.location.href = 'pending-approvals.html';
+      }
     });
 
-    function navigateTo(page) { window.location.href = page; }
-
-    function initRoleSwitcher() {
-      const roleSelector = document.getElementById('role-selector');
-      const userSelector = document.getElementById('user-selector');
-      roleSelector.addEventListener('change', () => {
-        const role = roleSelector.value;
-        userSelector.innerHTML = '<option value="">Select Name</option>';
-        if (role && mortalityRoles[role]) {
-          mortalityRoles[role].users.forEach(user => {
-            userSelector.innerHTML += `<option value="${user}">${user}</option>`;
-          });
-        }
-        updateUserInfo();
-      });
-      userSelector.addEventListener('change', updateUserInfo);
-    }
-
-    function updateUserInfo() {
-      const role = document.getElementById('role-selector').value;
-      const name = document.getElementById('user-selector').value;
-      const userInfo = document.getElementById('user-info');
-      if (role && name && mortalityRoles[role]) {
-        currentUser = { role, name, roleLabel: mortalityRoles[role].name };
-        userInfo.classList.remove('hidden');
-        userInfo.classList.add('flex');
-        document.getElementById('user-avatar').textContent = name.charAt(0);
-        document.getElementById('current-user-name').textContent = name;
-        document.getElementById('current-user-role').textContent = mortalityRoles[role].name;
-      } else {
-        userInfo.classList.add('hidden');
-        userInfo.classList.remove('flex');
-        currentUser = { role: '', name: '', roleLabel: '' };
+    // Handle keyboard escape
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        window.location.href = 'pending-approvals.html';
       }
-    }
-
-    function filterAnalyticsByDate() {
-      const fromDate = document.getElementById('analytics-date-from')?.value;
-      const toDate = document.getElementById('analytics-date-to')?.value;
-      if (!fromDate && !toDate) return;
-      const filtered = mortalityDocuments.filter(d => {
-        const docDate = new Date(d.date);
-        if (fromDate && docDate < new Date(fromDate)) return false;
-        if (toDate && docDate > new Date(toDate)) return false;
-        return true;
-      });
-      alert(`Analytics updated: ${filtered.length} cases match the date filter`);
-    }
-
-    function clearAnalyticsDateFilter() {
-      document.getElementById('analytics-date-from').value = '';
-      document.getElementById('analytics-date-to').value = '';
-      alert('Analytics reset to default view');
-    }
+    });
   </script>
 </body>
 </html>
