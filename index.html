@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BovineFlow - Create CTV</title>
+  <title>BovineFlow - Create Receival</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -47,10 +47,10 @@
       <div class="nav-item flex items-center gap-3 px-5 py-3.5 cursor-pointer border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium" onclick="window.location.href='dashboard.html'">
         <i class="fas fa-th-large w-5 text-lg"></i><span>Dashboard</span>
       </div>
-      <div class="nav-item active flex items-center gap-3 px-5 py-3.5 cursor-pointer border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium" onclick="window.location.href='create-ctv.html'">
+      <div class="nav-item flex items-center gap-3 px-5 py-3.5 cursor-pointer border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium" onclick="window.location.href='create-ctv.html'">
         <i class="fas fa-plus-circle w-5 text-lg"></i><span>Create CTV</span>
       </div>
-      <div class="nav-item flex items-center gap-3 px-5 py-3.5 cursor-pointer border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium" onclick="window.location.href='create-receival.html'">
+      <div class="nav-item active flex items-center gap-3 px-5 py-3.5 cursor-pointer border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium" onclick="window.location.href='create-receival.html'">
         <i class="fas fa-truck-loading w-5 text-lg"></i><span>Create Receival Form</span>
       </div>
       <div class="nav-item flex items-center gap-3 px-5 py-3.5 cursor-pointer border-l-[3px] border-transparent hover:bg-white/10 text-white/85 font-medium" onclick="window.location.href='create-siv.html'">
@@ -75,22 +75,22 @@
   <main class="main-content ml-[280px] min-h-screen">
     <header class="bg-white px-8 py-4 flex justify-between items-center shadow-sm sticky top-0 z-40 border-b border-gray-100">
       <div>
-        <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Create Transfer Voucher (CTV)</h1>
-        <p class="text-sm text-gray-500 mt-0.5">Create new inter-unit cattle transfer document.</p>
+        <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Cattle Receival Form</h1>
+        <p class="text-sm text-gray-500 mt-0.5">Record incoming cattle shipments.</p>
       </div>
       <div class="flex items-center gap-4">
         <div class="flex items-center gap-3 bg-gray-100 px-4 py-2 rounded-lg">
           <label class="text-xs font-bold text-gray-500 uppercase tracking-wide"><i class="fas fa-user-tag mr-1"></i>Role:</label>
           <select class="px-3 py-1.5 border border-gray-200 rounded-lg bg-white text-sm font-medium text-gray-700">
-            <option>SAPP-Integration</option>
-            <option>Livestock Manager</option>
+            <option>Operator</option>
+            <option>Livestock Supervisor</option>
           </select>
         </div>
         <div class="flex items-center gap-3 bg-primary text-white px-4 py-2 rounded-lg">
-          <div class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center font-bold">A</div>
+          <div class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center font-bold">O</div>
           <div>
-            <div class="font-semibold text-sm">Anis</div>
-            <div class="text-xs opacity-85">SAPP-Integration</div>
+            <div class="font-semibold text-sm">Operator SKFP</div>
+            <div class="text-xs opacity-85">Operator</div>
           </div>
         </div>
       </div>
@@ -98,38 +98,16 @@
 
     <div class="p-8">
       <form>
-        <div class="bg-gray-900 text-white px-5 py-3 rounded-lg mb-6 flex justify-between items-center flex-wrap gap-3">
-          <div class="font-bold text-sm">SAWIT KINABALU FARM PRODUCTS SDN BHD (Co.No.465571-P)</div>
-          <div class="flex gap-6 text-xs opacity-90"><span>Doc: SKFP/HACCP/FM-08</span><span>Rev: 01</span></div>
+        <div class="bg-gray-900 text-white px-5 py-3 rounded-lg mb-6">
+          <div class="font-bold text-sm">SAWIT KINABALU FARM PRODUCTS SDN BHD</div>
         </div>
         
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div class="p-5 border-b border-gray-100 flex justify-between items-center">
-            <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2"><i class="fas fa-truck text-primary"></i> CATTLE TRANSFER VOUCHER</h3>
-            <span class="text-primary font-mono font-bold">CTV-2025-0001</span>
+          <div class="p-5 border-b border-gray-100">
+            <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2"><i class="fas fa-clipboard-check text-primary"></i> CATTLE RECEIVAL FORM</h3>
           </div>
           <div class="p-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              <div>
-                <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">Transfer From *</label>
-                <select class="w-full p-2.5 border border-gray-200 rounded-lg bg-white text-sm focus:ring-2 focus:ring-primary outline-none" required>
-                  <option value="">Select Source</option>
-                  <option>SG FALDA</option>
-                  <option>SG AA</option>
-                  <option>SKLIC Breedlot</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">Transfer To *</label>
-                <select class="w-full p-2.5 border border-gray-200 rounded-lg bg-white text-sm focus:ring-2 focus:ring-primary outline-none" required>
-                  <option value="">Select Destination</option>
-                  <option>SELIC</option>
-                  <option>SKFP-Butchery</option>
-                </select>
-              </div>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
               <div>
                 <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">Date *</label>
                 <input type="date" class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none" required>
@@ -139,8 +117,12 @@
                 <input type="time" class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none">
               </div>
               <div>
-                <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">Vehicle No. *</label>
-                <input type="text" class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none" placeholder="SYK 6112" required>
+                <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">From *</label>
+                <input type="text" class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none" required>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">Vehicle *</label>
+                <input type="text" class="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary outline-none" required>
               </div>
             </div>
 
@@ -149,19 +131,19 @@
             </h4>
             
             <div class="overflow-x-auto mb-4">
-              <table class="w-full text-left whitespace-nowrap min-w-[800px]">
+              <table class="w-full text-left whitespace-nowrap min-w-[900px]">
                 <thead>
                   <tr class="bg-primary text-white text-xs">
-                    <th class="p-3 font-semibold">No.</th>
-                    <th class="p-3 font-semibold">Tag No.</th>
-                    <th class="p-3 font-semibold">Category</th>
-                    <th class="p-3 font-semibold">Colour</th>
-                    <th class="p-3 font-semibold">Weight</th>
-                    <th class="p-3 font-semibold">Good</th>
-                    <th class="p-3 font-semibold">Not Good</th>
-                    <th class="p-3 font-semibold">Remarks</th>
-                    <th class="p-3 font-semibold">Purpose</th>
-                    <th class="p-3 font-semibold"></th>
+                    <th class="p-3">No.</th>
+                    <th class="p-3">Tag No.</th>
+                    <th class="p-3">Category</th>
+                    <th class="p-3">Colour</th>
+                    <th class="p-3">Weight</th>
+                    <th class="p-3">Normal</th>
+                    <th class="p-3">Abnormal</th>
+                    <th class="p-3">Remarks</th>
+                    <th class="p-3">Yard</th>
+                    <th class="p-3"></th>
                   </tr>
                 </thead>
                 <tbody class="text-sm">
@@ -172,7 +154,6 @@
                       <select class="p-1.5 border rounded text-sm w-full">
                         <option>WB</option>
                         <option>BC</option>
-                        <option>Bull</option>
                       </select>
                     </td>
                     <td class="p-3"><input type="text" class="w-20 p-1.5 border rounded text-sm" placeholder="Colour"></td>
@@ -180,13 +161,7 @@
                     <td class="p-3"><input type="checkbox" class="w-4 h-4 accent-primary"></td>
                     <td class="p-3"><input type="checkbox" class="w-4 h-4 accent-red-500"></td>
                     <td class="p-3"><input type="text" class="w-24 p-1.5 border rounded text-sm" placeholder="Remarks"></td>
-                    <td class="p-3">
-                      <select class="p-1.5 border rounded text-sm w-full">
-                        <option>Sale</option>
-                        <option>Treatment</option>
-                        <option>Slaughter</option>
-                      </select>
-                    </td>
+                    <td class="p-3"><input type="text" class="w-20 p-1.5 border rounded text-sm" placeholder="Yard"></td>
                     <td class="p-3"><button type="button" class="w-7 h-7 bg-red-100 text-red-500 rounded flex items-center justify-center hover:bg-red-200"><i class="fas fa-times text-xs"></i></button></td>
                   </tr>
                 </tbody>
@@ -197,66 +172,32 @@
               <i class="fas fa-plus mr-2"></i>Add Livestock
             </button>
 
-            <!-- Signatures -->
             <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 mt-6">
               <h4 class="text-sm font-bold text-gray-800 mb-4 pb-2 border-b-2 border-primary flex items-center gap-2">
-                <i class="fas fa-signature text-primary"></i> Signatures & Authorization
+                <i class="fas fa-signature text-primary"></i> Signatures
               </h4>
-              <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
-                <div class="bg-white border border-gray-200 rounded-lg p-3">
-                  <div class="text-[10px] font-bold text-gray-600 uppercase mb-2">Issued By <span class="font-normal text-gray-400">(SAPP)</span></div>
-                  <div class="h-12 border-2 border-dashed border-gray-200 rounded mb-2"></div>
-                  <input type="text" placeholder="Name" class="w-full text-xs p-1.5 border rounded">
-                </div>
-                <div class="bg-white border border-gray-200 rounded-lg p-3">
-                  <div class="text-[10px] font-bold text-gray-600 uppercase mb-2">Approved By <span class="font-normal text-gray-400">(Manager)</span></div>
-                  <div class="h-12 border-2 border-dashed border-gray-200 rounded mb-2"></div>
-                  <input type="text" placeholder="Name" class="w-full text-xs p-1.5 border rounded">
-                </div>
-                <div class="bg-white border border-gray-200 rounded-lg p-3">
-                  <div class="text-[10px] font-bold text-gray-600 uppercase mb-2">Transported By <span class="font-normal text-gray-400">(Driver)</span></div>
-                  <div class="h-12 border-2 border-dashed border-gray-200 rounded mb-2"></div>
-                  <input type="text" placeholder="Name" class="w-full text-xs p-1.5 border rounded">
-                </div>
-                <div class="bg-white border border-gray-200 rounded-lg p-3">
-                  <div class="text-[10px] font-bold text-gray-600 uppercase mb-2">Witness By <span class="font-normal text-gray-400">(Estate)</span></div>
-                  <div class="h-12 border-2 border-dashed border-gray-200 rounded mb-2"></div>
-                  <input type="text" placeholder="Name" class="w-full text-xs p-1.5 border rounded">
-                </div>
-                <div class="bg-white border border-gray-200 rounded-lg p-3">
-                  <div class="text-[10px] font-bold text-gray-600 uppercase mb-2">Verified By <span class="font-normal text-gray-400">(Security)</span></div>
-                  <div class="h-12 border-2 border-dashed border-gray-200 rounded mb-2"></div>
-                  <input type="text" placeholder="Name" class="w-full text-xs p-1.5 border rounded">
-                </div>
-              </div>
               <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <div class="bg-white border border-gray-200 rounded-lg p-3">
-                  <div class="text-[10px] font-bold text-gray-600 uppercase mb-2">Witnessed By <span class="font-normal text-gray-400">(Receiving)</span></div>
+                  <div class="text-[10px] font-bold text-gray-600 uppercase mb-2">Prepared By</div>
                   <div class="h-12 border-2 border-dashed border-gray-200 rounded mb-2"></div>
                   <input type="text" placeholder="Name" class="w-full text-xs p-1.5 border rounded">
                 </div>
                 <div class="bg-white border border-gray-200 rounded-lg p-3">
-                  <div class="text-[10px] font-bold text-gray-600 uppercase mb-2">Received By <span class="font-normal text-gray-400">(Supervisor)</span></div>
+                  <div class="text-[10px] font-bold text-gray-600 uppercase mb-2">Witness By</div>
                   <div class="h-12 border-2 border-dashed border-gray-200 rounded mb-2"></div>
                   <input type="text" placeholder="Name" class="w-full text-xs p-1.5 border rounded">
                 </div>
                 <div class="bg-white border border-gray-200 rounded-lg p-3">
-                  <div class="text-[10px] font-bold text-gray-600 uppercase mb-2">Verified Completion <span class="font-normal text-gray-400">(Security)</span></div>
+                  <div class="text-[10px] font-bold text-gray-600 uppercase mb-2">Verified By</div>
                   <div class="h-12 border-2 border-dashed border-gray-200 rounded mb-2"></div>
                   <input type="text" placeholder="Name" class="w-full text-xs p-1.5 border rounded">
                 </div>
               </div>
-            </div>
-
-            <div class="bg-gray-100 border-t-2 border-gray-300 p-3 mt-6 flex gap-3 flex-wrap">
-              <span class="text-[10px] font-bold text-gray-500 uppercase px-2 py-1 bg-white border rounded">Original: SKFP Office</span>
-              <span class="text-[10px] font-bold text-gray-500 uppercase px-2 py-1 bg-white border rounded">2nd Copy: SAL</span>
-              <span class="text-[10px] font-bold text-gray-500 uppercase px-2 py-1 bg-white border rounded">3rd Copy: Issuing Office</span>
             </div>
 
             <div class="flex gap-3 mt-6">
               <button type="submit" class="px-6 py-2.5 bg-primary text-white rounded-lg font-bold hover:bg-primary-dark shadow-md transition-all text-sm">
-                <i class="fas fa-paper-plane mr-2"></i>Submit for Verification
+                <i class="fas fa-check mr-2"></i>Submit Verification
               </button>
               <button type="button" class="px-4 py-2.5 border border-gray-200 rounded-lg text-gray-600 font-medium hover:bg-gray-50 text-sm">Save as Draft</button>
               <button type="reset" class="px-4 py-2.5 border border-gray-200 rounded-lg text-gray-600 font-medium hover:bg-gray-50 text-sm">Reset</button>
