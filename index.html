@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Add Medication Modal - Sawit Kinabalu</title>
+        <title>View Medication Details - Sawit Kinabalu</title>
         
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -25,7 +25,6 @@
                             brand: {
                                 DEFAULT: '#34554a',
                                 hover: '#2c463d',
-                                light: '#E8F5F1',
                             }
                         }
                     },
@@ -46,110 +45,89 @@
     </head>
     <body class="font-sans text-gray-900 antialiased bg-gray-200 min-h-screen flex items-center justify-center p-4">
 
-        <!-- Add Medication Modal Container (Visible by Default for Preview) -->
-        <div id="addModal" class="relative z-50 w-full max-w-lg overflow-hidden bg-white shadow-2xl rounded-xl border border-gray-100 flex flex-col max-h-[90vh]">
+        <!-- View Medication Modal (Exactly matching the Vue structure) -->
+        <div id="viewModal" class="relative z-50 w-full max-w-md mx-4 overflow-hidden bg-white rounded-xl shadow-xl flex flex-col border border-gray-100">
             
             <!-- Modal Header -->
             <div class="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50">
-                <h3 class="text-lg font-extrabold text-gray-900 uppercase tracking-tight">Add Medication</h3>
+                <h3 class="text-lg font-bold text-gray-900">Medication Details</h3>
                 <button class="text-gray-400 hover:text-gray-600 transition-colors">
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
 
-            <!-- Modal Body (Form) -->
-            <div class="p-6 overflow-y-auto bg-white custom-scrollbar">
-                <form class="space-y-5" onsubmit="event.preventDefault(); alert('Medication Saved Successfully!');">
+            <!-- Modal Body (Replicating Vue logic) -->
+            <div class="p-6 space-y-4 bg-white">
+                
+                <!-- Medication Summary Header -->
+                <div class="flex items-center gap-4 mb-4">
+                    <!-- Icon Container: matching bg-blue-50 text-[#34554a] -->
+                    <div class="w-16 h-16 bg-blue-50 text-[#34554a] rounded-full flex items-center justify-center shadow-inner">
+                        <i data-lucide="pill" class="w-8 h-8"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-bold text-gray-900 tracking-tight">Penicillin G</h4>
+                        <p class="text-sm text-gray-500 font-medium">Procaine Penicillin</p>
+                    </div>
+                </div>
+
+                <!-- Information Grid Rows (Matching Vue v-for="col in columns") -->
+                <div class="space-y-3">
                     
-                    <!-- Medication Name -->
-                    <div class="space-y-1">
-                        <label class="block text-sm font-black text-gray-700 tracking-wide uppercase">Medication Name</label>
-                        <input 
-                            type="text" 
-                            placeholder="e.g. Penicillin G, Ivomec" 
-                            class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand focus:border-brand outline-none shadow-sm font-medium transition-all" 
-                            required
-                        >
+                    <!-- Row: Generic Name -->
+                    <div class="flex justify-between border-b pb-2 border-gray-100">
+                        <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Generic Name</span>
+                        <span class="text-sm font-semibold text-gray-900">Procaine Penicillin</span>
                     </div>
 
-                    <!-- Generic Name -->
-                    <div class="space-y-1">
-                        <label class="block text-sm font-black text-gray-700 tracking-wide uppercase">Generic Name / Chemical</label>
-                        <input 
-                            type="text" 
-                            placeholder="e.g. Procaine Penicillin" 
-                            class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand focus:border-brand outline-none shadow-sm font-medium transition-all"
-                        >
+                    <!-- Row: Category -->
+                    <div class="flex justify-between border-b pb-2 border-gray-100">
+                        <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Category</span>
+                        <span class="text-sm font-semibold text-gray-900">Antibiotics</span>
                     </div>
 
-                    <!-- Category & Stock Row -->
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="space-y-1">
-                            <label class="block text-sm font-black text-gray-700 tracking-wide uppercase">Category</label>
-                            <select class="w-full p-2.5 border border-gray-300 rounded-lg bg-white outline-none focus:ring-2 focus:ring-brand shadow-sm font-medium transition-all">
-                                <option>Antibiotics</option>
-                                <option>Vaccine</option>
-                                <option>Vitamin</option>
-                                <option>Dewormer</option>
-                                <option>Supplement</option>
-                            </select>
-                        </div>
-                        <div class="space-y-1">
-                            <label class="block text-sm font-black text-gray-700 tracking-wide uppercase">Initial Stock Qty</label>
-                            <div class="relative">
-                                <input 
-                                    type="number" 
-                                    value="0" 
-                                    class="w-full p-2.5 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-brand shadow-sm font-medium transition-all"
-                                >
-                            </div>
-                        </div>
+                    <!-- Row: Stock -->
+                    <div class="flex justify-between border-b pb-2 border-gray-100">
+                        <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Stock</span>
+                        <span class="text-sm font-semibold text-gray-900">120 ml</span>
                     </div>
 
-                    <!-- Expiry Date -->
-                    <div class="space-y-1">
-                        <label class="block text-sm font-black text-gray-700 tracking-wide uppercase">Expiry Date</label>
-                        <div class="relative">
-                            <i data-lucide="calendar" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none"></i>
-                            <input 
-                                type="date" 
-                                class="w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand outline-none shadow-sm font-medium transition-all"
-                            >
-                        </div>
+                    <!-- Row: Expiry -->
+                    <div class="flex justify-between border-b pb-2 border-gray-100">
+                        <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Expiry</span>
+                        <span class="text-sm font-semibold text-gray-900">2026-05-15</span>
                     </div>
 
-                    <!-- Notes / Remarks -->
-                    <div class="space-y-1">
-                        <label class="block text-sm font-black text-gray-700 tracking-wide uppercase">Notes / Remarks</label>
-                        <textarea 
-                            rows="3" 
-                            placeholder="Dosage instructions, storage temperature, batch details, etc." 
-                            class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand outline-none resize-none shadow-sm font-medium transition-all"
-                        ></textarea>
+                    <!-- Row: Status (Special Badge Styling) -->
+                    <div class="flex justify-between border-b pb-2 border-gray-100 last:border-0">
+                        <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Status</span>
+                        <!-- Status Classes matching getStatus(selectedItem?.stock).class -->
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-black border bg-green-100 text-green-800 border-green-200 uppercase tracking-wider">
+                            In Stock
+                        </span>
                     </div>
 
-                    <!-- Modal Footer Action Buttons -->
-                    <div class="flex justify-end gap-3 pt-5 border-t border-gray-100">
-                        <button 
-                            type="button" 
-                            class="px-5 py-2.5 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 transition-all font-bold"
-                        >
-                            Cancel
-                        </button>
-                        <button 
-                            type="submit" 
-                            class="px-7 py-2.5 bg-brand text-white rounded-lg hover:bg-brand-hover shadow-md font-black transition-all transform active:scale-95 flex items-center gap-2"
-                        >
-                            <i data-lucide="plus" class="w-4 h-4 text-white"></i>
-                            Save Medication
-                        </button>
+                    <!-- Simulated Custom Field Row (if !col.standard) -->
+                    <div class="flex justify-between border-b pb-2 border-gray-100 last:border-0">
+                        <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Batch Number</span>
+                        <span class="text-sm font-semibold text-gray-900">#4402-A</span>
                     </div>
-                </form>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-4 bg-gray-50 flex justify-end rounded-b-xl border-t border-gray-100">
+                <button 
+                    type="button" 
+                    class="px-6 py-2 border bg-white border-gray-200 rounded-lg text-sm font-bold shadow-sm hover:bg-gray-50 transition-all text-gray-700"
+                >
+                    Close Details
+                </button>
             </div>
         </div>
 
         <script>
-            // Initialize Lucide Icons for the modal
+            // Initialize Lucide Icons
             lucide.createIcons();
         </script>
     </body>
