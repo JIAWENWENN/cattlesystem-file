@@ -3,9 +3,9 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Stock Alert Dashboard - Sawit Kinabalu</title>
+        <title>Add Supplier Modal - Sawit Kinabalu</title>
         
-        <!-- Fonts: Loading full range of Figtree weights for exact match -->
+        <!-- Fonts: Exact matching Figtree weight range (300-900) -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:300,400,500,600,700,800,900&display=swap" rel="stylesheet" />
 
@@ -25,7 +25,6 @@
                             brand: {
                                 DEFAULT: '#34554a',
                                 hover: '#2c463d',
-                                light: '#E8F5F1',
                             }
                         }
                     },
@@ -33,391 +32,129 @@
             }
         </script>
         <style>
-            /* Custom Scrollbar Styling from Vue */
-            .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-            .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-            .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
-            .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
-            
-            /* Sidebar specific scrollbar */
-            .sidebar-scroll::-webkit-scrollbar { width: 5px; }
-            .sidebar-scroll::-webkit-scrollbar-track { background: #22262a; }
-            .sidebar-scroll::-webkit-scrollbar-thumb { background-color: #4b5563; border-radius: 10px; }
+            /* Custom weight and spacing overrides to match Vue logic exactly */
+            .font-black { font-weight: 900; }
+            .tracking-widest { letter-spacing: 0.1em; }
+            .tracking-tight { letter-spacing: -0.025em; }
+            .text-\[10px\] { font-size: 10px; }
 
+            /* Modal Backdrop simulation */
             .modal-backdrop {
                 background-color: rgba(0, 0, 0, 0.5);
                 backdrop-filter: blur(4px);
                 transition: all 0.2s ease;
             }
 
-            .hidden { display: none !important; }
-
-            /* Ensure font-black (900) and tracking-tight looks exactly as intended */
-            .font-black { font-weight: 900; }
-            .tracking-tight { letter-spacing: -0.025em; }
+            /* Form field focus styles matching system defaults */
+            .system-input:focus {
+                outline: none;
+                box-shadow: 0 0 0 2px rgba(52, 85, 74, 0.2);
+                border-color: #34554a;
+            }
         </style>
     </head>
-    <body class="font-sans text-gray-900 antialiased bg-gray-50 flex min-h-screen">
+    <body class="font-sans text-gray-900 antialiased bg-gray-200 min-h-screen flex items-center justify-center p-4">
 
-        <!-- Sidebar Navigation (Matching AppLayout) -->
-        <aside class="fixed inset-y-0 left-0 w-64 bg-[#22262a] text-gray-400 flex flex-col font-medium z-30 shadow-xl h-screen overflow-hidden text-sm">
-            <div class="h-24 flex items-center justify-center py-2 bg-[#22262a] flex-shrink-0 border-b border-gray-800">
-                <img src="https://placehold.co/150x60?text=LOGO" alt="Sawit Kinabalu Logo" class="h-10 w-auto" />
-            </div>
-            <nav class="flex-1 overflow-y-auto px-2 space-y-1 py-4 sidebar-scroll">
-                <a href="#" class="flex items-center px-4 py-2.5 text-gray-300 hover:bg-[#2a2e33] hover:text-white rounded-md transition-colors">
-                    <i data-lucide="layout-dashboard" class="w-4 h-4 mr-3"></i> Dashboard
-                </a>
-                <div class="nav-item">
-                    <button class="w-full flex items-center justify-between px-4 py-2.5 text-white bg-[#2a2e33] rounded-md">
-                        <div class="flex items-center"><i data-lucide="package" class="w-4 h-4 mr-3 text-white"></i>Inventory</div>
-                        <i data-lucide="chevron-down" class="w-3.5 h-3.5 rotate-180"></i>
-                    </button>
-                    <div class="pl-11 space-y-1 mt-1">
-                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs font-medium transition-colors">Feed Stock</a>
-                        <a href="#" class="block py-2 text-gray-500 hover:text-white text-xs font-medium transition-colors">Medication Stock</a>
-                        <a href="#" class="block py-2 text-white font-bold text-xs underline underline-offset-4 decoration-brand">Stock Alert</a>
-                    </div>
-                </div>
-            </nav>
-        </aside>
-
-        <!-- Main Content Area -->
-        <main class="ml-64 flex-1 p-8">
+        <!-- Add Supplier Modal (Matching Vue Structure Exactly) -->
+        <div id="addSupplierModal" class="relative z-50 w-full max-w-lg mx-4 border border-gray-100 bg-white rounded-2xl shadow-2xl overflow-hidden transition-all transform scale-100">
             
-            <!-- Page Header -->
-            <div class="mb-8">
-                <nav class="flex text-sm text-gray-500 mb-2 font-medium">
-                    <span>Inventory</span> <span class="mx-2">/</span> <span class="text-gray-900 font-medium">Stock Alert</span>
-                </nav>
-                <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Stock Alert Dashboard</h1>
-                <p class="text-sm text-gray-500 mt-1">Unified view of Feed & Medication inventory with threshold management.</p>
-            </div>
-
-            <!-- Stats Cards (Matching Vue font-black/text-3xl) -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="bg-white p-6 rounded-xl border border-gray-100 flex items-center gap-5 shadow-sm">
-                    <div class="w-14 h-14 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center">
-                        <i data-lucide="package" class="w-7 h-7"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs text-gray-500 font-bold uppercase tracking-wider">Total Items</p>
-                        <p class="text-3xl font-black text-gray-900 leading-none mt-1">124</p>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-xl border border-gray-100 flex items-center gap-5 shadow-sm">
-                    <div class="w-14 h-14 rounded-full bg-green-50 text-green-600 flex items-center justify-center">
-                        <i data-lucide="check-circle-2" class="w-7 h-7"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs text-gray-500 font-bold uppercase tracking-wider">In Stock</p>
-                        <p class="text-3xl font-black text-gray-900 leading-none mt-1">112</p>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-xl border border-red-100 flex items-center gap-5 shadow-sm cursor-pointer hover:bg-red-50 transition-colors">
-                    <div class="w-14 h-14 rounded-full bg-red-50 text-red-600 flex items-center justify-center">
-                        <i data-lucide="alert-circle" class="w-7 h-7"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs text-red-600 font-bold uppercase tracking-wider">Critical Stock</p>
-                        <p class="text-3xl font-black text-red-600 leading-none mt-1">12</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Filter Bar -->
-            <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-                <div class="flex flex-1 gap-2 w-full md:w-auto flex-wrap">
-                    <div class="relative flex-1 min-w-[200px]">
-                        <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4"></i>
-                        <input type="text" placeholder="Search item or supplier..." class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 outline-none text-sm focus:ring-2 focus:ring-[#34554a] text-gray-900 font-medium" />
-                    </div>
-                    <select class="px-3 py-2 rounded-lg border border-gray-200 bg-gray-50 text-gray-600 text-sm outline-none focus:ring-2 focus:ring-[#34554a] font-medium">
-                        <option value="">All Sources</option>
-                        <option>Feed Stock</option>
-                        <option>Medication</option>
-                    </select>
-                    <select class="px-3 py-2 rounded-lg border border-gray-200 bg-gray-50 text-gray-600 text-sm outline-none focus:ring-2 focus:ring-[#34554a] font-medium">
-                        <option value="">All Categories</option>
-                        <option>Roughage</option>
-                        <option>Antibiotics</option>
-                    </select>
-                </div>
-                <div class="flex gap-2">
-                    <button onclick="toggleBulkMode()" class="flex items-center gap-2 bg-white border border-gray-200 px-4 py-2 rounded-lg hover:bg-gray-50 text-sm font-bold text-gray-700 shadow-sm transition-colors uppercase tracking-tight">
-                        <i data-lucide="settings-2" class="w-4 h-4"></i> Bulk Assign
-                    </button>
-                    <button class="flex items-center gap-2 bg-white border border-gray-200 px-4 py-2 rounded-lg hover:bg-gray-50 text-sm font-bold text-gray-700 shadow-sm transition-colors uppercase tracking-tight">
-                        <i data-lucide="file-down" class="w-4 h-4"></i> Export
-                    </button>
-                    <button onclick="toggleModal('addSupplierModal')" class="flex items-center gap-2 bg-[#34554a] text-white px-4 py-2 rounded-lg font-bold hover:bg-opacity-90 text-sm shadow-sm transition-all transform active:scale-95 uppercase tracking-tight">
-                        <i data-lucide="plus" class="w-4 h-4"></i> Add Supplier
-                    </button>
-                </div>
-            </div>
-
-            <!-- Bulk Action Bar -->
-            <div id="bulkBar" class="bg-blue-50 border border-blue-100 px-4 py-3 rounded-xl flex items-center gap-4 mb-6 hidden">
-                <span class="text-blue-600 text-sm font-black uppercase tracking-wider"><span id="selectedCount">0</span> items selected</span>
-                <div class="w-px h-4 bg-blue-200"></div>
-                <button onclick="toggleModal('bulkSupplierModal')" class="flex items-center gap-1.5 text-blue-600 hover:text-blue-700 text-sm font-black uppercase tracking-tight transition-all">
-                    <i data-lucide="truck" class="w-4 h-4"></i> Assign Supplier
+            <!-- Modal Header -->
+            <div class="flex justify-between items-center p-6 border-b bg-gray-50">
+                <h3 class="text-lg font-black text-gray-900 tracking-widest uppercase">Add New Supplier</h3>
+                <button class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
-                <button onclick="toggleBulkMode()" class="text-gray-500 hover:text-gray-800 text-sm font-bold ml-auto uppercase tracking-widest text-[10px]">Cancel</button>
             </div>
 
-            <!-- Inventory Table -->
-            <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left whitespace-nowrap">
-                        <thead>
-                            <tr class="bg-[#34554a] text-white text-[11px] font-bold uppercase tracking-widest">
-                                <th class="p-4 w-10 bulk-col hidden">
-                                    <input type="checkbox" onchange="selectAll(this)" class="w-4 h-4 rounded border-white/30 text-brand focus:ring-brand cursor-pointer">
-                                </th>
-                                <th class="p-4">Item Details</th>
-                                <th class="p-4">Source</th>
-                                <th class="p-4">Category</th>
-                                <th class="p-4">Supplier</th>
-                                <th class="p-4 text-right">Stock</th>
-                                <th class="p-4 text-center">Threshold</th>
-                                <th class="p-4 text-center">Day Cover</th>
-                                <th class="p-4 text-center">Expiry</th>
-                                <th class="p-4 text-center">Status</th>
-                                <th class="p-4 text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y text-sm text-gray-700">
-                            <!-- Low Stock Row -->
-                            <tr class="bg-red-50/50 hover:bg-red-50 transition-colors">
-                                <td class="p-4 bulk-col hidden">
-                                    <input type="checkbox" class="row-checkbox w-4 h-4 rounded border-gray-300 text-brand focus:ring-brand cursor-pointer" onchange="updateSelectedCount()">
-                                </td>
-                                <td class="p-4">
-                                    <div class="flex items-center gap-4">
-                                        <div class="w-10 h-10 rounded-lg flex items-center justify-center border border-amber-200 bg-amber-50 text-amber-600 shadow-sm"><i data-lucide="wheat" class="w-5 h-5"></i></div>
-                                        <div class="flex flex-col">
-                                            <span class="font-black text-gray-900 tracking-tight">Napier Grass</span>
-                                            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-tighter leading-none mt-1">SKU-NG-001</span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="p-4">
-                                    <span class="inline-flex items-center gap-1 px-2 py-1 rounded bg-amber-100 text-amber-700 text-[10px] font-black uppercase">FEED <i data-lucide="external-link" class="w-3 h-3"></i></span>
-                                </td>
-                                <td class="p-4">
-                                    <button onclick="toggleModal('supplierProfile')" class="text-brand font-bold underline decoration-brand/30 hover:decoration-brand underline-offset-4 flex items-center gap-1 transition-all">AgroSupply <i data-lucide="truck" class="w-3.5 h-3.5"></i></button>
-                                </td>
-                                <td class="p-4 text-right">
-                                    <div class="flex flex-col items-end leading-none">
-                                        <span class="font-black text-red-600 text-base">450</span>
-                                        <span class="text-[9px] font-black text-gray-400 uppercase mt-1">KG</span>
-                                    </div>
-                                </td>
-                                <td class="p-4 text-center font-bold">500</td>
-                                <td class="p-4 text-center font-black text-red-600 tracking-tighter">3 Days</td>
-                                <td class="p-4 text-center font-bold text-[10px] uppercase text-green-600 tracking-wider">OK</td>
-                                <td class="p-4 text-center">
-                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black border bg-amber-100 text-amber-800 border-amber-200 uppercase tracking-widest">LOW STOCK</span>
-                                </td>
-                                <td class="p-4 text-right flex justify-end gap-3 text-gray-400">
-                                    <i data-lucide="eye" class="w-4 h-4 cursor-pointer hover:text-blue-600 transition-colors" onclick="toggleModal('viewModal')"></i>
-                                    <i data-lucide="history" class="w-4 h-4 cursor-pointer hover:text-amber-600 transition-colors" onclick="toggleModal('historyModal')"></i>
-                                    <i data-lucide="pencil" class="w-4 h-4 cursor-pointer hover:text-green-600 transition-colors" onclick="toggleModal('editSettingsModal')"></i>
-                                </td>
-                            </tr>
+            <!-- Modal Body (Matching the grid-cols-2 gap-4 layout from Vue) -->
+            <div class="p-6">
+                <form id="supplierForm" class="space-y-4" onsubmit="event.preventDefault();">
+                    <div class="grid grid-cols-2 gap-4">
+                        
+                        <!-- Company Name (Full Width) -->
+                        <div class="col-span-2 space-y-1">
+                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Company Name *</label>
+                            <input
+                                type="text"
+                                class="system-input w-full p-2.5 border border-gray-300 rounded-lg font-black text-sm shadow-sm transition-all"
+                                placeholder="Legal corporate name"
+                                required
+                            />
+                        </div>
 
-                            <!-- Normal Stock Row -->
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="p-4 bulk-col hidden">
-                                    <input type="checkbox" class="row-checkbox w-4 h-4 rounded border-gray-300 text-brand focus:ring-brand cursor-pointer" onchange="updateSelectedCount()">
-                                </td>
-                                <td class="p-4">
-                                    <div class="flex items-center gap-4">
-                                        <div class="w-10 h-10 rounded-lg flex items-center justify-center border border-blue-200 bg-blue-50 text-blue-600 shadow-sm"><i data-lucide="pill" class="w-5 h-5"></i></div>
-                                        <div class="flex flex-col">
-                                            <span class="font-black text-gray-900 tracking-tight">Penicillin G</span>
-                                            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-tighter leading-none mt-1">SKU-MED-402</span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="p-4">
-                                    <span class="inline-flex items-center gap-1 px-2 py-1 rounded bg-blue-100 text-blue-700 text-[10px] font-black uppercase">MEDICATION <i data-lucide="external-link" class="w-3 h-3"></i></span>
-                                </td>
-                                <td class="p-4 italic text-gray-400 font-medium">Not assigned</td>
-                                <td class="p-4 text-right">
-                                    <div class="flex flex-col items-end leading-none">
-                                        <span class="font-black text-gray-900 text-base">120</span>
-                                        <span class="text-[9px] font-black text-gray-400 uppercase mt-1">ML</span>
-                                    </div>
-                                </td>
-                                <td class="p-4 text-center font-bold">50</td>
-                                <td class="p-4 text-center font-black text-green-600 tracking-tighter">15 Days</td>
-                                <td class="p-4 text-center">
-                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black border bg-red-50 text-red-700 border-red-200 uppercase tracking-wider">
-                                        <i data-lucide="alert-triangle" class="w-3 h-3"></i> 12d
-                                    </span>
-                                </td>
-                                <td class="p-4 text-center">
-                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black border bg-green-100 text-green-800 border-green-200 uppercase tracking-widest">IN STOCK</span>
-                                </td>
-                                <td class="p-4 text-right flex justify-end gap-3 text-gray-400">
-                                    <i data-lucide="eye" class="w-4 h-4 cursor-pointer hover:text-blue-600 transition-colors"></i>
-                                    <i data-lucide="history" class="w-4 h-4 cursor-pointer hover:text-amber-600 transition-colors"></i>
-                                    <i data-lucide="pencil" class="w-4 h-4 cursor-pointer hover:text-green-600 transition-colors"></i>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </main>
-
-        <!-- MODALS -->
-
-        <!-- 1. Edit Stock Settings (Matching font-black / uppercase tracking-widest) -->
-        <div id="editSettingsModal" class="fixed inset-0 z-50 flex items-center justify-center modal-backdrop hidden">
-            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 border border-gray-100 overflow-hidden transform scale-100 transition-all">
-                <div class="flex justify-between items-center p-6 border-b bg-gray-50">
-                    <h3 class="text-lg font-black text-gray-900 tracking-widest uppercase">Edit Stock Settings</h3>
-                    <button onclick="toggleModal('editSettingsModal')" class="text-gray-400 hover:text-gray-600 transition-colors"><i data-lucide="x" class="w-5 h-5"></i></button>
-                </div>
-                <div class="p-6">
-                    <form class="space-y-5" onsubmit="event.preventDefault(); toggleModal('editSettingsModal');">
+                        <!-- Type -->
                         <div class="space-y-1">
-                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Preferred Supplier</label>
-                            <select class="w-full p-2.5 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-brand outline-none font-bold text-sm">
-                                <option>AgroSupply Co.</option>
-                                <option>FarmDirect Ltd</option>
+                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Type</label>
+                            <select class="system-input w-full p-2.5 border border-gray-300 rounded-lg bg-white font-black text-sm shadow-sm transition-all cursor-pointer">
+                                <option value="Distributor">Distributor</option>
+                                <option value="Manufacturer">Manufacturer</option>
+                                <option value="Wholesaler">Wholesaler</option>
                             </select>
                         </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="space-y-1">
-                                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Min Threshold</label>
-                                <input type="number" value="500" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand outline-none font-black text-sm">
-                            </div>
-                            <div class="space-y-1">
-                                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Safety Stock</label>
-                                <input type="number" value="50" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand outline-none font-black text-sm">
-                            </div>
-                        </div>
-                        <div class="flex justify-end gap-3 pt-6 border-t border-gray-100 mt-4">
-                            <button type="button" onclick="toggleModal('editSettingsModal')" class="px-5 py-2.5 border border-gray-300 rounded-lg text-gray-600 font-bold uppercase text-[10px] tracking-widest hover:bg-gray-50 transition-all">Cancel</button>
-                            <button type="submit" class="px-8 py-2.5 bg-brand text-white rounded-lg hover:bg-opacity-90 shadow-md font-black uppercase text-[10px] tracking-widest transition-all transform active:scale-95">Save Settings</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
 
-        <!-- 2. View Log (Activity History - Exact match) -->
-        <div id="historyModal" class="fixed inset-0 z-50 flex items-center justify-center modal-backdrop hidden">
-            <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg mx-4 max-h-[80vh] flex flex-col overflow-hidden">
-                <div class="p-6 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
-                    <div>
-                        <h3 class="font-bold text-gray-900 text-lg leading-none">Activity History</h3>
-                        <p class="text-xs text-gray-500 font-bold uppercase tracking-widest mt-2">Napier Grass</p>
-                    </div>
-                    <button onclick="toggleModal('historyModal')" class="text-gray-400 hover:text-gray-600 transition-colors"><i data-lucide="x" class="w-5 h-5"></i></button>
-                </div>
-                <div class="p-8 overflow-y-auto custom-scrollbar bg-white flex-1">
-                    <div class="space-y-8 relative border-l-2 border-gray-100 ml-3">
-                        <div class="relative pl-7">
-                            <div class="absolute -left-[10px] top-1 w-4 h-4 rounded-full border-4 border-white shadow-sm bg-[#34554a]"></div>
-                            <p class="text-[10px] text-gray-400 font-mono font-black uppercase tracking-wider">29/12/2025, 10:15 AM</p>
-                            <p class="font-bold text-sm text-gray-800 leading-tight">Threshold Adjusted</p>
-                            <p class="text-xs text-gray-500 leading-relaxed font-medium mt-1">Increased min threshold from 400 to 500 KG by Admin.</p>
+                        <!-- Contact Person -->
+                        <div class="space-y-1">
+                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Contact Person</label>
+                            <input
+                                type="text"
+                                class="system-input w-full p-2.5 border border-gray-300 rounded-lg font-black text-sm shadow-sm transition-all"
+                                placeholder="Name"
+                            />
                         </div>
-                        <div class="relative pl-7">
-                            <div class="absolute -left-[10px] top-1 w-4 h-4 rounded-full border-4 border-white shadow-sm bg-gray-200"></div>
-                            <p class="text-[10px] text-gray-400 font-mono font-black uppercase tracking-wider">15/12/2025, 09:00 AM</p>
-                            <p class="font-bold text-sm text-gray-800 leading-tight">Stock Record Created</p>
+
+                        <!-- Phone -->
+                        <div class="space-y-1">
+                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Phone</label>
+                            <input
+                                type="text"
+                                class="system-input w-full p-2.5 border border-gray-300 rounded-lg font-black text-sm shadow-sm transition-all"
+                                placeholder="+60 12-345 6789"
+                            />
+                        </div>
+
+                        <!-- Email -->
+                        <div class="space-y-1">
+                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Email</label>
+                            <input
+                                type="email"
+                                class="system-input w-full p-2.5 border border-gray-300 rounded-lg font-black text-sm shadow-sm transition-all"
+                                placeholder="email@company.com"
+                            />
+                        </div>
+
+                        <!-- Address (Full Width) -->
+                        <div class="col-span-2 space-y-1">
+                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Address</label>
+                            <textarea
+                                rows="2"
+                                class="system-input w-full p-2.5 border border-gray-300 rounded-lg font-black text-sm shadow-sm transition-all"
+                                placeholder="Full address"
+                            ></textarea>
                         </div>
                     </div>
-                </div>
-                <div class="p-4 bg-gray-50 border-t flex justify-end">
-                    <button onclick="toggleModal('historyModal')" class="px-6 py-2 bg-white border border-gray-200 text-gray-700 font-bold rounded-lg hover:bg-gray-50 text-[10px] uppercase tracking-widest transition-all">Close History</button>
-                </div>
-            </div>
-        </div>
 
-        <!-- 3. Add Supplier Modal -->
-        <div id="addSupplierModal" class="fixed inset-0 z-50 flex items-center justify-center modal-backdrop hidden">
-            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 border border-gray-100 overflow-hidden">
-                <div class="flex justify-between items-center p-6 border-b bg-gray-50">
-                    <h3 class="text-lg font-black text-gray-900 tracking-widest uppercase">Add New Supplier</h3>
-                    <button onclick="toggleModal('addSupplierModal')" class="text-gray-400 hover:text-gray-600 transition-colors"><i data-lucide="x" class="w-5 h-5"></i></button>
-                </div>
-                <div class="p-6">
-                    <form class="space-y-4" onsubmit="event.preventDefault(); toggleModal('addSupplierModal');">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="col-span-2 space-y-1">
-                                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Company Name *</label>
-                                <input type="text" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand outline-none font-black text-sm shadow-sm" placeholder="Legal corporate name" required />
-                            </div>
-                            <div class="space-y-1">
-                                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Type</label>
-                                <select class="w-full p-2.5 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-brand outline-none font-black text-sm shadow-sm">
-                                    <option>Distributor</option>
-                                    <option>Manufacturer</option>
-                                    <option>Wholesaler</option>
-                                </select>
-                            </div>
-                            <div class="space-y-1">
-                                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Contact Person</label>
-                                <input type="text" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand outline-none font-black text-sm shadow-sm" placeholder="Name" />
-                            </div>
-                        </div>
-                        <div class="flex justify-end gap-3 pt-6 border-t border-gray-100 mt-4">
-                            <button type="button" onclick="toggleModal('addSupplierModal')" class="px-5 py-2.5 border border-gray-300 rounded-lg text-gray-600 font-bold uppercase text-[10px] tracking-widest hover:bg-gray-50 transition-all">Cancel</button>
-                            <button type="submit" class="px-8 py-2.5 bg-brand text-white rounded-lg hover:bg-opacity-90 shadow-md font-black uppercase text-[10px] tracking-widest transition-all transform active:scale-95">Add Supplier</button>
-                        </div>
-                    </form>
-                </div>
+                    <!-- Modal Footer Actions (Replicating exact button typography) -->
+                    <div class="flex justify-end gap-3 pt-6 border-t border-gray-100 mt-4">
+                        <button 
+                            type="button" 
+                            class="px-5 py-2.5 border border-gray-300 rounded-lg text-gray-600 font-bold uppercase text-[10px] tracking-widest hover:bg-gray-50 transition-all"
+                        >
+                            Cancel
+                        </button>
+                        <button 
+                            type="submit" 
+                            class="px-8 py-2.5 bg-brand text-white rounded-lg hover:bg-brand-hover shadow-md font-black uppercase text-[10px] tracking-widest transition-all transform active:scale-95"
+                        >
+                            Add Supplier
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
 
         <script>
+            // Initialize Icons
             lucide.createIcons();
-
-            function toggleBulkMode() {
-                const bulkCols = document.querySelectorAll('.bulk-col');
-                const bulkBar = document.getElementById('bulkBar');
-                const btn = document.getElementById('bulkToggle');
-                const isHidden = bulkBar.classList.contains('hidden');
-                
-                if (isHidden) {
-                    bulkBar.classList.remove('hidden');
-                    bulkCols.forEach(c => c.classList.remove('hidden'));
-                } else {
-                    bulkBar.classList.add('hidden');
-                    bulkCols.forEach(c => c.classList.add('hidden'));
-                    document.querySelectorAll('.row-checkbox').forEach(cb => cb.checked = false);
-                    updateSelectedCount();
-                }
-            }
-
-            function selectAll(master) {
-                document.querySelectorAll('.row-checkbox').forEach(cb => cb.checked = master.checked);
-                updateSelectedCount();
-            }
-
-            function updateSelectedCount() {
-                const count = document.querySelectorAll('.row-checkbox:checked').length;
-                document.getElementById('selectedCount').innerText = count;
-            }
-
-            function toggleModal(id) {
-                const modal = document.getElementById(id);
-                modal.classList.toggle('hidden');
-            }
-
-            // Simple backdrop close
-            document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
-                backdrop.addEventListener('click', function(e) {
-                    if (e.target === this) this.classList.add('hidden');
-                });
-            });
         </script>
     </body>
 </html>
