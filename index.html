@@ -49,8 +49,8 @@
     </head>
     <body class="font-sans text-gray-900 antialiased bg-gray-50 flex min-h-screen">
 
-        <!-- Sidebar Navigation Simulation -->
-        <aside class="fixed inset-y-0 left-0 w-64 bg-[#22262a] text-gray-400 flex flex-col font-medium z-30 shadow-xl h-screen overflow-hidden text-sm border-r border-gray-800">
+        <!-- Sidebar Navigation Simulation (Background) -->
+        <aside class="fixed inset-y-0 left-0 w-64 bg-[#22262a] text-gray-400 flex flex-col font-medium z-30 shadow-xl h-screen overflow-hidden text-sm border-r border-gray-800 opacity-50 pointer-events-none">
             <div class="h-24 flex items-center justify-center py-2 bg-[#22262a] border-b border-gray-800">
                 <img src="https://placehold.co/150x60?text=LOGO" alt="Logo" class="h-10 w-auto" />
             </div>
@@ -60,255 +60,113 @@
                 </a>
                 <div class="nav-item">
                     <button class="w-full flex items-center justify-between px-4 py-2.5 text-white bg-[#2a2e33] rounded-md shadow-sm">
-                        <div class="flex items-center font-bold"><i data-lucide="beef" class="w-4 h-4 mr-3"></i>Herd Management</div>
+                        <div class="flex items-center font-bold"><i data-lucide="beef" class="w-4 h-4 mr-3 text-white"></i>Herd Management</div>
                         <i data-lucide="chevron-down" class="w-3.5 h-3.5 rotate-180"></i>
                     </button>
-                    <div class="pl-11 space-y-1 mt-1 text-xs">
-                        <a href="#" class="block py-2 text-white font-bold underline underline-offset-4 decoration-brand">Herd Details</a>
-                        <a href="#" class="block py-2 text-gray-500 hover:text-white">Data Input</a>
-                    </div>
                 </div>
             </nav>
         </aside>
 
-        <!-- Main Content Area -->
-        <main class="ml-64 flex-1 p-8">
-            
-            <!-- Page Header (Normal casing as per Vue script) -->
+        <!-- Main Content Area (Background) -->
+        <main class="ml-64 flex-1 p-8 opacity-50 pointer-events-none">
             <div class="mb-8">
                 <div class="flex items-center gap-2 text-sm text-gray-500 mb-2">
-                    <a href="#" class="hover:text-[#34554a] transition-colors flex items-center gap-1 font-medium">
-                        <i data-lucide="arrow-left" class="w-4 h-4"></i>
-                        Back to Herd Cards
-                    </a>
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to Herd Cards
                 </div>
-                <h1 class="text-2xl font-bold text-gray-900 tracking-tight" id="estateTitle">Estate Alpha Herd Details</h1>
-                <p class="text-sm text-gray-500 mt-1" id="monthDisplay">December 2025 Performance</p>
+                <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Estate Alpha Herd Details</h1>
             </div>
-
-            <!-- Summary Stat Cards (Exact typography mapping) -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                <div class="bg-white p-6 rounded-xl border border-gray-100 flex items-center gap-5 shadow-sm">
-                    <div class="w-14 h-14 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center">
-                        <i data-lucide="mountain" class="w-7 h-7"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs text-gray-500 font-bold uppercase">Total Area</p>
-                        <p class="text-3xl font-black text-gray-900">520.4 Ha</p>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-xl border border-gray-100 flex items-center gap-5 shadow-sm">
-                    <div class="w-14 h-14 rounded-full bg-green-50 text-green-600 flex items-center justify-center">
-                        <i data-lucide="check-circle" class="w-7 h-7"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs text-gray-500 font-bold uppercase">Active Blocks</p>
-                        <p class="text-3xl font-black text-gray-900">12</p>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-xl border border-gray-100 flex items-center gap-5 shadow-sm">
-                    <div class="w-14 h-14 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                        <i data-lucide="trending-up" class="w-7 h-7"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs text-gray-500 font-bold uppercase">Avg Achievement</p>
-                        <p class="text-3xl font-black text-green-600">98.5%</p>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-xl border border-green-100 flex items-center gap-5 shadow-sm">
-                    <div class="w-14 h-14 rounded-full bg-green-50 text-green-600 flex items-center justify-center">
-                        <i data-lucide="dollar-sign" class="w-7 h-7"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs text-green-600 font-bold uppercase">Total Claim</p>
-                        <p class="text-3xl font-black text-green-600 uppercase tracking-tighter leading-none">RM 5,750.50</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Filter/Action Bar -->
-            <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-                <div class="flex flex-1 gap-2 w-full md:w-auto flex-wrap">
-                    <div class="relative flex-1 min-w-[200px]">
-                        <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4"></i>
-                        <input type="text" id="tableSearch" placeholder="Search blocks..." class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-200 outline-none text-sm focus:ring-2 focus:ring-[#34554a] text-gray-900" />
-                    </div>
-                    <select id="statusFilter" class="px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 text-gray-700 text-sm outline-none focus:ring-2 focus:ring-[#34554a] font-medium">
-                        <option value="">All Status</option>
-                        <option value="excellent">Excellent</option>
-                        <option value="good">Good</option>
-                        <option value="average">Average</option>
-                        <option value="below">Below Target</option>
-                    </select>
-                    <!-- Bulk Action Toggle -->
-                    <button onclick="toggleBulkMode()" id="bulkToggleBtn" class="flex items-center gap-2 px-4 py-2 border border-gray-200 bg-white text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all">
-                        <i data-lucide="list-checks" class="w-4 h-4"></i>
-                        Bulk Action
-                    </button>
-                    <!-- Bulk Delete Button -->
-                    <button onclick="openDeleteModal('bulk')" id="bulkDeleteBtn" class="hidden flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-600 text-sm shadow-md transition-all active:scale-95">
-                        <i data-lucide="trash-2" class="w-4 h-4"></i> Delete (<span id="selectedCount">0</span>)
-                    </button>
-                </div>
-                <div class="flex gap-2">
-                    <button class="flex items-center gap-2 bg-[#34554a] text-white px-5 py-2.5 rounded-lg font-medium hover:bg-opacity-90 text-sm shadow-sm transition-all transform active:scale-95">
-                        <i data-lucide="download" class="w-4 h-4"></i> Export
-                    </button>
-                </div>
-            </div>
-
-            <!-- Block Details Table (Exact match to Vue template logic) -->
-            <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 mb-8">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left whitespace-nowrap">
-                        <thead>
-                            <tr class="bg-[#34554a] text-white text-sm">
-                                <th class="p-4 w-12 bulk-col hidden">
-                                    <input type="checkbox" id="selectAllCheckbox" onchange="selectAllRows(this)" class="w-4 h-4 rounded border-gray-300 text-brand focus:ring-brand cursor-pointer">
-                                </th>
-                                <th class="p-4 font-semibold">Block</th>
-                                <th class="p-4 font-semibold">Area (Ha)</th>
-                                <th class="p-4 font-semibold text-center">Rate</th>
-                                <th class="p-4 font-semibold text-center">Area Actual %</th>
-                                <th class="p-4 font-semibold text-center">Achievement</th>
-                                <th class="p-4 font-semibold text-center">RM/Ha</th>
-                                <th class="p-4 font-semibold text-right">Total (RM)</th>
-                                <th class="p-4 font-semibold text-center">Status</th>
-                                <th class="p-4 text-right font-semibold">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="blocksTableBody" class="divide-y text-sm text-gray-700 font-medium divide-gray-100">
-                            <!-- JS Dynamic Content -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Table Footer -->
-                <div class="p-4 border-t bg-gray-50 flex flex-col md:flex-row items-center justify-between gap-4">
-                    <p class="text-sm text-gray-500 font-medium">Showing <span id="displayCount" class="font-bold text-gray-800">0</span> records</p>
-                    <div class="flex items-center gap-2">
-                        <span class="text-sm font-medium text-gray-900 mr-4">
-                            Grand Total: <span class="text-green-600 font-bold" id="grandTotalClaim">RM 0.00</span>
-                        </span>
-                        <div class="flex gap-2">
-                            <button disabled class="w-8 h-8 flex items-center justify-center border border-gray-200 rounded-lg bg-white opacity-50 cursor-not-allowed"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
-                            <button disabled class="w-8 h-8 flex items-center justify-center border border-gray-200 rounded-lg bg-white opacity-50 cursor-not-allowed"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Performance Metrics (Summary Cards) -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center"><i data-lucide="bar-chart-3" class="w-5 h-5"></i></div>
-                        <h3 class="text-lg font-semibold text-gray-900">Performance Metrics</h3>
-                    </div>
-                    <div class="space-y-3">
-                        <div class="flex justify-between border-b border-gray-50 pb-2"><span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Avg Achievement Rate</span><span class="text-sm font-semibold text-green-600">98.5%</span></div>
-                        <div class="flex justify-between border-b border-gray-50 pb-2"><span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Best Performing Block</span><span class="text-sm font-semibold text-gray-900 uppercase">A-01</span></div>
-                        <div class="flex justify-between"><span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Total Area Coverage</span><span class="text-sm font-semibold text-gray-900">520.4 Ha</span></div>
-                    </div>
-                </div>
-
-                <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-10 h-10 rounded-full bg-green-50 text-green-600 flex items-center justify-center"><i data-lucide="dollar-sign" class="w-5 h-5"></i></div>
-                        <h3 class="text-lg font-semibold text-gray-900">Financial Summary</h3>
-                    </div>
-                    <div class="space-y-3">
-                        <div class="flex justify-between border-b border-gray-50 pb-2"><span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Total Monthly Claim</span><span class="text-sm font-semibold text-green-600">RM 5,750.50</span></div>
-                        <div class="flex justify-between border-b border-gray-50 pb-2"><span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Avg RM per Hectare</span><span class="text-sm font-semibold text-gray-900">RM 11.09</span></div>
-                        <div class="flex justify-between"><span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Total Achievement</span><span class="text-sm font-semibold text-gray-900">512.59</span></div>
-                    </div>
-                </div>
-
-                <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-10 h-10 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center"><i data-lucide="map" class="w-5 h-5"></i></div>
-                        <h3 class="text-lg font-semibold text-gray-900">Block Status</h3>
-                    </div>
-                    <div class="space-y-3">
-                        <div class="flex justify-between border-b border-gray-50 pb-2"><span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Active Blocks</span><span class="text-sm font-semibold text-green-600">12 / 12</span></div>
-                        <div class="flex justify-between border-b border-gray-50 pb-2"><span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Excellent Performance</span><span class="text-sm font-semibold text-green-600">75%</span></div>
-                        <div class="flex justify-between"><span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Area Actual %</span><span class="text-sm font-semibold text-gray-900 font-black">98.5%</span></div>
-                    </div>
-                </div>
-            </div>
+            <!-- Stats Cards and Table Content blurred by backdrop -->
         </main>
 
-        <!-- MODALS -->
-
-        <!-- 1. View Block Modal -->
-        <div id="viewModal" class="fixed inset-0 z-50 flex items-center justify-center modal-backdrop hidden p-4">
-            <div class="bg-white rounded-xl w-full max-w-lg shadow-2xl overflow-hidden transform scale-100 transition-all border border-gray-100">
-                <div class="px-6 py-4 border-b flex items-center justify-between bg-gray-50">
-                    <div>
-                        <h3 class="text-lg font-bold text-gray-900">Block Details</h3>
-                        <p class="text-xs text-gray-500 font-bold uppercase tracking-widest mt-1" id="view-block-id">A-01</p>
-                    </div>
-                    <button onclick="toggleModal('viewModal')" class="text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-200 rounded-lg"><i data-lucide="x" class="w-5 h-5"></i></button>
-                </div>
-                <div class="p-6 space-y-6">
-                    <div class="grid grid-cols-2 gap-x-8 gap-y-6">
-                        <div><span class="block text-xs text-gray-400 uppercase font-bold tracking-tight mb-1">Area (Ha)</span><span class="text-base font-bold text-gray-900" id="view-area">0.00</span></div>
-                        <div><span class="block text-xs text-gray-400 uppercase font-bold tracking-tight mb-1">Rate</span><span class="text-base font-bold text-gray-900" id="view-rate">0.00</span></div>
-                        <div><span class="block text-xs text-gray-400 uppercase font-bold tracking-tight mb-1">Achievement</span><span class="text-base font-bold text-gray-900" id="view-achievement">0.00</span></div>
-                        <div><span class="block text-xs text-gray-400 uppercase font-bold tracking-tight mb-1">RM/Ha</span><span class="text-base font-bold text-gray-900" id="view-rmha">0.00</span></div>
-                        <div class="col-span-2 flex justify-between items-center py-4 border-t border-b border-gray-50 mt-2">
-                            <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">Total Value</span>
-                            <span class="text-xl font-black text-green-600" id="view-total">RM 0.00</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="px-6 py-4 border-t bg-gray-50 flex justify-end gap-3">
-                    <button onclick="toggleModal('viewModal')" class="px-5 py-2 border border-gray-300 rounded-lg text-gray-700 font-bold hover:bg-white text-sm transition-colors">Close</button>
-                    <button onclick="toggleModal('viewModal'); openEditModal(currentViewingBlock)" class="px-5 py-2 bg-brand text-white rounded-lg font-black text-sm flex items-center gap-2 shadow-md active:scale-95 transition-all transition-colors"><i data-lucide="pencil" class="w-4 h-4"></i> Edit Block</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 2. Edit Block Modal (Exactly matching the useForm structure) -->
-        <div id="editModal" class="fixed inset-0 z-50 flex items-center justify-center modal-backdrop hidden p-4">
-            <div class="bg-white rounded-xl w-full max-w-lg shadow-2xl overflow-hidden border border-gray-100">
-                <div class="px-6 py-4 border-b bg-gray-50 flex items-center justify-between">
+        <!-- Edit Block Modal (PROMINENT PREVIEW) -->
+        <div id="editModal" class="fixed inset-0 z-50 flex items-center justify-center modal-backdrop p-4">
+            <div class="bg-white rounded-xl w-full max-w-lg shadow-2xl overflow-hidden border border-gray-100 transform scale-100 transition-all">
+                
+                <!-- Modal Header (Matching Vue exactly) -->
+                <div class="px-6 py-4 border-b bg-white flex items-center justify-between">
                     <div>
                         <h3 class="text-lg font-bold text-gray-900">Edit Block</h3>
-                        <p class="text-xs text-gray-500 font-bold uppercase tracking-widest mt-1" id="edit-block-label">Block Details</p>
+                        <p class="text-xs text-gray-500" id="edit-block-label">A-01</p>
                     </div>
-                    <button onclick="toggleModal('editModal')" class="text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-200 rounded-lg"><i data-lucide="x" class="w-5 h-5"></i></button>
+                    <button class="text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-100 rounded-lg">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
                 </div>
-                <form class="p-6 space-y-6" onsubmit="event.preventDefault(); toggleModal('editModal');">
-                    <div class="space-y-4">
-                        <div class="space-y-1.5">
-                            <label class="block text-sm font-medium text-gray-700">Block ID</label>
-                            <input type="text" id="input-block-id" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium outline-none focus:ring-2 focus:ring-brand shadow-sm">
+
+                <!-- Modal Body (Matching the useForm structure and styling) -->
+                <form class="p-6 space-y-4" onsubmit="event.preventDefault();">
+                    
+                    <!-- Block ID Field -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Block ID</label>
+                        <input 
+                            type="text" 
+                            id="input-block-id" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium outline-none focus:ring-2 focus:ring-[#34554a] focus:border-transparent transition-all" 
+                            value="A-01"
+                        />
+                    </div>
+
+                    <!-- Area and Actual Grid -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Area (Ha)</label>
+                            <input 
+                                type="number" 
+                                step="0.01" 
+                                id="input-area" 
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium outline-none focus:ring-2 focus:ring-[#34554a] focus:border-transparent transition-all text-right" 
+                                value="52.40"
+                            />
                         </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="space-y-1.5">
-                                <label class="block text-sm font-medium text-gray-700">Area (Ha)</label>
-                                <input type="number" step="0.01" id="input-area" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium outline-none focus:ring-2 focus:ring-brand shadow-sm text-right">
-                            </div>
-                            <div class="space-y-1.5">
-                                <label class="block text-sm font-medium text-gray-700">Actual (Ha)</label>
-                                <input type="number" step="0.01" id="input-actual" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium outline-none focus:ring-2 focus:ring-brand shadow-sm text-right">
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="space-y-1.5">
-                                <label class="block text-sm font-medium text-gray-700">Achievement</label>
-                                <input type="number" step="0.01" id="input-achievement" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium outline-none focus:ring-2 focus:ring-brand shadow-sm text-right">
-                            </div>
-                            <div class="space-y-1.5">
-                                <label class="block text-sm font-medium text-gray-700">Rate (RM/Ha)</label>
-                                <input type="number" step="0.01" id="input-rate" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium outline-none focus:ring-2 focus:ring-brand shadow-sm text-right">
-                            </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Actual (Ha)</label>
+                            <input 
+                                type="number" 
+                                step="0.01" 
+                                id="input-actual" 
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium outline-none focus:ring-2 focus:ring-[#34554a] focus:border-transparent transition-all text-right" 
+                                value="52.40"
+                            />
                         </div>
                     </div>
-                    <div class="flex justify-end gap-3 pt-6 border-t border-gray-100">
-                        <button type="button" onclick="toggleModal('editModal')" class="px-5 py-2.5 border border-gray-300 rounded-lg text-gray-700 font-bold hover:bg-gray-50 transition-all text-sm uppercase tracking-tight">Cancel</button>
-                        <button type="submit" class="px-6 py-2.5 bg-brand text-white rounded-lg font-black shadow-lg transform active:scale-95 transition-all text-sm flex items-center gap-2 uppercase tracking-tight">
+
+                    <!-- Achievement and Rate Grid -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Achievement</label>
+                            <input 
+                                type="number" 
+                                step="0.01" 
+                                id="input-achievement" 
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium outline-none focus:ring-2 focus:ring-[#34554a] focus:border-transparent transition-all text-right" 
+                                value="52.40"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Rate (RM/Ha)</label>
+                            <input 
+                                type="number" 
+                                step="0.01" 
+                                id="input-rate" 
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium outline-none focus:ring-2 focus:ring-[#34554a] focus:border-transparent transition-all text-right" 
+                                value="11.09"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Modal Footer Actions (Exactly as in Vue) -->
+                    <div class="flex justify-end gap-3 pt-4 border-t mt-4">
+                        <button 
+                            type="button" 
+                            class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 text-sm font-medium transition-all"
+                        >
+                            Cancel
+                        </button>
+                        <button 
+                            type="submit" 
+                            class="px-6 py-2 bg-[#34554a] text-white rounded-lg hover:bg-[#2a443b] text-sm font-bold shadow-md transition-all flex items-center gap-2 active:scale-95"
+                        >
                             <i data-lucide="save" class="w-4 h-4"></i> Save Changes
                         </button>
                     </div>
@@ -316,184 +174,14 @@
             </div>
         </div>
 
-        <!-- 3. Delete Confirmation Modal -->
-        <div id="deleteModal" class="fixed inset-0 z-50 flex items-center justify-center modal-backdrop hidden p-4">
-            <div class="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl text-center border border-gray-100 transform scale-100 transition-all">
-                <div class="w-16 h-16 rounded-full bg-red-100 text-red-500 flex items-center justify-center mx-auto mb-6">
-                    <i data-lucide="trash-2" class="w-8 h-8"></i>
-                </div>
-                <h3 class="text-lg font-bold text-gray-900 mb-2">Confirm Delete</h3>
-                <p class="text-sm text-gray-600 mb-8 leading-relaxed">
-                    Are you sure you want to delete <strong id="deleteTargetName" class="text-gray-900">"Block A-01"</strong>?
-                    <br><span class="text-red-500 text-xs font-bold uppercase tracking-widest mt-2 block">This action cannot be undone.</span>
-                </p>
-                <div class="flex gap-3">
-                    <button onclick="toggleModal('deleteModal')" class="flex-1 px-4 py-3 border border-gray-300 rounded-xl text-gray-700 font-bold hover:bg-gray-50 transition-all text-sm">Cancel</button>
-                    <button onclick="toggleModal('deleteModal'); alert('Record successfully removed.');" class="flex-1 px-4 py-3 bg-red-500 text-white rounded-xl font-bold hover:bg-red-600 transition-all shadow-md text-sm active:scale-95">Delete</button>
-                </div>
-            </div>
-        </div>
-
         <script>
             lucide.createIcons();
 
-            // Internal Data Simulation
-            const blocks = [
-                { id: 1, block_id: 'A-01', area: 52.40, rate: 1.00, area_actual_percent: 100, achievement: 52.40, rm_per_ha: 11.09, total: 581.12, status: 'excellent', status_label: 'Excellent' },
-                { id: 2, block_id: 'A-02', area: 48.15, rate: 0.98, area_actual_percent: 98, achievement: 47.19, rm_per_ha: 11.09, total: 523.34, status: 'good', status_label: 'Good' },
-                { id: 3, block_id: 'B-01', area: 60.00, rate: 0.94, area_actual_percent: 94, achievement: 56.40, rm_per_ha: 11.09, total: 625.48, status: 'average', status_label: 'Average' },
-                { id: 4, block_id: 'C-03', area: 45.30, rate: 0.85, area_actual_percent: 85, achievement: 38.50, rm_per_ha: 11.09, total: 426.96, status: 'below', status_label: 'Below Target' },
-            ];
-
-            let bulkMode = false;
-            let selectedBlocks = [];
-            let currentViewingBlock = null;
-
-            function renderTable() {
-                const tableBody = document.getElementById('blocksTableBody');
-                tableBody.innerHTML = '';
-                
-                blocks.forEach(block => {
-                    const isSelected = selectedBlocks.includes(block.id);
-                    const tr = document.createElement('tr');
-                    tr.className = `border-b border-gray-100 hover:bg-green-50/30 transition-colors cursor-pointer group ${isSelected ? 'bg-brand-light/30' : ''}`;
-                    tr.onclick = (e) => {
-                        if (bulkMode) toggleRowSelection(block.id);
-                        else if (!e.target.closest('button') && !e.target.closest('input')) openView(block);
-                    };
-
-                    tr.innerHTML = `
-                        <td class="p-4 bulk-col ${bulkMode ? '' : 'hidden'}">
-                            <input type="checkbox" class="row-checkbox w-4 h-4 rounded border-gray-300 text-brand focus:ring-brand cursor-pointer" 
-                                ${isSelected ? 'checked' : ''} onchange="toggleRowSelection(${block.id})">
-                        </td>
-                        <td class="p-4"><div class="font-bold text-gray-900 text-base uppercase tracking-tight">${block.block_id}</div></td>
-                        <td class="p-4">${block.area.toFixed(2)}</td>
-                        <td class="p-4 text-center font-medium">${block.rate.toFixed(2)}</td>
-                        <td class="p-4 text-center">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold border ${getActualColorClass(block.area_actual_percent)}">
-                                ${block.area_actual_percent}%
-                            </span>
-                        </td>
-                        <td class="p-4 text-center font-medium">${block.achievement.toFixed(2)}</td>
-                        <td class="p-4 text-center font-black text-brand">${block.rm_per_ha.toFixed(2)}</td>
-                        <td class="p-4 text-right font-black text-green-600">RM ${block.total.toFixed(2)}</td>
-                        <td class="p-4 text-center">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black border uppercase tracking-wider ${getStatusColorClass(block.status)}">
-                                ${block.status_label}
-                            </span>
-                        </td>
-                        <td class="p-4 text-right">
-                            <div class="flex justify-end gap-3 text-gray-400 opacity-60 group-hover:opacity-100 transition-all">
-                                <button onclick="openView(${JSON.stringify(block).replace(/"/g, '&quot;')})" class="hover:text-blue-600"><i data-lucide="eye" class="w-4 h-4"></i></button>
-                                <button onclick="openEditModal(${JSON.stringify(block).replace(/"/g, '&quot;')})" class="hover:text-green-600"><i data-lucide="pencil" class="w-4 h-4"></i></button>
-                                <button onclick="openDeleteModal('single', '${block.block_id}')" class="hover:text-red-600"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                            </div>
-                        </td>
-                    `;
-                    tableBody.appendChild(tr);
-                });
-
-                document.getElementById('grandTotalClaim').innerText = `RM 5,750.50`;
-                document.getElementById('displayCount').innerText = blocks.length;
-                lucide.createIcons();
-            }
-
-            function getStatusColorClass(status) {
-                switch (status) {
-                    case 'excellent': return 'bg-green-100 text-green-800 border-green-200';
-                    case 'good': return 'bg-blue-100 text-blue-800 border-blue-200';
-                    case 'average': return 'bg-amber-100 text-amber-800 border-amber-200';
-                    case 'below': return 'bg-red-100 text-red-800 border-red-200';
-                    default: return 'bg-gray-100 text-gray-800 border-gray-300';
-                }
-            }
-
-            function getActualColorClass(percent) {
-                if (percent >= 98) return 'bg-green-100 text-green-800 border-green-200';
-                if (percent >= 95) return 'bg-amber-100 text-amber-800 border-amber-200';
-                return 'bg-red-100 text-red-800 border-red-200';
-            }
-
-            function toggleBulkMode() {
-                bulkMode = !bulkMode;
-                const cols = document.querySelectorAll('.bulk-col');
-                const btn = document.getElementById('bulkToggleBtn');
-                const delBtn = document.getElementById('bulkDeleteBtn');
-
-                if (bulkMode) {
-                    cols.forEach(c => c.classList.remove('hidden'));
-                    btn.classList.add('bg-brand', 'text-white');
-                    btn.classList.remove('bg-white', 'text-gray-700');
-                } else {
-                    cols.forEach(c => c.classList.add('hidden'));
-                    btn.classList.remove('bg-brand', 'text-white');
-                    btn.classList.add('bg-white', 'text-gray-700');
-                    selectedBlocks = [];
-                    delBtn.classList.add('hidden');
-                }
-                renderTable();
-            }
-
-            function selectAllRows(master) {
-                if (master.checked) selectedBlocks = blocks.map(b => b.id);
-                else selectedBlocks = [];
-                updateSelectedCount();
-                renderTable();
-            }
-
-            function toggleRowSelection(id) {
-                const index = selectedBlocks.indexOf(id);
-                if (index > -1) selectedBlocks.splice(index, 1);
-                else selectedBlocks.push(id);
-                updateSelectedCount();
-                renderTable();
-            }
-
-            function updateSelectedCount() {
-                const count = selectedBlocks.length;
-                document.getElementById('selectedCount').innerText = count;
-                const delBtn = document.getElementById('bulkDeleteBtn');
-                if (count > 0) delBtn.classList.remove('hidden');
-                else delBtn.classList.add('hidden');
-            }
-
+            // Simple Modal Toggle (for interactive use if needed)
             function toggleModal(id) {
                 const m = document.getElementById(id);
                 if (m) m.classList.toggle('hidden');
             }
-
-            function openView(block) {
-                currentViewingBlock = block;
-                document.getElementById('view-block-id').innerText = block.block_id;
-                document.getElementById('view-area').innerText = block.area.toFixed(2);
-                document.getElementById('view-rate').innerText = block.rate.toFixed(2);
-                document.getElementById('view-achievement').innerText = block.achievement.toFixed(2);
-                document.getElementById('view-rmha').innerText = block.rm_per_ha.toFixed(2);
-                document.getElementById('view-total').innerText = `RM ${block.total.toFixed(2)}`;
-                toggleModal('viewModal');
-            }
-
-            function openEditModal(block) {
-                document.getElementById('edit-block-label').innerText = `Modifying Block ${block.block_id}`;
-                document.getElementById('input-block-id').value = block.block_id;
-                document.getElementById('input-area').value = block.area;
-                document.getElementById('input-actual').value = block.rate;
-                document.getElementById('input-achievement').value = block.achievement;
-                document.getElementById('input-rate').value = block.rm_per_ha;
-                toggleModal('editModal');
-            }
-
-            function openDeleteModal(type, name = '') {
-                if (type === 'bulk') {
-                    document.getElementById('deleteTargetName').innerText = `${selectedBlocks.length} selected blocks`;
-                } else {
-                    document.getElementById('deleteTargetName').innerText = `"${name}"`;
-                }
-                toggleModal('deleteModal');
-            }
-
-            window.onload = renderTable;
         </script>
     </body>
 </html>
