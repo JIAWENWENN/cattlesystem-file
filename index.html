@@ -3,9 +3,9 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Cattle Profile Genealogy - Sawit Kinabalu</title>
+        <title>Herd Cards - Sawit Kinabalu</title>
         
-        <!-- Fonts: Figtree with full weight range for exact style matching -->
+        <!-- Fonts: Figtree with full weight range -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:300,400,500,600,700,800,900&display=swap" rel="stylesheet" />
 
@@ -22,7 +22,7 @@
                         colors: {
                             brand: {
                                 DEFAULT: '#34554a',
-                                hover: '#2c463d',
+                                hover: '#2a443b',
                                 light: '#E8F5F1',
                             }
                         }
@@ -36,9 +36,12 @@
             .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
             .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
             
+            .modal-backdrop {
+                background-color: rgba(0, 0, 0, 0.5);
+                backdrop-filter: blur(4px);
+                z-index: 50;
+            }
             .hidden { display: none !important; }
-            .font-black { font-weight: 900; }
-            .tracking-widest { letter-spacing: 0.1em; }
         </style>
     </head>
     <body class="font-sans text-gray-900 antialiased bg-gray-50 flex min-h-screen">
@@ -46,20 +49,20 @@
         <!-- Sidebar Navigation -->
         <aside class="fixed inset-y-0 left-0 w-64 bg-[#22262a] text-gray-400 flex flex-col font-medium z-30 shadow-xl h-screen overflow-hidden text-sm border-r border-gray-800">
             <div class="h-24 flex items-center justify-center py-2 bg-[#22262a] border-b border-gray-800">
-                <img src="https://placehold.co/150x60?text=LOGO" alt="Sawit Kinabalu" class="h-10 w-auto" />
+                <img src="https://placehold.co/150x60?text=LOGO" alt="Logo" class="h-10 w-auto" />
             </div>
             <nav class="flex-1 overflow-y-auto px-2 space-y-1 py-4 custom-scrollbar">
-                <a href="#" class="flex items-center px-4 py-2.5 text-gray-300 hover:bg-[#2a2e33] hover:text-white rounded-md transition-colors font-medium">
+                <a href="#" class="flex items-center px-4 py-2.5 text-gray-300 hover:bg-[#2a2e33] hover:text-white rounded-md transition-colors">
                     <i data-lucide="layout-dashboard" class="w-4 h-4 mr-3"></i> Dashboard
                 </a>
                 <div class="nav-item">
                     <button class="w-full flex items-center justify-between px-4 py-2.5 text-white bg-[#2a2e33] rounded-md shadow-sm">
-                        <div class="flex items-center font-bold"><i data-lucide="beef" class="w-4 h-4 mr-3 text-white"></i>Cattle</div>
+                        <div class="flex items-center font-bold"><i data-lucide="grid-3x3" class="w-4 h-4 mr-3"></i>Herd Management</div>
                         <i data-lucide="chevron-down" class="w-3.5 h-3.5 rotate-180"></i>
                     </button>
                     <div class="pl-11 space-y-1 mt-1 text-xs">
-                        <a href="#" class="block py-2 text-white font-bold underline underline-offset-4 decoration-brand transition-all">Cattle Directory</a>
-                        <a href="#" class="block py-2 text-gray-500 hover:text-white transition-all">Breeding Records</a>
+                        <a href="#" class="block py-2 text-white font-bold underline underline-offset-4 decoration-brand">Herd Cards</a>
+                        <a href="#" class="block py-2 text-gray-500 hover:text-white transition-colors">Data Input</a>
                     </div>
                 </div>
             </nav>
@@ -68,218 +71,309 @@
         <!-- Main Content -->
         <main class="ml-64 flex-1 p-8">
             
-            <!-- Page Header -->
-            <div class="flex items-center justify-between mb-6">
-                <div class="flex items-center gap-4">
-                    <a href="#" class="p-2 hover:bg-gray-200 rounded-lg transition-all">
-                        <i data-lucide="arrow-left" class="w-5 h-5 text-gray-600"></i>
-                    </a>
+            <!-- Page Header (Casing from Vue) -->
+            <div class="mb-8">
+                <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Herd Management Cards</h1>
+                <p class="text-sm text-gray-500 mt-1">Monthly Performance Summary for December 2025</p>
+            </div>
+
+            <!-- Summary Stat Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-xl border border-gray-100 flex items-center gap-5 shadow-sm">
+                    <div class="w-14 h-14 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center">
+                        <i data-lucide="grid-3x3" class="w-7 h-7"></i>
+                    </div>
                     <div>
-                        <h1 class="text-2xl font-black text-gray-900 tracking-tight">Cattle SK-C00124</h1>
-                        <p class="text-sm text-gray-500 font-bold">Brahman Cross &bull; Cow &bull; 2y 4m</p>
+                        <p class="text-xs text-gray-500 font-bold uppercase">Total Herds</p>
+                        <p class="text-3xl font-black text-gray-900">12</p>
                     </div>
                 </div>
-                
-                <div id="action-buttons">
-                    <button id="edit-btn" onclick="toggleEditMode(true)" class="flex items-center gap-2 px-5 py-2.5 bg-[#34554a] text-white rounded-lg hover:bg-opacity-90 font-black transition-all shadow-md active:scale-95 uppercase text-xs tracking-wider">
-                        <i data-lucide="pencil" class="w-4 h-4"></i> Edit Genealogy
+                <div class="bg-white p-6 rounded-xl border border-gray-100 flex items-center gap-5 shadow-sm">
+                    <div class="w-14 h-14 rounded-full bg-green-50 text-green-600 flex items-center justify-center">
+                        <i data-lucide="check-circle" class="w-7 h-7"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 font-bold uppercase">Above Target</p>
+                        <p class="text-3xl font-black text-gray-900">8</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-xl border border-amber-100 flex items-center gap-5 shadow-sm">
+                    <div class="w-14 h-14 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center">
+                        <i data-lucide="alert-triangle" class="w-7 h-7"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-amber-600 font-bold uppercase">At Target</p>
+                        <p class="text-3xl font-black text-amber-600">3</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-xl border border-gray-100 flex items-center gap-5 shadow-sm">
+                    <div class="w-14 h-14 rounded-full bg-[#34554a]/10 text-[#34554a] flex items-center justify-center">
+                        <i data-lucide="dollar-sign" class="w-7 h-7"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 font-bold uppercase">Total Claim</p>
+                        <p class="text-3xl font-black text-[#34554a]">RM 13,750.50</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Bar -->
+            <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+                <div class="flex flex-1 gap-2 w-full md:w-auto">
+                    <div class="relative flex-1 min-w-[200px]">
+                        <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4"></i>
+                        <input type="text" placeholder="Search herds..." class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 outline-none text-sm focus:ring-2 focus:ring-brand" />
+                    </div>
+                    <select class="px-3 py-2 rounded-lg border border-gray-200 bg-gray-50 text-gray-600 text-sm outline-none focus:ring-2 focus:ring-brand">
+                        <option value="">All Status</option>
+                        <option>Above Target</option>
+                    </select>
+                    <input type="month" value="2025-12" class="px-3 py-2 rounded-lg border border-gray-200 bg-gray-50 text-gray-600 text-sm outline-none focus:ring-2 focus:ring-brand" />
+                </div>
+                <div class="flex gap-2">
+                    <div class="flex border border-gray-200 rounded-lg overflow-hidden">
+                        <button class="flex items-center gap-2 px-3 py-2 text-sm bg-brand text-white transition-colors"><i data-lucide="list" class="w-4 h-4"></i></button>
+                        <button class="flex items-center gap-2 px-3 py-2 text-sm bg-white text-gray-600 hover:bg-gray-50 transition-colors"><i data-lucide="layout-grid" class="w-4 h-4"></i></button>
+                    </div>
+                    <button class="flex items-center gap-2 bg-[#34554a] text-white px-4 py-2 rounded-lg font-medium hover:bg-opacity-90 text-sm shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4"></i> Add Data
                     </button>
-                    <div id="editing-controls" class="hidden flex gap-2">
-                        <button onclick="toggleEditMode(false)" class="flex items-center gap-2 px-5 py-2.5 border border-gray-300 text-gray-700 bg-white rounded-lg hover:bg-gray-50 font-bold transition-all uppercase text-xs tracking-wider">
-                            <i data-lucide="x" class="w-4 h-4"></i> Cancel
-                        </button>
-                        <button onclick="saveProfile()" class="flex items-center gap-2 px-6 py-2.5 bg-[#34554a] text-white rounded-lg hover:bg-opacity-90 font-black shadow-lg transition-all active:scale-95 uppercase text-xs tracking-wider">
-                            <i data-lucide="save" class="w-4 h-4"></i> Save Changes
-                        </button>
+                </div>
+            </div>
+
+            <!-- Table View -->
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 mb-8">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left whitespace-nowrap border-collapse">
+                        <thead>
+                            <tr class="bg-[#34554a] text-white text-sm">
+                                <th class="p-4 w-12"><input type="checkbox" class="w-4 h-4 rounded border-white/30 text-brand focus:ring-brand cursor-pointer"></th>
+                                <th class="p-4 font-semibold">Herd / Estate Name</th>
+                                <th class="p-4 font-semibold">Total Area</th>
+                                <th class="p-4 font-semibold">Active Blocks</th>
+                                <th class="p-4 font-semibold">Achievement</th>
+                                <th class="p-4 font-semibold">RM/Hectare</th>
+                                <th class="p-4 font-semibold">Monthly Claim</th>
+                                <th class="p-4 font-semibold">Status</th>
+                                <th class="p-4 text-right font-semibold">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y text-sm text-gray-700">
+                            <tr class="hover:bg-gray-50 transition-colors cursor-pointer group">
+                                <td class="p-4"><input type="checkbox" class="w-4 h-4 rounded border-gray-300 text-brand focus:ring-brand cursor-pointer"></td>
+                                <td class="p-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-lg flex items-center justify-center bg-green-50 text-green-600">
+                                            <i data-lucide="grid-3x3" class="w-5 h-5"></i>
+                                        </div>
+                                        <div>
+                                            <span class="font-bold text-gray-900">ESTATE ALPHA</span>
+                                            <p class="text-xs text-[#34554a] font-medium">HERD UNIT A</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="p-4 font-medium">520.40 Ha</td>
+                                <td class="p-4">12</td>
+                                <td class="p-4">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-16 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                            <div class="h-full rounded-full bg-green-500" style="width: 98.5%"></div>
+                                        </div>
+                                        <span class="font-bold text-green-600">98.5%</span>
+                                    </div>
+                                </td>
+                                <td class="p-4">RM 11.09</td>
+                                <td class="p-4 font-bold text-green-600">RM 5,750.50</td>
+                                <td class="p-4">
+                                    <span class="px-2.5 py-0.5 rounded-full text-xs font-medium border bg-green-100 text-green-800 border-green-200">Above Target</span>
+                                </td>
+                                <td class="p-4 text-right flex justify-end gap-3 text-gray-400 opacity-60 group-hover:opacity-100 transition-opacity">
+                                    <i data-lucide="eye" class="w-4 h-4 cursor-pointer hover:text-blue-600"></i>
+                                    <i data-lucide="pencil" onclick="openEditModal()" class="w-4 h-4 cursor-pointer hover:text-green-600"></i>
+                                    <i data-lucide="trash-2" class="w-4 h-4 cursor-pointer hover:text-red-600"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Footer Stats -->
+                <div class="p-4 border-t bg-gray-50 flex items-center justify-between">
+                    <p class="text-sm text-gray-500 font-medium">Showing 1 herds</p>
+                    <div class="flex items-center gap-4">
+                        <span class="text-sm font-medium text-gray-900">
+                            Total: <span class="text-green-600 font-bold">RM 13,750.50</span>
+                        </span>
                     </div>
                 </div>
             </div>
 
-            <!-- Profile Summary Card -->
-            <div class="bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-100">
-                <div class="flex flex-col md:flex-row gap-6">
-                    <!-- Profile Picture -->
-                    <div class="flex-shrink-0">
-                        <div id="profile-box" class="w-40 h-40 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 overflow-hidden shadow-inner transition-colors">
-                            <i data-lucide="image" id="pic-placeholder" class="w-16 h-16 text-gray-300"></i>
-                            <img id="pic-preview" class="hidden w-full h-full object-cover" />
-                        </div>
+            <!-- Summary Info -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center"><i data-lucide="bar-chart-3" class="w-5 h-5"></i></div>
+                        <h3 class="text-lg font-semibold text-gray-900">Financial Summary</h3>
                     </div>
-
-                    <!-- Quick Info -->
-                    <div class="flex-1 grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
-                            <p class="text-[10px] text-gray-400 font-black uppercase tracking-widest">Tag Number</p>
-                            <p class="text-xl font-black text-gray-900 mt-1">SK-C00124</p>
+                    <div class="space-y-3">
+                        <div class="flex justify-between border-b pb-2 border-gray-100">
+                            <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">MTD Claim</span>
+                            <span class="text-sm font-semibold text-blue-600">RM 13,750.50</span>
                         </div>
-                        <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
-                            <p class="text-[10px] text-gray-400 font-black uppercase tracking-widest">Status</p>
-                            <span class="inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase border bg-green-100 text-green-700 border-green-200 tracking-wider mt-2">Active</span>
+                        <div class="flex justify-between border-b pb-2 border-gray-100">
+                            <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Total Herds</span>
+                            <span class="text-sm font-semibold text-gray-900">12</span>
                         </div>
-                        <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
-                            <p class="text-[10px] text-gray-400 font-black uppercase tracking-widest">Weight</p>
-                            <p class="text-xl font-black text-gray-900 mt-1">420.50 <span class="text-xs font-bold text-gray-400">kg</span></p>
-                        </div>
-                        <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
-                            <p class="text-[10px] text-gray-400 font-black uppercase tracking-widest">Condition</p>
-                            <p class="text-xl font-black text-gray-900 mt-1">Excellent</p>
+                        <div class="flex justify-between">
+                            <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">Above Target</span>
+                            <span class="text-sm font-semibold text-green-600">8 herds</span>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Tab Navigation Simulation -->
-            <div class="bg-white rounded-lg shadow-sm mb-6 border border-gray-100 overflow-hidden">
-                <div class="flex overflow-x-auto">
-                    <div class="flex items-center gap-2 px-8 py-5 font-black text-[11px] uppercase tracking-widest border-b-2 border-transparent text-gray-400 cursor-pointer hover:text-gray-600 transition-all">
-                        <i data-lucide="file-text" class="w-4 h-4"></i> Overview
-                    </div>
-                    <div class="flex items-center gap-2 px-8 py-5 font-black text-[11px] uppercase tracking-widest border-b-2 border-brand text-brand">
-                        <i data-lucide="heart" class="w-4 h-4 text-brand"></i> Genealogy
-                    </div>
-                    <div class="flex items-center gap-2 px-8 py-5 font-black text-[11px] uppercase tracking-widest border-b-2 border-transparent text-gray-400 cursor-pointer hover:text-gray-600 transition-all">
-                        <i data-lucide="activity" class="w-4 h-4"></i> Health
-                    </div>
-                </div>
-            </div>
-
-            <!-- Main Content Area -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 min-h-[500px] p-10">
-                
-                <!-- GENEALOGY TAB CONTENT -->
-                <div id="genealogy-view-mode" class="animate-in fade-in duration-300">
-                    <h3 class="text-sm font-black text-brand mb-8 pb-2 border-b border-brand/10 uppercase tracking-widest">Genealogy Information</h3>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                        <!-- Dam (Mother) Card -->
-                        <div class="bg-pink-50/20 p-8 rounded-2xl border border-pink-100 shadow-sm transition-all hover:shadow-md">
-                            <div class="flex items-center gap-3 mb-8">
-                                <div class="p-2.5 bg-pink-100 text-pink-600 rounded-xl shadow-inner">
-                                    <i data-lucide="heart" class="w-5 h-5"></i>
-                                </div>
-                                <h4 class="text-xs font-black text-pink-600 uppercase tracking-widest">Dam (Mother)</h4>
-                            </div>
-                            
-                            <div class="space-y-6">
-                                <div class="flex justify-between border-b border-pink-50 pb-3">
-                                    <span class="text-[10px] font-black text-pink-300 uppercase tracking-widest">Mother Tag</span>
-                                    <span class="text-sm font-black text-gray-900">SK-DAM-882</span>
-                                </div>
-                                <div class="flex justify-between border-b border-pink-50 pb-3">
-                                    <span class="text-[10px] font-black text-pink-300 uppercase tracking-widest">Dam Breed</span>
-                                    <span class="text-sm font-black text-gray-900">Brahman Cross</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-[10px] font-black text-pink-300 uppercase tracking-widest">Dam Colour</span>
-                                    <span class="text-sm font-black text-gray-900">Light Grey</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Sire (Father) Card -->
-                        <div class="bg-blue-50/20 p-8 rounded-2xl border border-blue-100 shadow-sm transition-all hover:shadow-md">
-                            <div class="flex items-center gap-3 mb-8">
-                                <div class="p-2.5 bg-blue-100 text-blue-600 rounded-xl shadow-inner">
-                                    <i data-lucide="shield" class="w-5 h-5"></i>
-                                </div>
-                                <h4 class="text-xs font-black text-blue-600 uppercase tracking-widest">Sire (Father)</h4>
-                            </div>
-                            
-                            <div class="space-y-6">
-                                <div class="flex justify-between border-b border-blue-50 pb-3">
-                                    <span class="text-[10px] font-black text-blue-300 uppercase tracking-widest">Father Tag</span>
-                                    <span class="text-sm font-black text-gray-900">SK-SIRE-901</span>
-                                </div>
-                                <div class="flex justify-between border-b border-blue-50 pb-3">
-                                    <span class="text-[10px] font-black text-blue-300 uppercase tracking-widest">Sire Breed</span>
-                                    <span class="text-sm font-black text-gray-900">Angus Cross</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-[10px] font-black text-blue-300 uppercase tracking-widest">Sire Colour</span>
-                                    <span class="text-sm font-black text-gray-900">Pure Black</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- GENEALOGY EDIT MODE (v-else) -->
-                <div id="genealogy-edit-mode" class="hidden animate-in slide-in-from-bottom-2 duration-300">
-                    <h3 class="text-sm font-black text-brand mb-8 pb-2 border-b border-brand/10 uppercase tracking-widest">Edit Genealogy</h3>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                        <!-- Edit Dam -->
-                        <div class="bg-pink-50/20 p-8 rounded-2xl border border-pink-100 space-y-6">
-                            <h4 class="text-xs font-black text-pink-600 uppercase tracking-widest">Update Dam Details</h4>
-                            <div class="space-y-4">
-                                <div class="space-y-1">
-                                    <label class="text-[10px] font-black text-pink-400 uppercase tracking-widest">Mother Tag</label>
-                                    <input type="text" value="SK-DAM-882" class="w-full px-4 py-2.5 border border-pink-200 rounded-lg font-black text-sm outline-none focus:ring-2 focus:ring-pink-500">
-                                </div>
-                                <div class="space-y-1">
-                                    <label class="text-[10px] font-black text-pink-400 uppercase tracking-widest">Breed</label>
-                                    <select class="w-full px-4 py-2.5 border border-pink-200 bg-white rounded-lg font-black text-sm outline-none focus:ring-2 focus:ring-pink-500">
-                                        <option>Brahman Cross</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Edit Sire -->
-                        <div class="bg-blue-50/20 p-8 rounded-2xl border border-blue-100 space-y-6">
-                            <h4 class="text-xs font-black text-blue-600 uppercase tracking-widest">Update Sire Details</h4>
-                            <div class="space-y-4">
-                                <div class="space-y-1">
-                                    <label class="text-[10px] font-black text-blue-400 uppercase tracking-widest">Father Tag</label>
-                                    <input type="text" value="SK-SIRE-901" class="w-full px-4 py-2.5 border border-blue-200 rounded-lg font-black text-sm outline-none focus:ring-2 focus:ring-blue-500">
-                                </div>
-                                <div class="space-y-1">
-                                    <label class="text-[10px] font-black text-blue-400 uppercase tracking-widest">Breed</label>
-                                    <select class="w-full px-4 py-2.5 border border-blue-200 bg-white rounded-lg font-black text-sm outline-none focus:ring-2 focus:ring-blue-500">
-                                        <option>Angus Cross</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </main>
+
+        <!-- EDIT MODAL -->
+        <div id="editModal" class="fixed inset-0 z-50 modal-backdrop hidden flex items-center justify-center p-4">
+            <div class="bg-gray-100 rounded-xl shadow-2xl w-full max-w-5xl max-h-[95vh] overflow-hidden flex flex-col transform transition-all">
+                
+                <!-- Modal Header -->
+                <div class="bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between sticky top-0 z-10">
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-900">Edit Grazing Data</h3>
+                        <p class="text-xs text-gray-500">ESTATE ALPHA - December 2025</p>
+                    </div>
+                    <button onclick="toggleModal('editModal')" class="text-gray-400 hover:text-gray-600 transition-colors p-2 hover:bg-gray-100 rounded-lg">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <form class="p-6 space-y-6 overflow-y-auto custom-scrollbar" onsubmit="event.preventDefault();">
+                    
+                    <!-- Section 1: Estate & Period -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                        <h4 class="text-sm font-bold text-gray-500 uppercase tracking-wide mb-4">Selected Estate & Period</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">Estate Name</label>
+                                <input type="text" value="ESTATE ALPHA" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-[#34554a]">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">Selected Herd</label>
+                                <div class="flex gap-2">
+                                    <select class="flex-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#34554a]">
+                                        <option>HERD UNIT A</option>
+                                    </select>
+                                    <button type="button" class="bg-[#34554a] text-white rounded-lg px-3 py-2 hover:bg-[#2a443b] transition-colors"><i data-lucide="plus" class="w-4 h-4"></i></button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">Month</label>
+                                <input type="month" value="2025-12" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-[#34554a]">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Coverage & Financials -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                        <h4 class="text-lg font-semibold text-gray-700 mb-6 border-b border-gray-100 pb-2">Monthly Grazing Coverage & Financials</h4>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-4">
+                            <div class="space-y-4">
+                                <div class="grid grid-cols-2 gap-4 items-center">
+                                    <label class="text-sm text-gray-600 font-medium">Allocated Area (Ha)</label>
+                                    <input type="number" value="520.40" class="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-right font-medium focus:ring-2 focus:ring-[#34554a]">
+                                </div>
+                                <div class="grid grid-cols-2 gap-4 items-center">
+                                    <label class="text-sm text-gray-600 font-medium">Rotation Period (Days)</label>
+                                    <input type="number" value="62" class="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-right font-medium focus:ring-2 focus:ring-[#34554a]">
+                                </div>
+                                <div class="border-t border-gray-100 pt-2 grid grid-cols-2 gap-4 items-center">
+                                    <label class="text-sm text-gray-900 font-semibold">Current Month (Ha)</label>
+                                    <input type="number" value="480.20" class="w-full rounded-lg border border-blue-300 bg-white px-3 py-2 text-sm text-right font-bold text-gray-800">
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="grid grid-cols-2 gap-4 items-center">
+                                    <label class="text-sm text-gray-600 font-medium">Pay/Ha (RM)</label>
+                                    <input type="number" value="11.09" class="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-right font-medium focus:ring-2 focus:ring-[#34554a]">
+                                </div>
+                                <div class="grid grid-cols-2 gap-4 items-center">
+                                    <label class="text-sm text-gray-600 font-medium">Deduction %</label>
+                                    <input type="number" value="0.00" class="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-right font-medium focus:ring-2 focus:ring-[#34554a]">
+                                </div>
+                                <div class="border-t border-gray-100 pt-2 grid grid-cols-2 gap-4 items-center bg-green-50 p-2 rounded-lg">
+                                    <label class="text-sm font-semibold text-gray-700">Total Budget (RM)</label>
+                                    <span class="text-sm font-bold text-green-600 text-right">RM 15,000.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Block Table Section -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="p-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
+                            <h4 class="text-lg font-semibold text-gray-700">Block Level Data</h4>
+                            <button type="button" class="text-sm text-[#34554a] font-medium flex items-center gap-1 hover:text-[#2a443b]"><i data-lucide="plus" class="w-4 h-4"></i> Add Block</button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left whitespace-nowrap">
+                                <thead class="bg-[#34554a] text-white text-sm uppercase tracking-wide">
+                                    <tr>
+                                        <th class="px-4 py-3 font-semibold">Block</th>
+                                        <th class="px-4 py-3 font-semibold text-right">Area (Ha)</th>
+                                        <th class="px-4 py-3 font-semibold text-right">Actual (Ha)</th>
+                                        <th class="px-4 py-3 font-semibold text-right">Achievement</th>
+                                        <th class="px-4 py-3 font-semibold text-right bg-[#2a443b]">Rate (RM)</th>
+                                        <th class="px-4 py-3 w-16 bg-[#2a443b]"></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100 text-sm">
+                                    <tr>
+                                        <td class="px-4 py-2"><input type="text" value="A-01" class="w-full border-gray-200 rounded px-2 py-1.5 font-bold text-gray-900 outline-none focus:ring-2 focus:ring-[#34554a]"></td>
+                                        <td class="px-4 py-2"><input type="number" value="45.50" class="w-full border-gray-200 rounded px-2 py-1.5 text-right outline-none"></td>
+                                        <td class="px-4 py-2"><input type="number" value="45.00" class="w-full border-gray-200 rounded px-2 py-1.5 text-right outline-none"></td>
+                                        <td class="px-4 py-2 text-right font-bold text-green-600">0.98</td>
+                                        <td class="px-4 py-2 bg-brand/5"><input type="number" value="11.09" class="w-full border-transparent bg-transparent rounded px-2 py-1.5 text-right text-[#34554a] font-bold outline-none"></td>
+                                        <td class="px-4 py-2 text-center bg-brand/5"><i data-lucide="trash-2" class="w-4 h-4 text-red-400 cursor-pointer"></i></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Modal Action Footer -->
+                    <div class="flex justify-between items-center bg-white p-4 border rounded-xl border-gray-200 shadow-sm sticky bottom-0 z-10">
+                        <button type="button" class="px-4 py-2 border border-red-300 text-red-600 rounded-lg font-medium hover:bg-red-50 flex items-center gap-2">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i> Delete Estate
+                        </button>
+                        <div class="flex gap-3">
+                            <button type="button" onclick="toggleModal('editModal')" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50">Cancel</button>
+                            <button type="submit" class="px-6 py-2 bg-[#34554a] text-white rounded-lg font-bold hover:bg-[#2a443b] shadow-md flex items-center gap-2">
+                                <i data-lucide="save" class="w-4 h-4"></i> Save Changes
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
 
         <script>
             lucide.createIcons();
 
-            let isEditing = false;
-
-            /**
-             * toggleEditMode(val)
-             * Simulated logic from CattleProfile.vue
-             */
-            function toggleEditMode(val) {
-                isEditing = val;
-                const editBtn = document.getElementById('edit-btn');
-                const controls = document.getElementById('editing-controls');
-                const viewMode = document.getElementById('genealogy-view-mode');
-                const editMode = document.getElementById('genealogy-edit-mode');
-
-                if (isEditing) {
-                    editBtn.classList.add('hidden');
-                    controls.classList.remove('hidden');
-                    viewMode.classList.add('hidden');
-                    editMode.classList.remove('hidden');
-                } else {
-                    editBtn.classList.remove('hidden');
-                    controls.classList.add('hidden');
-                    viewMode.classList.remove('hidden');
-                    editMode.classList.add('hidden');
-                }
+            function toggleModal(id) {
+                const m = document.getElementById(id);
+                if(m) m.classList.toggle('hidden');
             }
 
-            function saveProfile() {
-                alert("Genealogy data updated successfully!");
-                toggleEditMode(false);
+            function openEditModal() {
+                toggleModal('editModal');
             }
+
+            document.querySelectorAll('.modal-backdrop').forEach(m => {
+                m.addEventListener('click', function(e) {
+                    if (e.target === this) this.classList.add('hidden');
+                });
+            });
         </script>
     </body>
 </html>
