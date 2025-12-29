@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Cattle Profile Overview - Sawit Kinabalu</title>
+        <title>Cattle Profile Genealogy - Sawit Kinabalu</title>
         
         <!-- Fonts: Figtree with full weight range for exact style matching -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -82,7 +82,7 @@
                 
                 <div id="action-buttons">
                     <button id="edit-btn" onclick="toggleEditMode(true)" class="flex items-center gap-2 px-5 py-2.5 bg-[#34554a] text-white rounded-lg hover:bg-opacity-90 font-black transition-all shadow-md active:scale-95 uppercase text-xs tracking-wider">
-                        <i data-lucide="pencil" class="w-4 h-4"></i> Edit Profile
+                        <i data-lucide="pencil" class="w-4 h-4"></i> Edit Genealogy
                     </button>
                     <div id="editing-controls" class="hidden flex gap-2">
                         <button onclick="toggleEditMode(false)" class="flex items-center gap-2 px-5 py-2.5 border border-gray-300 text-gray-700 bg-white rounded-lg hover:bg-gray-50 font-bold transition-all uppercase text-xs tracking-wider">
@@ -104,15 +104,6 @@
                             <i data-lucide="image" id="pic-placeholder" class="w-16 h-16 text-gray-300"></i>
                             <img id="pic-preview" class="hidden w-full h-full object-cover" />
                         </div>
-                        <div id="pic-edit-controls" class="mt-3 hidden flex gap-2">
-                            <input type="file" id="profile-upload" accept="image/*" class="hidden" onchange="handleImageUpload(event)" />
-                            <label for="profile-upload" class="flex-1 flex items-center justify-center gap-1 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-[10px] font-black uppercase tracking-widest cursor-pointer hover:bg-gray-200">
-                                <i data-lucide="upload" class="w-3 h-3 text-brand"></i> Upload
-                            </label>
-                            <button id="remove-pic-btn" onclick="removeImage()" type="button" class="hidden px-3 py-1.5 bg-red-50 text-red-600 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-red-100">
-                                <i data-lucide="trash-2" class="w-3 h-3"></i>
-                            </button>
-                        </div>
                     </div>
 
                     <!-- Quick Info -->
@@ -123,7 +114,7 @@
                         </div>
                         <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
                             <p class="text-[10px] text-gray-400 font-black uppercase tracking-widest">Status</p>
-                            <span id="status-badge" class="inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase border bg-green-100 text-green-700 border-green-200 tracking-wider mt-2">Active</span>
+                            <span class="inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase border bg-green-100 text-green-700 border-green-200 tracking-wider mt-2">Active</span>
                         </div>
                         <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
                             <p class="text-[10px] text-gray-400 font-black uppercase tracking-widest">Weight</p>
@@ -137,107 +128,122 @@
                 </div>
             </div>
 
-            <!-- Main Overview Tab Content Area -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 min-h-[500px] overflow-hidden">
-                <!-- Tab Header Simulation -->
-                <div class="border-b border-gray-100 bg-white">
-                    <div class="flex overflow-x-auto">
-                        <div class="flex items-center gap-2 px-8 py-5 font-black text-[11px] uppercase tracking-widest border-b-2 border-brand text-brand">
-                            <i data-lucide="file-text" class="w-4 h-4"></i> Overview Information
-                        </div>
+            <!-- Tab Navigation Simulation -->
+            <div class="bg-white rounded-lg shadow-sm mb-6 border border-gray-100 overflow-hidden">
+                <div class="flex overflow-x-auto">
+                    <div class="flex items-center gap-2 px-8 py-5 font-black text-[11px] uppercase tracking-widest border-b-2 border-transparent text-gray-400 cursor-pointer hover:text-gray-600 transition-all">
+                        <i data-lucide="file-text" class="w-4 h-4"></i> Overview
+                    </div>
+                    <div class="flex items-center gap-2 px-8 py-5 font-black text-[11px] uppercase tracking-widest border-b-2 border-brand text-brand">
+                        <i data-lucide="heart" class="w-4 h-4 text-brand"></i> Genealogy
+                    </div>
+                    <div class="flex items-center gap-2 px-8 py-5 font-black text-[11px] uppercase tracking-widest border-b-2 border-transparent text-gray-400 cursor-pointer hover:text-gray-600 transition-all">
+                        <i data-lucide="activity" class="w-4 h-4"></i> Health
                     </div>
                 </div>
+            </div>
 
-                <div class="p-10">
-                    <!-- VIEW MODE (Matches Vue template read-only state) -->
-                    <div id="overview-view-mode" class="space-y-12">
-                        
-                        <!-- 1. Basic Information -->
-                        <div>
-                            <h3 class="text-sm font-black text-brand mb-6 pb-2 border-b border-brand/10 uppercase tracking-widest">Basic Information</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                                <div><label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Tag Number</label><p class="text-sm font-black text-gray-900 mt-1">SK-C00124</p></div>
-                                <div><label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Category</label><p class="text-sm font-black text-gray-900 mt-1">Cow</p></div>
-                                <div><label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Breed</label><p class="text-sm font-black text-gray-900 mt-1">Brahman Cross</p></div>
-                                <div><label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Coat Colour</label><p class="text-sm font-black text-gray-900 mt-1">Brown</p></div>
-                                <div><label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Gender</label><p class="text-sm font-black text-gray-900 mt-1">Female</p></div>
-                                <div><label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Birth Date</label><p class="text-sm font-black text-gray-900 mt-1">12 Aug 2023</p></div>
-                            </div>
-                        </div>
-
-                        <!-- 2. Receival & Condition -->
-                        <div>
-                            <h3 class="text-sm font-black text-brand mb-6 pb-2 border-b border-brand/10 uppercase tracking-widest">Receival & Condition</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                                <div><label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Receival Weight</label><p class="text-sm font-black text-gray-900 mt-1">420.50 kg</p></div>
-                                <div><label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">General Condition</label><p class="text-sm font-black text-gray-900 mt-1">Excellent</p></div>
-                                <div><label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Ownership</label><p class="text-sm font-black text-gray-900 mt-1">Sawit Kinabalu</p></div>
-                                <div><label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Placement Yard</label><p class="text-sm font-black text-gray-900 mt-1">Yard A</p></div>
-                                <div><label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Location Block</label><p class="text-sm font-black text-gray-900 mt-1">B02</p></div>
-                                <div><label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Location Phase</label><p class="text-sm font-black text-gray-900 mt-1">Phase 1</p></div>
-                            </div>
-                        </div>
-
-                        <!-- 3. Milestones -->
-                        <div>
-                            <h3 class="text-sm font-black text-brand mb-6 pb-2 border-b border-brand/10 uppercase tracking-widest">Milestones</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                <div class="bg-gray-50/50 p-6 rounded-xl border border-gray-100 flex flex-col justify-center">
-                                    <h4 class="text-[11px] font-black text-gray-700 uppercase tracking-widest mb-4">Weaning</h4>
-                                    <div class="flex justify-between border-b border-gray-100 pb-2 mb-2"><span class="text-[10px] font-black text-gray-400 uppercase">Date</span><span class="text-sm font-black text-gray-900">15 Jan 2024</span></div>
-                                    <div class="flex justify-between"><span class="text-[10px] font-black text-gray-400 uppercase">Weight</span><span class="text-sm font-black text-gray-900">180.00 kg</span></div>
+            <!-- Main Content Area -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 min-h-[500px] p-10">
+                
+                <!-- GENEALOGY TAB CONTENT -->
+                <div id="genealogy-view-mode" class="animate-in fade-in duration-300">
+                    <h3 class="text-sm font-black text-brand mb-8 pb-2 border-b border-brand/10 uppercase tracking-widest">Genealogy Information</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                        <!-- Dam (Mother) Card -->
+                        <div class="bg-pink-50/20 p-8 rounded-2xl border border-pink-100 shadow-sm transition-all hover:shadow-md">
+                            <div class="flex items-center gap-3 mb-8">
+                                <div class="p-2.5 bg-pink-100 text-pink-600 rounded-xl shadow-inner">
+                                    <i data-lucide="heart" class="w-5 h-5"></i>
                                 </div>
-                                <div class="bg-gray-50/50 p-6 rounded-xl border border-gray-100 flex flex-col justify-center">
-                                    <h4 class="text-[11px] font-black text-gray-700 uppercase tracking-widest mb-4">Yearling</h4>
-                                    <div class="flex justify-between border-b border-gray-100 pb-2 mb-2"><span class="text-[10px] font-black text-gray-400 uppercase">Date</span><span class="text-sm font-black text-gray-900">12 Aug 2024</span></div>
-                                    <div class="flex justify-between"><span class="text-[10px] font-black text-gray-400 uppercase">Weight</span><span class="text-sm font-black text-gray-900">310.00 kg</span></div>
-                                </div>
+                                <h4 class="text-xs font-black text-pink-600 uppercase tracking-widest">Dam (Mother)</h4>
                             </div>
-                        </div>
-
-                        <!-- 4. Additional Information -->
-                        <div>
-                            <h3 class="text-sm font-black text-brand mb-6 pb-2 border-b border-brand/10 uppercase tracking-widest">Additional Information</h3>
+                            
                             <div class="space-y-6">
-                                <div><label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Status</label><p class="text-sm font-black text-gray-900 mt-1">Active</p></div>
-                                <div><label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Remarks</label><p class="text-sm font-medium text-gray-600 mt-2 leading-relaxed bg-gray-50 p-4 rounded-lg border border-gray-100 italic">"Initial health screening completed. No complications found during quarantine period."</p></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- EDIT MODE (Matches Vue form inputs) -->
-                    <div id="overview-edit-mode" class="hidden space-y-10 animate-in fade-in duration-300">
-                        <!-- Edit Form: Basic -->
-                        <div>
-                            <h3 class="text-sm font-black text-brand mb-6 uppercase tracking-widest">Edit Basic Information</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                <div class="space-y-1">
-                                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Tag No *</label>
-                                    <input type="text" value="SK-C00124" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg font-black text-sm outline-none focus:ring-2 focus:ring-brand focus:border-brand shadow-sm transition-all">
+                                <div class="flex justify-between border-b border-pink-50 pb-3">
+                                    <span class="text-[10px] font-black text-pink-300 uppercase tracking-widest">Mother Tag</span>
+                                    <span class="text-sm font-black text-gray-900">SK-DAM-882</span>
                                 </div>
-                                <div class="space-y-1">
-                                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Category *</label>
-                                    <select class="w-full px-4 py-2.5 border border-gray-300 bg-white rounded-lg font-black text-sm outline-none focus:ring-2 focus:ring-brand">
-                                        <option>Cow</option><option>Bull</option><option>Calf</option>
-                                    </select>
+                                <div class="flex justify-between border-b border-pink-50 pb-3">
+                                    <span class="text-[10px] font-black text-pink-300 uppercase tracking-widest">Dam Breed</span>
+                                    <span class="text-sm font-black text-gray-900">Brahman Cross</span>
                                 </div>
-                                <div class="space-y-1">
-                                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Breed *</label>
-                                    <select class="w-full px-4 py-2.5 border border-gray-300 bg-white rounded-lg font-black text-sm outline-none focus:ring-2 focus:ring-brand">
-                                        <option>Brahman Cross</option><option>Angus</option>
-                                    </select>
+                                <div class="flex justify-between">
+                                    <span class="text-[10px] font-black text-pink-300 uppercase tracking-widest">Dam Colour</span>
+                                    <span class="text-sm font-black text-gray-900">Light Grey</span>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Edit Form: Remarks -->
-                        <div class="space-y-1">
-                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Remarks</label>
-                            <textarea rows="4" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg font-black text-sm outline-none focus:ring-2 focus:ring-brand resize-none shadow-sm" placeholder="Add additional notes..."></textarea>
+                        <!-- Sire (Father) Card -->
+                        <div class="bg-blue-50/20 p-8 rounded-2xl border border-blue-100 shadow-sm transition-all hover:shadow-md">
+                            <div class="flex items-center gap-3 mb-8">
+                                <div class="p-2.5 bg-blue-100 text-blue-600 rounded-xl shadow-inner">
+                                    <i data-lucide="shield" class="w-5 h-5"></i>
+                                </div>
+                                <h4 class="text-xs font-black text-blue-600 uppercase tracking-widest">Sire (Father)</h4>
+                            </div>
+                            
+                            <div class="space-y-6">
+                                <div class="flex justify-between border-b border-blue-50 pb-3">
+                                    <span class="text-[10px] font-black text-blue-300 uppercase tracking-widest">Father Tag</span>
+                                    <span class="text-sm font-black text-gray-900">SK-SIRE-901</span>
+                                </div>
+                                <div class="flex justify-between border-b border-blue-50 pb-3">
+                                    <span class="text-[10px] font-black text-blue-300 uppercase tracking-widest">Sire Breed</span>
+                                    <span class="text-sm font-black text-gray-900">Angus Cross</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-[10px] font-black text-blue-300 uppercase tracking-widest">Sire Colour</span>
+                                    <span class="text-sm font-black text-gray-900">Pure Black</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
                 </div>
+
+                <!-- GENEALOGY EDIT MODE (v-else) -->
+                <div id="genealogy-edit-mode" class="hidden animate-in slide-in-from-bottom-2 duration-300">
+                    <h3 class="text-sm font-black text-brand mb-8 pb-2 border-b border-brand/10 uppercase tracking-widest">Edit Genealogy</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                        <!-- Edit Dam -->
+                        <div class="bg-pink-50/20 p-8 rounded-2xl border border-pink-100 space-y-6">
+                            <h4 class="text-xs font-black text-pink-600 uppercase tracking-widest">Update Dam Details</h4>
+                            <div class="space-y-4">
+                                <div class="space-y-1">
+                                    <label class="text-[10px] font-black text-pink-400 uppercase tracking-widest">Mother Tag</label>
+                                    <input type="text" value="SK-DAM-882" class="w-full px-4 py-2.5 border border-pink-200 rounded-lg font-black text-sm outline-none focus:ring-2 focus:ring-pink-500">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="text-[10px] font-black text-pink-400 uppercase tracking-widest">Breed</label>
+                                    <select class="w-full px-4 py-2.5 border border-pink-200 bg-white rounded-lg font-black text-sm outline-none focus:ring-2 focus:ring-pink-500">
+                                        <option>Brahman Cross</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Edit Sire -->
+                        <div class="bg-blue-50/20 p-8 rounded-2xl border border-blue-100 space-y-6">
+                            <h4 class="text-xs font-black text-blue-600 uppercase tracking-widest">Update Sire Details</h4>
+                            <div class="space-y-4">
+                                <div class="space-y-1">
+                                    <label class="text-[10px] font-black text-blue-400 uppercase tracking-widest">Father Tag</label>
+                                    <input type="text" value="SK-SIRE-901" class="w-full px-4 py-2.5 border border-blue-200 rounded-lg font-black text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="text-[10px] font-black text-blue-400 uppercase tracking-widest">Breed</label>
+                                    <select class="w-full px-4 py-2.5 border border-blue-200 bg-white rounded-lg font-black text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                                        <option>Angus Cross</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </main>
 
@@ -248,69 +254,31 @@
 
             /**
              * toggleEditMode(val)
-             * Exact simulation of Vue isEditing ref logic
+             * Simulated logic from CattleProfile.vue
              */
             function toggleEditMode(val) {
                 isEditing = val;
-                const viewBtn = document.getElementById('edit-btn');
-                const editCtrls = document.getElementById('editing-controls');
-                const viewMode = document.getElementById('overview-view-mode');
-                const editMode = document.getElementById('overview-edit-mode');
-                const picControls = document.getElementById('pic-edit-controls');
-                const profileBox = document.getElementById('profile-box');
+                const editBtn = document.getElementById('edit-btn');
+                const controls = document.getElementById('editing-controls');
+                const viewMode = document.getElementById('genealogy-view-mode');
+                const editMode = document.getElementById('genealogy-edit-mode');
 
                 if (isEditing) {
-                    viewBtn.classList.add('hidden');
-                    editCtrls.classList.remove('hidden');
+                    editBtn.classList.add('hidden');
+                    controls.classList.remove('hidden');
                     viewMode.classList.add('hidden');
                     editMode.classList.remove('hidden');
-                    picControls.classList.remove('hidden');
-                    profileBox.classList.add('border-brand');
                 } else {
-                    viewBtn.classList.remove('hidden');
-                    editCtrls.classList.add('hidden');
+                    editBtn.classList.remove('hidden');
+                    controls.classList.add('hidden');
                     viewMode.classList.remove('hidden');
                     editMode.classList.add('hidden');
-                    picControls.classList.add('hidden');
-                    profileBox.classList.remove('border-brand');
                 }
-            }
-
-            function handleImageUpload(event) {
-                const file = event.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const preview = document.getElementById('pic-preview');
-                        const placeholder = document.getElementById('pic-placeholder');
-                        const removeBtn = document.getElementById('remove-pic-btn');
-                        
-                        preview.src = e.target.result;
-                        preview.classList.remove('hidden');
-                        placeholder.classList.add('hidden');
-                        removeBtn.classList.remove('hidden');
-                    };
-                    reader.readAsDataURL(file);
-                }
-            }
-
-            function removeImage() {
-                const preview = document.getElementById('pic-preview');
-                const placeholder = document.getElementById('pic-placeholder');
-                const removeBtn = document.getElementById('remove-pic-btn');
-                
-                preview.src = '';
-                preview.classList.add('hidden');
-                placeholder.classList.remove('hidden');
-                removeBtn.classList.add('hidden');
-                document.getElementById('profile-upload').value = '';
             }
 
             function saveProfile() {
-                alert("Processing update for SK-C00124...");
-                setTimeout(() => {
-                    toggleEditMode(false);
-                }, 500);
+                alert("Genealogy data updated successfully!");
+                toggleEditMode(false);
             }
         </script>
     </body>
